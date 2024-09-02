@@ -41,7 +41,7 @@ useEffect(() => {
 
   return (
     <div>
-      hello
+      <h1>hello world</h1>
     </div>
   )
 }
