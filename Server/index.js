@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import db from './models/model_index.js';
 
+
+
 // Create express app
 const app = express();
 app.use(cors({
@@ -16,6 +18,10 @@ dotenv.config();
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
+
+import QNArouter from './routes/Comments.js';
+app.use('/comment', QNArouter);
+
 
 // Initialising database & server
 let port = process.env.SERVER_PORT;
