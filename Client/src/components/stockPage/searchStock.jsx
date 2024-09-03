@@ -18,7 +18,7 @@ function SearchStock() {
     };
 
     return (
-        <div className="flex w-full max-w-sm items-center space-x-2" style={{marginBottom:'4rem', paddingTop:'2rem', marginLeft: '70px'}}>
+        <div className="flex w-full max-w-sm items-center space-x-2 pl-10 pt-[2em]">
             <form onSubmit={handleSubmit} className="flex items-center space-x-2 w-full">
                 <Input 
                     value={inputValue} 

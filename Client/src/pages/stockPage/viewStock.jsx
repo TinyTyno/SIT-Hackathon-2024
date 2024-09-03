@@ -119,7 +119,7 @@ function ViewStock() {
                 </div>
             </div>
 
-            { historicalData.length > 0 &&
+            { historicalData?.length > 0 &&
                 <div className='flex' style={{ margin: 'auto', marginLeft: '70px' }}>
                     <div className="flex m-2 flex-col items-start" style={{ textalign: 'left', padding: '10px' }}>
                         <HoverCard>

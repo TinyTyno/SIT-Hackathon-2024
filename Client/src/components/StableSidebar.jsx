@@ -19,7 +19,7 @@ const StableSidebar = ({ children }) => {
   };
   return (
     <>
-      {!isOpen ? (
+      {isOpen ? (
         <div className="z-50">
           <div className="h-screen fixed top-0 left-0 w-[15rem] bg-[#233F59] py-[1em] px-5">
             <div className="justify-center flex flex-col gap-7 ">
