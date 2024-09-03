@@ -8,9 +8,12 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { FaRobot } from "react-icons/fa";
+
 
 import { Button } from "@/components/ui/button";
 import StockCard from "@/components/stockPage/StockCard";
+import { Link } from "react-router-dom";
 const Homepage = () => {
   return (
     <main id="top" className="relative min-h-screen w-full bg-white scroll-smooth">
@@ -81,6 +84,11 @@ const Homepage = () => {
          2024virtutradeHackathon</div>
       </div>
       </section>
+      <Link to="/ai" >
+      <div className="rounded-full  bg-blue-500 shadow-lg p-5 fixed bottom-[2em] right-[2em] cursor-pointer">
+        <FaRobot className="text-white text-3xl"/>
+      </div>
+        </Link>
     </main>
   );
 };

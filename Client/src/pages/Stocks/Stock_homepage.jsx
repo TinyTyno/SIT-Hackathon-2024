@@ -2,8 +2,7 @@ import React,{useState,useEffect} from 'react'
 import StableSidebar from '@/components/StableSidebar'
 import SearchStock from '@/components/stockPage/searchStock'
 import StockCard from '@/components/stockPage/StockCard'
-
-import http from '../../../http'
+import axios from 'axios'
 import {
     Carousel,
     CarouselContent,
@@ -15,11 +14,16 @@ import StockTable from '@/components/stockPage/StockTable';
   
 const Stock_homepage = () => {
   const [stocks, setStocks] = useState([])
-  const fetchStocks = async () => {
-    console.log('fetching stocks')
-    }
+  const fetchData = async () => {
+    var data = await axios.get("http://localhost:3000/stocks/stockData?symbol=NVDA&type=stock&view=5D");
+    var stockArray = (data.data[symbol])
+    var latest = stockArray[stockArray.length - 1]
+    console.log(latest)
+};
+
+
   useEffect(() => {
-fetchStocks()
+fetchData()
   }, [])
   return (
     <div>

@@ -51,16 +51,12 @@ const AIChat = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="relative w-[375px] h-[812px] bg-white rounded-[40px] border-[5px] border-[#1C1C1E] overflow-hidden">
-        {/* Notch */}
-        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-[200px] h-[30px] bg-black rounded-b-[20px]"></div>
-
-
+    <div className="">
+      <div className="relative  bg-white overflow-hidden">
 
         {/* Chat interface */}
-        <div className="flex flex-col h-full bg-gray-100 dark:bg-gray-700 pt-[44px] pb-[34px] px-4">
-          <div className="flex-grow overflow-y-auto">
+        <div className="relative flex flex-col h-screen bg-gray-100 dark:bg-gray-700 pt-[44px] pb-[34px] px-4">
+          <div className="flex-grow overflow-y-auto px-[2em]">
             {conversation.map((msg, index) => (
               <div
                 key={index}
@@ -76,13 +72,13 @@ const AIChat = () => {
 
           {error && <div className="text-red-500">{error}</div>}
 
-          <form onSubmit={handleSubmit} className="flex items-center space-x-2 mt-4">
+          <form onSubmit={handleSubmit} className="flex items-center space-x-2 mt-4 fixed bottom-0 left-0 w-full px-[2em] py-[1em] bg-white">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type your message..."
-              className="flex-grow p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:text-white"
+              className="flex-grow p-2 rounded-lg text-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:text-white"
               disabled={isLoading || !chatModel}
             />
             <button
