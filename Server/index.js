@@ -19,8 +19,10 @@ dotenv.config();
 // Stocks
 import stockRouter from './routes/Stocks.js';
 app.use('/stocks', stockRouter);
-import searchRouter from './routes/Search.js';
-app.use('/api', searchRouter);
+// import searchRouter from './routes/Search.js';
+// app.use('/api', searchRouter);
+import StockTransactionRouter from './routes/StockTransaction.js';
+app.use('/transactions', StockTransactionRouter);
 import yahoofinancetesting from './routes/yahoofinance/yahoofinancetesting.js';
 app.use('/testing', yahoofinancetesting);
 
