@@ -27,7 +27,7 @@ function SearchStockInput() {
                     value={inputValue} 
                     onChange={handleInputChange} 
                     type="text" 
-                    placeholder="Search for a Stock" 
+                    placeholder="Search using a stock symbol" 
                 />
                 <Button type="submit">Search</Button> {/* Ensure Button is correctly used */}
             </form>

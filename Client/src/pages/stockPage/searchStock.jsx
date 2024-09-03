@@ -14,6 +14,11 @@ import {
 import { Button } from "@/components/ui/button";
 import SearchStockInput from '@/components/stockPage/searchStockInput';
 import StableSidebar from '@/components/StableSidebar';
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from "@/components/ui/hover-card"
 
 function SearchStock() {
   const { query } = useParams();
@@ -82,12 +87,12 @@ function SearchStock() {
     }
 
     return stockList.map((stock, index) => (
-      <TableRow key={index} onClick={() => navigate(`/Stock/${stock.symbol}`)}>
+      <TableRow key={index}>
         <TableCell>{stock.symbol || 'N/A'}</TableCell>
         <TableCell>{stock.name || 'N/A'}</TableCell>
         <TableCell>
           {stock.price || 'N/A'}{' '}
-          <span className={`text-sm ${stock.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+          <span className={`text-sm font-bold ${stock.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
             {stock.change >= 0 ? '+' : ''}{stock.change || 0} ({stock.percent || 0}%)
           </span>
         </TableCell>
@@ -104,7 +109,8 @@ function SearchStock() {
     <StableSidebar>
       <div className='Container'>
         <SearchStockInput />
-        <Table style={{ maxHeight: '60vh', width: '60vw', marginLeft:'2rem', marginTop: '4rem' }}>
+        <span style={{marginLeft:'2rem', fontSize:'1.5rem', fontWeight:'800', marginTop:'1rem'}}>Searching for: {query}</span>
+        <Table style={{ maxHeight: '60vh', width: '60vw', marginLeft:'2rem', marginTop: '1.5rem' }}>
           <TableCaption>List of Stocks matching {query}</TableCaption>
           <TableHeader>
             <TableRow>
