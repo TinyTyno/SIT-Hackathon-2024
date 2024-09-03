@@ -67,6 +67,7 @@ function App() {
                 <Route path='/resetSuccess' Component={resetSuccess} />
                 <Route path='/changePasswordSuccess' Component={changePasswordSuccess} />
 
+                <Route path='/search/:query' element={<SearchStock />} />
                 <Route path='/dashboard' element={<Stock_homepage/>} />
                 <Route path='/stock/:symbol' element={<ViewStock />} />
                 <Route path='/buyStock/:symbol' element={<BuyStock />} />
