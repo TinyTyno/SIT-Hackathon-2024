@@ -20,7 +20,7 @@ const StableSidebar = ({ children }) => {
   return (
     <>
       {!isOpen ? (
-        <div className="">
+        <div className="z-50">
           <div className="h-screen fixed top-0 left-0 w-[15rem] bg-[#233F59] py-[1em] px-5">
             <div className="justify-center flex flex-col gap-7 ">
               <div
@@ -33,7 +33,9 @@ const StableSidebar = ({ children }) => {
                 <img src="/Logo.svg" alt="logo" className="h-5 w-auto" />
               </div>
               <ul className="flex flex-col gap-3 text-white px-2">
-                <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
+              
+                  <Link to="/dashboard">
+                  <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
                   <div className="self-center">
                     <MdDashboard className="text-white" />
                   </div>
@@ -41,6 +43,7 @@ const StableSidebar = ({ children }) => {
                     Dashboard
                   </div>
                 </li>
+                </Link>
                 <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
                   <div className="self-center">
                     <ImProfile className="text-white" />
@@ -50,10 +53,10 @@ const StableSidebar = ({ children }) => {
               </ul>
             </div>
           </div>
-          <main className= 'pl-[15rem] box-border'>{children}</main>
+          <main className= 'pl-[16rem] box-border'>{children}</main>
         </div>
       ) : (
-        <div className="">
+        <div className="z-50">
           <div className="h-screen fixed top-0 left-0 w-[5rem] bg-[#233F59] py-[1em] px-2">
             <div className="justify-center flex flex-col gap-7 ">
               <div
