@@ -5,6 +5,7 @@ import db from './models/model_index.js';
 
 
 
+
 // Create express app
 const app = express();
 app.use(cors({
@@ -15,12 +16,10 @@ app.use(express.json());
 
 dotenv.config();
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
-
-import QNArouter from './routes/Comments.js';
-app.use('/comment', QNArouter);
+//Routes
+// Stocks
+import stockRouter from './routes/Stocks.js';
+app.use('/stocks', stockRouter);
 
 
 // Initialising database & server
