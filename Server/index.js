@@ -16,10 +16,16 @@ app.use(express.json());
 
 dotenv.config();
 
+
 //Routes
 // Stocks
 import stockRouter from './routes/Stocks.js';
 app.use('/stocks', stockRouter);
+
+//user
+import userRouter from './routes/User.js';
+app.use('/user', userRouter)
+
 
 
 // Initialising database & server
