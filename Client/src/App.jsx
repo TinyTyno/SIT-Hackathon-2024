@@ -27,6 +27,7 @@ import resetSuccess from './pages/login/resetSuccess'
 import forgetSuccess from './pages/login/forgetSuccess'
 import changePassword from './pages/login/changePassword'
 import changePasswordSuccess from './pages/login/changePasswordSuccess'
+import SearchStock from './pages/stockPage/searchStock'
 
 
 function App() {
@@ -43,40 +44,39 @@ function App() {
 	}, []);
 
 
-	return (
-
-		<UserContext.Provider value={{ user, setUser }}>
-			<Router>
-				<Routes>
-
-					<Route path="/qna" Component={QuestionArea} />
-					<Route path="/AI" Component={AI} />
-					{/* <Route path='/stock/:symbol' element={<View_Ind_Stock />} /> */}
-					<Route path='/' element={<Homepage />} />
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+        <Router>
+            <Routes>
+                <Route path="/qna" Component={QuestionArea} />
+                <Route path="/AI" Component={AI} />
+                {/* <Route path='/stock/:symbol' element={<View_Ind_Stock />} /> */}
+                <Route path='/' element={<Homepage />} />
 
 
-					<Route path='/user/userCreate' Component={UserCreate} />
-					<Route path='/user/userView/:id' Component={UserView} />
-					<Route path='/user/userUpdate/:id' Component={UserUpdate} />
-					<Route path='/login' Component={login} />
+                <Route path='/user/userCreate' Component={UserCreate} />
+                <Route path='/user/userView/:id' Component={UserView} />
+                <Route path='/user/userUpdate/:id' Component={UserUpdate} />
+                <Route path='/login' Component={login} />
 
-					{/* password reset */}
-					<Route path='/forgotPassword' Component={forgotPassword} />
-					<Route path='/resetPassword/:id/:token' Component={resetPassword} />
-					<Route path='/changePassword/:id' Component={changePassword} />
-					<Route path='/forgetSuccess' Component={forgetSuccess} />
-					<Route path='/resetSuccess' Component={resetSuccess} />
-					<Route path='/changePasswordSuccess' Component={changePasswordSuccess} />
+                {/* password reset */}
+                <Route path='/forgotPassword' Component={forgotPassword} />
+                <Route path='/resetPassword/:id/:token' Component={resetPassword} />
+                <Route path='/changePassword/:id' Component={changePassword} />
+                <Route path='/forgetSuccess' Component={forgetSuccess} />
+                <Route path='/resetSuccess' Component={resetSuccess} />
+                <Route path='/changePasswordSuccess' Component={changePasswordSuccess} />
 
-					<Route path='/dashboard' element={<Stock_homepage />} />
-					<Route path='/stock/:symbol' element={<ViewStock />} />
-					<Route path='/buyStock/:symbol' element={<BuyStock />} />
-					<Route path='/sellStock/:symbol' element={<SellStock />} />
-					<Route path='/test' element={<View_Ind_Stock />} />
-				</Routes>
-			</Router>
-		</UserContext.Provider >
-	)
+                <Route path='/search/:query' element={<SearchStock />} />
+                <Route path='/dashboard' element={<Stock_homepage/>} />
+                <Route path='/stock/:symbol' element={<ViewStock />} />
+                <Route path='/buyStock/:symbol' element={<BuyStock />} />
+                <Route path='/sellStock/:symbol' element={<SellStock />} />
+                <Route path='/test' element={<View_Ind_Stock />} />
+            </Routes>
+        </Router>
+    </UserContext.Provider>
+  )
 }
 
 export default App

@@ -1,4 +1,4 @@
-import React, { useState, initialFormState } from "react";
+import React, { useState, initialFormState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { RulerHorizontalIcon } from "@radix-ui/react-icons";
@@ -29,17 +29,24 @@ import {
   } from "@/components/ui/dialog"
   
 
-function BuyStockForm() {
+function BuyStockForm({currentPrice}) {
     const { symbol } = useParams();
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         orderType: 'Market', // Default to 'Market'
         quantity: '',
-        price: 119.42,
+        price: currentPrice,
         duration: 'Day',
         extendedHours: false,
     });
+
+    useEffect(() => {
+        setFormData(prevData => ({
+            ...prevData,
+            price: currentPrice || ''
+        }));
+    }, [currentPrice]);
 
     // Handler for input change
     const handleInputChange = (e) => {
@@ -57,7 +64,7 @@ function BuyStockForm() {
             setFormData({
                 ...formData,
                 orderType: 'Market',
-                price: 119.42,
+                price: currentPrice,
                 duration: 'Day',
                 extendedHours: false
             });

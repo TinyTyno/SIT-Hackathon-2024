@@ -26,14 +26,14 @@ import {
     DialogTrigger,
   } from "@/components/ui/dialog"
 
-function SellStockForm() {
+function SellStockForm({currentPrice}) {
     const { symbol } = useParams();
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         orderType: 'Market', // Default to 'Market'
         quantity: '',
-        price: 119.42,
+        price: {currentPrice},
         duration: 'Day',
         extendedHours: false,
     });
@@ -54,7 +54,7 @@ function SellStockForm() {
             setFormData({
                 ...formData,
                 orderType: 'Market',
-                price: 119.42,
+                price: {currentPrice},
                 duration: 'Day',
                 extendedHours: false
             });
