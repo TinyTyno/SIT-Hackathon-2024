@@ -8,6 +8,7 @@ import Homepage from './pages/homepage'
 import ViewStock from './pages/stockPage/viewStock'
 import BuyStock from './pages/stockPage/buyStock'
 import SellStock from './pages/stockPage/sellStock'
+import Stock_homepage from './pages/Stocks/Stock_homepage'
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
       <Routes>
         {/* <Route path='/stock/:symbol' element={<View_Ind_Stock />} /> */}
         <Route path='/' element={<Homepage/>} />
+        <Route path='/dashboard' element={<Stock_homepage/>} />
         <Route path='/stock/:symbol' element={<ViewStock />} />
         <Route path='/buyStock/:symbol' element={<BuyStock />} />
         <Route path='/sellStock/:symbol' element={<SellStock />} />

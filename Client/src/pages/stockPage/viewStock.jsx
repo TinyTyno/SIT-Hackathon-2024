@@ -31,14 +31,14 @@ function ViewStock() {
   // var data = axios.get(`http://localhost:3000/api/stock/${symbol}`)
 
   return (
-    <div>
+    <div class="container" style={{ margin: "auto" }}>
       <StableSidebar>
-        <div class="container w-full m-auto">
+        <div className="w-[90%] m-auto">
           <SearchStock />
           <ResizablePanelGroup
             direction="horizontal"
-            className="w-[100vw]"
-            style={{ width: "80vw", margin: "auto", marginLeft: "70px" }}
+            // className="w-[100vw]"
+            // style={{ width: "80vw", margin: "auto", marginLeft: "70px" }}
           >
             <ResizablePanel>
               <div
@@ -92,7 +92,8 @@ function ViewStock() {
           <ResizablePanelGroup
             direction="horizontal"
             className="border"
-            style={{ width: "80vw", margin: "auto", marginLeft: "70px" }}
+            // className="border w-[100vw]"
+            // style={{ width: "80vw", margin: "auto", marginLeft: "70px" }}
           >
             <ResizablePanel defaultSize={73}>
               <div
@@ -180,8 +181,8 @@ function ViewStock() {
           </ResizablePanelGroup>
           <ResizablePanelGroup
             direction="horizontal"
-            className="border w-[100vw]"
-            style={{ width: "80vw", margin: "auto", marginLeft: "70px" }}
+            // className="border w-[100vw]"
+            // style={{ width: "80vw", margin: "auto", marginLeft: "70px" }}
           >
             <ResizablePanel>{/* // Put your charts here */}</ResizablePanel>
           </ResizablePanelGroup>
