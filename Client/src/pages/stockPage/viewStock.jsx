@@ -1,5 +1,12 @@
+
 import React, { useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+
+import {
+    ResizableHandle,
+    ResizablePanel,
+    ResizablePanelGroup,
+  } from "@/components/ui/resizable"
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import axios from 'axios';
@@ -10,6 +17,7 @@ import {
   } from "@/components/ui/hover-card"
 import SearchStock from '@/components/stockPage/searchStock'
 import StableSidebar from '@/components/StableSidebar'
+
 
 
 function ViewStock() {
