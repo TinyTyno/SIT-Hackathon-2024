@@ -12,6 +12,7 @@ dotenv.config();
 // Get the historical stock data for a specific stock/crypto
 //Required parameters: type, symbol, view (e.g. AAPL, stock, 1D)
 stockRouter.get('/stockData', async (req, res) => {
+    console.log('haha')
     const type = req.query.type;
     const symbol = req.query.symbol;
     const view = req.query.view;

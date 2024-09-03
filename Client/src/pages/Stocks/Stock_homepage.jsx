@@ -3,6 +3,7 @@ import StableSidebar from '@/components/StableSidebar'
 import SearchStock from '@/components/stockPage/searchStock'
 import StockCard from '@/components/stockPage/StockCard'
 import axios from 'axios'
+import http from '../../../http'
 import {
     Carousel,
     CarouselContent,
@@ -15,8 +16,10 @@ import StockTable from '@/components/stockPage/StockTable';
 const Stock_homepage = () => {
   const [stocks, setStocks] = useState([])
   const fetchData = async () => {
-    var data = await axios.get("http://localhost:3000/stocks/stockData?symbol=NVDA&type=stock&view=5D");
-    var stockArray = (data.data[symbol])
+    var data = await axios.get("http://localhost:3000/stocks/stockData?symbol=AAPL&type=stock&view=1D");
+    console.log(data)
+    var stockArray = (data.data['AAPL'])
+    console.log(stockArray)
     var latest = stockArray[stockArray.length - 1]
     console.log(latest)
 };
