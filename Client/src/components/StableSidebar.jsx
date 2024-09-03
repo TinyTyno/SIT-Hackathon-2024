@@ -12,6 +12,7 @@ import {
 import { Link, useParams } from "react-router-dom";
 import clsx from 'clsx';
 import UserContext from '../contexts/UserContext';
+import http from '../../http';
 
 
 const StableSidebar = ({ children }) => {
@@ -29,14 +30,13 @@ const StableSidebar = ({ children }) => {
   useEffect(() => {
     if (user) {
       fetchData();
-      setUser(user)
       setLoading(false);
     }
   }, []);
 
   const fetchData = async () => {
     await http.get(`/user/${id}`).then((res) => {
-      setPassword(res.data.password)
+      setUser(user)
       console.log(res.data)
     });
   }
