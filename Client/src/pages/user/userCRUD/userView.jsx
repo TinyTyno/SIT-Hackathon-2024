@@ -141,7 +141,6 @@ function UserView() {
 
     return (
         <>
-            <Navbar />
             <StableSidebar>
                 <Container maxW="container.lg" p={4}>
                     <Box
@@ -149,36 +148,40 @@ function UserView() {
                         sx={{ flexGrow: 1, pl: { xs: 6, md: 0 }, position: "relative" }}
                     >
 
-                        <Box sx={{ maxWidth: 700, mt: { xs: '5em', lg: 0 } }}>
-                            <Box sx={{ display: 'flex', width: '100%', alignItems: 'flex-end', mb: 4, mt: 1 }}>
-                                <Text variant="subtitle1" sx={{ textTransform: "uppercase", pb: 2, fontWeight: "bold", flexGrow: 1 }}>
-                                    Account Information
+                        <Box sx={{ maxWidth: "95%", mt: { xs: '5em', lg: 0 }, ml: 10 }}>
+                            <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between', mb: 4, mt: 1 }}>
+                                <Text variant="subtitle1" fontSize="42" fontWeight="bold">
+                                    {userInfo.name}
                                 </Text>
                                 <Link to={`/user/userUpdate/${id}`}>
                                     <Text
-                                        component="span"
                                         variant="subtitle1"
                                         sx={{
-                                            pb: 2, fontWeight: "bold", color: '#AA3535', textDecoration: 'underline', cursor: 'pointer'
+                                            fontWeight: "bold", color: '#AA3535', textDecoration: 'underline', cursor: 'pointer', mt: 10
                                         }}
                                     >
                                         Edit
                                     </Text>
                                 </Link>
                             </Box>
-                            <Table sx={{ pb: 10, width: '100%', mb: 4 }}>
-                                <Thead>
-                                    <Th textAlign="left">Name</Th>
-                                    <Th textAlign="left">Email</Th>
-                                </Thead>
-                                <Tbody>
-                                    <Tr>
-                                        <Td textAlign="left">{userInfo?.name}</Td>
-                                        <Td textAlign="left">{userInfo?.email}</Td>
-                                    </Tr>
-                                </Tbody>
-                            </Table>
+                            <Text variant="subtitle1" fontSize="20" fontWeight="bold">
+                                    {userInfo.email}
+                                </Text>
                         </Box>
+                        {/* box for portfolio and cash balance */}
+                        <Container maxW="container.lg" p={5} h="100vh" display="flex" flexDirection="column">
+                            <Box display="flex" justifyContent="space-between" pt={10}>
+                                {/* portfolio box */}
+                                
+                                <Box w="70%" mr={2}>
+
+                                </Box>
+                                {/* Cash balance box */}
+                                <Box w="30%" ml={2}>
+
+                                </Box>
+                            </Box>
+                        </Container>
                     </Box>
                 </Container>
             </StableSidebar>
