@@ -1,29 +1,24 @@
-import React, { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
+import axios from 'axios';
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+  } from "@/components/ui/hover-card"
+import SearchStock from '@/components/stockPage/searchStock'
+import StableSidebar from '@/components/StableSidebar'
 
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import axios from "axios";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import SearchStock from "@/components/stockPage/searchStock";
-import StableSidebar from "@/components/StableSidebar";
 
 function ViewStock() {
-  const { symbol } = useParams();
-  const navigate = useNavigate();
+    const { symbol } = useParams();
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+    useEffect(() => {
+        fetchData();
+    }, []);
 
   const fetchData = async () => {
     console.log("Testing");
@@ -192,4 +187,9 @@ function ViewStock() {
   );
 }
 
-export default ViewStock;
+export default ViewStock
+
+
+
+
+

@@ -58,12 +58,14 @@ stockRouter.get('/stockData', async (req, res) => {
                 start.setFullYear(start.getFullYear() - 1);
                 break;
         }
+        start = start.toISOString().split('T')[0];
 
         // Creating the URI for the request of the stock data
         uri = `https://data.alpaca.markets/v2/stocks/bars?symbols=${symbol}&&timeframe=${interval}&start=${start}&limit=10000&adjustment=raw&feed=sip&sort=asc`
+        console.log(encodeURI(uri))
         options = {
             method: 'GET',
-            url: 'https://data.alpaca.markets/v2/stocks/bars?symbols=AAPL&timeframe=1T&start=2024-01-01&limit=1000&adjustment=raw&feed=sip&sort=asc',
+            url: encodeURI(uri),
             headers: {
                 accept: 'application/json',
                 'APCA-API-KEY-ID': process.env.APCA_API_KEY_ID,
