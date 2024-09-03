@@ -7,7 +7,7 @@ import {
     HoverCard,
     HoverCardContent,
     HoverCardTrigger,
-} from "@/components/ui/hover-card"
+  } from "@/components/ui/hover-card"
 import SearchStock from '@/components/stockPage/searchStock'
 import StableSidebar from '@/components/StableSidebar'
 
@@ -20,12 +20,10 @@ function ViewStock() {
         fetchData();
     }, []);
 
-    const fetchData = async () => {
-        console.log('Testing')
-    }
-    // var data = axios.get(`http://localhost:3000/api/stock/${symbol}`)
-
-
+  const fetchData = async () => {
+    console.log("Testing");
+  };
+  // var data = axios.get(`http://localhost:3000/api/stock/${symbol}`)
 
     return (
         <div class="container" style={{ margin: 'auto' }}>
@@ -123,8 +121,8 @@ function ViewStock() {
                     </div>
                 </div>
             </div>
-        </div>
-    )
+        </div>      
+  );
 }
 
 export default ViewStock
