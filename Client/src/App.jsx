@@ -1,8 +1,10 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import './App.css'
-import Test from './pages/test'
+import './index.css'
+
+import View_Ind_Stock from './pages/Stocks/View_Ind_Stock'
+import Homepage from './pages/homepage'
 import QuestionArea from './pages/Comments'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import AI from './pages/AI'
