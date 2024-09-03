@@ -1,0 +1,10 @@
+{
+    "BTCUSD" : {
+        "finnhub" : "BINANCE:BTCUSDT",
+        "alpaca" : "BTC/USD"
+    },
+    "ETHUSD" : {
+        "finnhub" : "BINANCE:ETHUSDT",
+        "alpaca" : "ETH/USD"
+    }
+}

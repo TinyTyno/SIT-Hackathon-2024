@@ -62,7 +62,6 @@ stockRouter.get('/stockData', async (req, res) => {
 
         // Creating the URI for the request of the stock data
         uri = `https://data.alpaca.markets/v2/stocks/bars?symbols=${symbol}&&timeframe=${interval}&start=${start}&limit=10000&adjustment=raw&feed=sip&sort=asc`
-        console.log(encodeURI(uri))
         options = {
             method: 'GET',
             url: encodeURI(uri),
@@ -92,6 +91,24 @@ stockRouter.get('/stockData', async (req, res) => {
     } catch (error) {
         res.status(500).send
     }
+});
+
+//Search Symbol
+stockRouter.get('/searchSymbol', async (req, res) => {
+    const symbol = req.query.symbol;
+
+    const api_key = finnhub.ApiClient.instance.authentications['api_key'];
+    api_key.apiKey = process.env.FINNHUB_API_KEY;
+    const finnhubClient = new finnhub.DefaultApi()
+
+    finnhubClient.symbolSearch(symbol, (error, data, response) => {
+        if (error) {
+            res.status(500).send(error);
+        }
+        else {
+            res.status(200).send(data);
+        }
+    });
 });
 
 
