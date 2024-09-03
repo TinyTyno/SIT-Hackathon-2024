@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import db from './models/model_index.js';
 
+
 // Create express app
 const app = express();
 app.use(cors({
@@ -13,9 +14,11 @@ app.use(express.json());
 
 dotenv.config();
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+//Routes
+// Stocks
+import stockRouter from './routes/Stocks.js';
+app.use('/stocks', stockRouter);
+
 
 // Initialising database & server
 let port = process.env.SERVER_PORT;
