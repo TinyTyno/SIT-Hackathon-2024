@@ -5,6 +5,7 @@ import './App.css'
 import Test from './pages/test'
 import QuestionArea from './pages/Comments'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import AI from './pages/AI'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -15,6 +16,7 @@ function App() {
        <Routes>
        
         <Route path="/qna" Component={QuestionArea} />
+        <Route path="/AI" Component={AI}  />
 
         </Routes>
         </Router>

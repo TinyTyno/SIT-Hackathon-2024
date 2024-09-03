@@ -67,7 +67,7 @@ function QuestionArea() {
                     messages.map((message, index) => (
                         <div key={index}>
                             <p><strong>Message:</strong> {message.messages}</p>
-                            <p><strong>Date:</strong> {message.date}</p>
+                            
                         </div>
                     ))
                 ) : (
