@@ -4,8 +4,6 @@ import cors from 'cors';
 import db from './models/model_index.js';
 
 
-
-
 // Create express app
 const app = express();
 app.use(cors({
@@ -16,10 +14,22 @@ app.use(express.json());
 
 dotenv.config();
 
+
 //Routes
 // Stocks
 import stockRouter from './routes/Stocks.js';
 app.use('/stocks', stockRouter);
+// import searchRouter from './routes/Search.js';
+// app.use('/api', searchRouter);
+import StockTransactionRouter from './routes/StockTransaction.js';
+app.use('/transactions', StockTransactionRouter);
+import yahoofinancetesting from './routes/yahoofinance/yahoofinancetesting.js';
+app.use('/testing', yahoofinancetesting);
+
+//user
+import userRouter from './routes/User.js';
+app.use('/user', userRouter)
+
 
 
 // Initialising database & server
