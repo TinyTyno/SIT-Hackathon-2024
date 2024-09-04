@@ -68,7 +68,7 @@ const StableSidebar = ({ children }) => {
                     </div>
                   </li>
                 </Link>
-                <Link to={`/user/userView`}>
+                <Link to={'/user/view'}>
                 <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
                   <div className="self-center">
                     <ImProfile className="text-white" />
@@ -139,7 +139,7 @@ const StableSidebar = ({ children }) => {
                   <Tooltip>
                     <TooltipTrigger>
                       <li className="flex flex-row justify-center gap-4 w-full py-2 rounded-sm hover:bg-[#516e9578] cursor-pointer">
-                        <Link to={`/user/userView`}>
+                        <Link to={'/user/view'}>
                           <div className="self-center w-fit">
                             <ImProfile className="text-white" />
                           </div></Link>

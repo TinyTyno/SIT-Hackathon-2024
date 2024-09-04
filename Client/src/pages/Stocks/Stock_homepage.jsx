@@ -15,36 +15,18 @@ import SearchStockInput from "@/components/stockPage/searchStockInput";
 
 const Stock_homepage = () => {
   const [stocks, setStocks] = useState([]);
+  const [search, setSearch] = useState("");
 
-  const invoiceData = [
-    {
-      id: 1,
-      invoiceNumber: "INV001",
-      status: "Paid",
-      method: "Credit Card",
-      amount: "$250.00",
-    },
-    // Add more invoice objects as needed
-  ];
   const fetchData = async () => {
     var symbolList = []
     var symbols = await axios.get(
       `http://localhost:3000/stocks/allStock`
     );
-    // const yahooResponse = await axios.get(`http://localhost:3000/testing/api/trendingStocks`);
-    // console.log('yahooResponse.data', yahooResponse.data);
-    // var data = await axios.get(
-    //   "http://localhost:3000/stocks/stockData?symbol=AAPL&type=stock&view=1D"
-    // );
     symbols.data.map((symbol) => {
       symbolList.push(symbol.symbol)
     })
     setStocks(symbolList)
-    // console.log("data", data);
-    // var stockArray = data.data["AAPL"];
-    // console.log(stockArray);
-    // var latest = stockArray[stockArray.length - 1];
-    // console.log(latest);
+
   };
 
   useEffect(() => {
@@ -53,7 +35,7 @@ const Stock_homepage = () => {
   return (
     <div>
       <StableSidebar>
-        <div className="w-[90%] m-auto">
+        <div className="w-[95%] m-auto">
           <SearchStockInput />
           <h1 className="text-2xl font-bold ml-10 mt-10">Trending Stocks</h1>
           <div className="mt-10 w-[90%] m-auto">

@@ -31,6 +31,8 @@ function UserCreate() {
             email: '',
             password: '',
             confirmPassword: '',
+            cashBalance: 10000.00,
+            startingBalance: 10000.00,
         },
         validationSchema: yup.object({
             name: yup.string().required('User Name is required'),
@@ -54,7 +56,8 @@ function UserCreate() {
             data.name = data.name.trim();
             data.email = data.email.trim();
             data.password = data.password.trim();
-
+            data.cashBalance = 10000.00;
+            data.startingBalance = 10000.00;
             http.post('/user/create', data)
                 .then((res) => {
                     console.log(res); // Log the entire response object
