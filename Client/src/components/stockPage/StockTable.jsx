@@ -19,33 +19,70 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination"; // Adjust the import path
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const StockTable = ({ data, itemsPerPage = 10,type='stock' }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentData, setCurrentData] = useState([]);
+  const navigate = useNavigate();
 
   const totalPages = Math.ceil(data.length / itemsPerPage);
-  console.log(totalPages)
+
+
   // Memoize paginated data to avoid recalculation on every render
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     return data.slice(startIndex, startIndex + itemsPerPage);
   }, [currentPage, data]);
 
-  console.log(paginatedData)
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-  const fetchData = async () => {
-    paginatedData.map((stock) => {
-       axios.get(`http://localhost:3000/testing/api/stock?symbol=${stock}`)
-      .then((response) => {
-        console.log(response.data)
-      }).catch((error) => {
-         console.log(error)
-      })
+
+  const searchSymbol = async (symbol) => {
+    try {
+      const stockResponse = await axios.get(`http://localhost:3000/stocks/stockData?symbol=${symbol}&type=stock&view=5D`);
+      const stockArray = stockResponse.data[symbol];
+      if(stockArray){
+      const latest = stockArray[stockArray.length - 1];
+      const currentPrice = latest.c.toFixed(2);
+      const yahooResponse = await axios.get(`http://localhost:3000/testing/api/stock/${symbol}`);
+      console.log('yahooResponse.data', yahooResponse.data.regularMarketVolume);
+      const displayName = yahooResponse.data.displayName;
+      const regularMarketChange = yahooResponse.data.regularMarketChange.toFixed(2);
+      const regularMarketChangePercent = yahooResponse.data.regularMarketChangePercent.toFixed(2);
+
+      // Return the stock object to be added to the list
+      return {
+        symbol,
+        name: displayName,
+        price: currentPrice,
+        change: regularMarketChange,
+        percent: regularMarketChangePercent,
+      };
+      }
+      else{
+        return null
+      }
+
+      
+    } catch (error) {
+      console.error(`Error fetching symbol data for ${symbol}:`, error);
+      return null; // Return null on failure to prevent adding to the list
     }
-    )
+  };
+
+  const fetchData = async () => {
+    var stockList = []
+    for(let i=0;i<paginatedData.length;i++){
+      const stockData = await searchSymbol(paginatedData[i]);
+      if (stockData) { // Only push if stockData is not null
+        stockList.push(stockData);
+      }
+    }
+    console.log('stockList',stockList)
+    setCurrentData(stockList)
   };
   useEffect(() => {
     setCurrentData(paginatedData);
@@ -55,39 +92,33 @@ const StockTable = ({ data, itemsPerPage = 10,type='stock' }) => {
   return (
     <div>
       <Table className="">
-        <TableCaption>A list of your recent invoices.</TableCaption>
+        <TableCaption>All available stocks.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Invoice</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Method</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
+            <TableHead className="w-[100px]">Symbol</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Current Price</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {/* {type==='stock'?paginatedData.map((invoice) => (
-            <TableRow key={invoice.id}>
-              <TableCell className="font-medium">
-                {invoice.invoiceNumber}
-              </TableCell>
-              <TableCell>{invoice.status}</TableCell>
-              <TableCell>{invoice.method}</TableCell>
-              <TableCell className="text-right">{invoice.amount}</TableCell>
-            </TableRow>
-          )):paginatedData.map((holding) => (
-            <TableRow key={holding.id}>
-              <TableCell className="font-medium">
-                <div className="font-semibold">{holding.symbol}</div>
-                <span>{holding.name}</span>
-              </TableCell>
-              <TableCell>
-                <div className="font-semibold">{holding.position}</div>
-                <span>{holding.market}</span>
-              </TableCell>
-              <TableCell>{holding.amount}</TableCell>
-              <TableCell className="text-right">{holding.price}</TableCell>
-            </TableRow>
-          ))} */}
+          {currentData.map((stock) => (
+             <TableRow key={stock.symbol}>
+             <TableCell>{stock.symbol || 'N/A'}</TableCell>
+             <TableCell>{stock.name || 'N/A'}</TableCell>
+             <TableCell>
+               {stock.price || 'N/A'}{' '}
+               <span className={`text-sm font-bold ${stock.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                 {stock.change >= 0 ? '+' : ''}{stock.change || 0} ({stock.percent || 0}%)
+               </span>
+             </TableCell>
+             <TableCell className="text-right">
+                 <Button className="mr-2 bg-blue-500 hover:bg-blue-600" onClick={() => navigate(`/buyStock/${stock.symbol}`)}>Buy</Button>
+                 <Button className="mr-2 bg-red-500 hover:bg-red-600" onClick={() => navigate(`/sellStock/${stock.symbol}`)}>Sell</Button>
+                 <Button onClick={() => navigate(`/Stock/${stock.symbol}`)}>View</Button>
+             </TableCell>
+           </TableRow>
+          ))}
         </TableBody>
       </Table>
 
