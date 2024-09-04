@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import UserContext from '@/contexts/UserContext'
 import StableSidebar from '@/components/StableSidebar'
-import SearchStockInput from '@/components/stockPage/searchStockInput'
 import StockCard from '@/components/stockPage/StockCard'
 import axios from 'axios'
 import {
