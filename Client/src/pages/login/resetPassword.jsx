@@ -107,6 +107,7 @@ function ResetPassword() {
                                                 border: '1px solid gray',
                                                 borderRadius: '10px',
                                                 padding: '10px',
+                                                marginBottom: '15px'
                                             }}
                                         />
                                         <InputRightElement>
@@ -129,6 +130,7 @@ function ResetPassword() {
                                                 border: '1px solid gray',
                                                 borderRadius: '10px',
                                                 padding: '10px',
+                                                marginBottom: '15px'
                                             }}
                                         />
                                         <InputRightElement>
@@ -137,7 +139,7 @@ function ResetPassword() {
                                     </InputGroup>
                                     <FormErrorMessage>{formik.errors.confirmPassword}</FormErrorMessage>
                                 </FormControl>
-                                <Button type="submit" w="full" mt={8} style={{
+                                <Button type="submit" w="full" mt={5} mb={2} style={{
                                     background: 'linear-gradient(to left, #1DB5E4, #1274CE)',
                                 }}
                                     color="#fff">
