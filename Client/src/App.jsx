@@ -5,9 +5,9 @@ import './index.css'
 
 import View_Ind_Stock from './pages/Stocks/View_Ind_Stock'
 import Homepage from './pages/homepage'
-import QuestionArea from './pages/Comments'
+import QuestionArea from './pages/Comments/Comments'
 
-import AI from './pages/AI'
+import AI from './pages/AI/AI'
 import ViewStock from './pages/stockPage/viewStock'
 import BuyStock from './pages/stockPage/buyStock'
 import SellStock from './pages/stockPage/sellStock'

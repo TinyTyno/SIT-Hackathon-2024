@@ -30,6 +30,10 @@ app.use('/testing', yahoofinancetesting);
 import userRouter from './routes/User.js';
 app.use('/user', userRouter)
 
+//comments
+import QNArouter from './routes/Comments.js';
+app.use('/comment', QNArouter);
+
 
 
 // Initialising database & server

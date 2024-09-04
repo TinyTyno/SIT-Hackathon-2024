@@ -12,8 +12,9 @@ export default (sequelize, DataTypes) => {
         },
         date: {
             type: DataTypes.DATE,
-            allowNull: true
+            allowNull: false
         },
+     
   
         
     }, {
