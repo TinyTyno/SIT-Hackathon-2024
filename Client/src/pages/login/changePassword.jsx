@@ -132,10 +132,10 @@ function ChangePassword() {
                 >
                         <Box display="flex" justifyContent="space-between" pt={10}>
                             <Box w="50%" mr={2}>
-                                <Text variant="h4" my={2} fontWeight="bold">
+                                <Text variant="h4"fontSize={32} my={2} fontWeight="bold">
                                     Change
                                 </Text>
-                                <Text variant="h4" my={2} fontWeight="bold" mb={5}>
+                                <Text variant="h4" fontSize={32} my={2} fontWeight="bold" mb={5}>
                                     Password
                                 </Text>
                                 <form onSubmit={formik.handleSubmit}>

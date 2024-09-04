@@ -12,7 +12,7 @@ dotenv.config();
 import { google } from 'googleapis';
 
 
-const userRouter = express.Router(); 
+const userRouter = express.Router();
 
 userRouter.post('/create', async (req, res) => {
     let data = req.body;
@@ -22,7 +22,30 @@ userRouter.post('/create', async (req, res) => {
     //yup validation
     let validationSchema = yup.object({
         name: yup.string().required("User Name is required"),
+        dob: yup.date()
+            .min(new Date(1900, 0, 1), 'Date of birth must be on or after January 1, 1900')
+            .max(new Date(), 'Date of birth must be in the past')
+            .required('Date of birth is required'),
+        sex: yup.string()
+            .oneOf(['male', 'female'], 'Invalid sex')
+            .required("User Sex is required"),
+        residentialStatus: yup.string()
+            .oneOf(['Citizen', 'Permanent Resident', 'Foreigner'], 'Invalid residential status')
+            .required('Residential status is required'),
         email: yup.string().required("Email is required"),
+        mobileNo: yup.string()
+            .required('Mobile number is required')
+            .test('len', 'Mobile number must be 8 digits', val => val && val.length === 8)
+            .test('numeric', 'Mobile number must be numeric', val => val && /^\d+$/.test(val)),
+        streetName: yup.string().required('Street Name is required'),
+        postal: yup.string()
+            .required('Postal code is required')
+            .test('len', 'Postal code must be 6 digits', val => val && val.length === 6 && /^\d+$/.test(val)),
+        blockNo: yup.string().required('Block Number is required')
+            .test('numeric', 'Block Number must be numeric', val => val && /^\d+$/.test(val)),
+        floorNo: yup.string(),
+        unitNo: yup.string(),
+        buildingName: yup.string().optional(),
         password: yup.string()
         .required('Password is required')
         .min(8, 'Password must be at least 8 characters')
@@ -32,6 +55,9 @@ userRouter.post('/create', async (req, res) => {
         .test('hasCapitalLetter', 'Password must have at least one capital letter', val => val && /[A-Z]/.test(val))
         .test('hasSpecialSymbol', 'Password must have at least one special symbol', val => val && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(val))
         .notOneOf([yup.ref('currentPassword')], 'New password must not match previous password'),
+        staffPosition: yup.string()
+            .oneOf(['Manager', 'Staff', 'NonStaff'], 'Invalid Staff Position')
+            .required('staff position is required')
     });
 
     try {
@@ -94,7 +120,7 @@ userRouter.post("/login", async (req, res) => {
         let userInfo = {
             id: user.id,
             email: user.email,
-            name: user.name,
+            name: user.name
         };
         console.log(userInfo)
         let accessToken = sign(userInfo, process.env.APP_SECRET,

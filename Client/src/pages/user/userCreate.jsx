@@ -1,12 +1,13 @@
-import React, { useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { Box, Text, FormControl, Input, InputRightElement, Button, IconButton, FormLabel, FormErrorMessage, InputGroup, ChakraProvider, Container } from "@chakra-ui/react";
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import http from '../../../../http';
+import http from '../../http';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import UserContext from '../../../contexts/UserContext';
+import UserContext from '../../contexts/UserContext';
+import '../../loginCSS/signinLogin.css'
 
 
 function UserCreate() {
@@ -30,8 +31,6 @@ function UserCreate() {
             email: '',
             password: '',
             confirmPassword: '',
-            cashBalance: 10000.00,
-            startingBalance: 10000.00,
         },
         validationSchema: yup.object({
             name: yup.string().required('User Name is required'),
@@ -55,8 +54,7 @@ function UserCreate() {
             data.name = data.name.trim();
             data.email = data.email.trim();
             data.password = data.password.trim();
-            data.cashBalance = 10000.00;
-            data.startingBalance = 10000.00;
+
             http.post('/user/create', data)
                 .then((res) => {
                     console.log(res); // Log the entire response object
@@ -74,48 +72,23 @@ function UserCreate() {
         },
     });
 
-    const handleCancel = () => {
-        navigate(-1);
-    };
 
     return (
         <ChakraProvider padding={0}>
             <Container
                 maxW={'100%'}
                 padding={0}
-                minHeight={'100vh'}
             >
                 <Box display="flex" justifyContent="space-between">
-                    <Box w="60%" mr={2} style={{
-                        backgroundImage: 'url(/signUp.jpg)',
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        height: '100vh',
-                    }} />
+                    <Box w="60%" h='100%' mr={2}>
+                        <img src="signUp.jpg" alt=""  />
+                    </Box>
                     <Box w="40%" m={6} mr={8} pt={170}>
-                        <Box justifyContent="center" width='90%'>
+                        <Box  justifyContent="center" width='90%'> 
                             <Text variant="h4" my={2} fontSize={32} fontWeight="bold" mb={5}>
                                 Sign Up
                             </Text>
                             <form onSubmit={formik.handleSubmit}>
-                                <FormControl isInvalid={formik.errors.name && formik.touched.name}>
-                                    <FormLabel>Name *</FormLabel>
-                                    <Input
-                                        type="text"
-                                        name="name"
-                                        value={formik.values.name}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        style={{
-                                            backgroundColor: 'white',
-                                            border: '1px solid gray',
-                                            borderRadius: '10px',
-                                            padding: '10px',
-                                        }}
-                                    />
-                                    <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
-                                </FormControl>
-
                                 <FormControl isInvalid={formik.errors.email && formik.touched.email}>
                                     <FormLabel>Email *</FormLabel>
                                     <Input
@@ -150,7 +123,7 @@ function UserCreate() {
                                                 padding: '10px',
                                             }}
                                         />
-                                        <InputRightElement>
+                                        <InputRightElement width="4.5rem">
                                             <IconButton
                                                 onClick={handleTogglePassword}
                                                 size="sm"
@@ -161,46 +134,18 @@ function UserCreate() {
                                     <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
                                 </FormControl>
 
-                                <FormControl isInvalid={formik.errors.confirmPassword && formik.touched.confirmPassword}>
-                                    <FormLabel>Confirm Password *</FormLabel>
-                                    <InputGroup>
-                                        <Input
-                                            type={confirmShowPassword ? 'text' : 'password'}
-                                            name="confirmPassword"
-                                            value={formik.values.confirmPassword}
-                                            onChange={formik.handleChange}
-                                            onBlur={formik.handleBlur}
-                                            style={{
-                                                backgroundColor: 'white',
-                                                border: '1px solid gray',
-                                                borderRadius: '10px',
-                                                padding: '10px',
-                                            }}
-                                        />
-                                        <InputRightElement>
-                                            <IconButton
-                                                onClick={handleToggleConfirmPassword}
-                                                size="sm"
-                                                icon={confirmShowPassword ? <ViewIcon /> : <ViewOffIcon />}
-                                            />
-                                        </InputRightElement>
-                                    </InputGroup>
-                                    <FormErrorMessage>{formik.errors.confirmPassword}</FormErrorMessage>
-                                </FormControl>
+                                <Box display="flex" justifyContent="space-between" mb={4} mt={1}>
+                                    <Link to="/forgotPassword" color="#AA3535" textDecoration="underline" cursor="pointer">
+                                        Forgot Password?
+                                    </Link>
+                                    {/* <Link to="/user/userCreate" color="#AA3535" textDecoration="underline" cursor="pointer">
+                                        Don't have an Account?
+                                    </Link> */}
+                                </Box>
 
-                                <Button style={{
-                                    background: 'linear-gradient(to left, #1DB5E4, #1274CE)',
-                                }}
-                                    color="#fff" type="submit" w="full" mt={2}>
+                                <Button className='submitButton' type="submit" w="full" mt={2}>
                                     Sign Up
                                 </Button>
-                                <Link to="/login">
-                                    Already have an Account? <span style={{
-                                        color: "#1274CE",
-                                        textDecoration: "underline",
-                                        cursor: "pointer"
-                                    }}>Log In</span>
-                                </Link>
                             </form>
                         </Box>
                     </Box>

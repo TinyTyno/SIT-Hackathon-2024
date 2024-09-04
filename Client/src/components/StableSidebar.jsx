@@ -30,6 +30,7 @@ const StableSidebar = ({ children }) => {
   useEffect(() => {
     if (user) {
       fetchData();
+      console.log(user.id)
       setLoading(false);
     }
   }, []);
@@ -188,7 +189,7 @@ const StableSidebar = ({ children }) => {
                   <Tooltip>
                     <TooltipTrigger>
                       <li className="flex flex-row justify-center gap-4 w-full py-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
-                        <Link to={`/changePassword/${id}`}>
+                        <Link to={`/changePassword/${user.id}`}>
                           <div className="self-center w-fit">
                             <MdVpnKey className="text-white" />
                           </div>

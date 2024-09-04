@@ -1,11 +1,12 @@
 import { Box, Flex, Grid, Button, Input, FormLabel, FormControl, FormErrorMessage, RadioGroup, Radio, Checkbox, IconButton, Container } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import http from '../../../http'
+import http from '../../http'
 import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import Navbar from '@/components/Navbar'
-import UserContext from '../../../contexts/UserContext';
+import StableSidebar from '@/components/StableSidebar'
+import UserContext from '../../contexts/UserContext';
 import { React, useState, useRef, useEffect, useContext } from 'react'
 
 
