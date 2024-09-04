@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
@@ -20,10 +20,12 @@ import {
 } from "@/components/ui/hover-card"
 import http from '../../../http.js'
 import { Tab } from '@chakra-ui/react';
+import UserContext from "../../contexts/UserContext";
 
 function ViewOrder() {
     const { query } = useParams();
     const navigate = useNavigate();
+    const { user } = useContext(UserContext);
 
     const [ordersList, setOrdersList] = useState([]);
 
@@ -33,7 +35,7 @@ function ViewOrder() {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/transactions/getOrders?id=123456789`);
+            const response = await axios.get(`http://localhost:3000/transactions/getOrders?id=${user.id}`);
             const data = response.data;
             setOrdersList(data.reverse());
             console.log('orders list is' + ordersList)
@@ -76,7 +78,7 @@ function ViewOrder() {
         <StableSidebar>
         <div className='Container'>
             <SearchStockInput />
-            <span style={{marginLeft:'2rem', fontSize:'1.5rem', fontWeight:'800', marginTop:'1rem'}}>Order History</span>
+            <span style={{display:'block', marginLeft:'2rem', fontSize:'1.5rem', fontWeight:'800', marginTop:'2rem'}}>Order History</span>
             <Table style={{ maxHeight: '60vh', width: '60vw', marginLeft:'2rem', marginTop: '1.5rem' }}>
             <TableCaption>List of order history</TableCaption>
             <TableHeader>

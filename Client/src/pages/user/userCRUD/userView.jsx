@@ -30,6 +30,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -134,13 +139,13 @@ function UserView() {
 <TableHead>P/L</TableHead> */
   }
 
-  useEffect(() => {
-    if (user) {
-      console.log(user);
-      setUser(user);
-      fetchData(user.id);
-    }
-  }, [user]);
+    useEffect(() => {
+      if (user) {
+        setUser(user);
+        fetchData(user.id);
+        CalculateAsset();
+      }
+    }, [user]);
 
   const handleReset = async () => {
     await http
@@ -221,59 +226,67 @@ function UserView() {
     setOpenEditForm(false);
   };
 
-  // Output the User holdings tables
-  function UserHoldingsOutput() {
-    if (!Array.isArray(holdingData) || holdingData.length === 0) {
-      return (
-        <TableRow>
-          <TableCell colSpan="4">
-            No data available or failed to fetch.
-          </TableCell>
-        </TableRow>
-      );
+    // Output the User holdings tables
+    function UserHoldingsOutput() {
+        CalculateAsset();
+        if (!Array.isArray(holdingData) || holdingData.length === 0) {
+        return (
+            <TableRow>
+            <TableCell colSpan="4">No data available or failed to fetch.</TableCell>
+            </TableRow>
+        )};
+        return holdingData.map((holding) => (
+          <TableRow>
+            <TableCell>{holding.symbol}</TableCell>
+            <TableCell>{holding.name}</TableCell>
+            <TableCell>{(holding.marketValue).toFixed(2)} USD</TableCell>
+            <TableCell>{holding.quantity}</TableCell>
+            <TableCell>{(holding.currentPrice).toFixed(2)} USD</TableCell>
+            <TableCell>{(holding.priceBought)} USD</TableCell>
+            <TableCell className={holding.PL < 0 ? 'text-red-500' : 'text-green-500'}>{(holding.PL).toFixed(2)} USD ({(holding.PL / (holding.priceBought * holding.quantity) * 100).toFixed(2)}%)</TableCell>
+          </TableRow>
+        ))
     }
 
-    return holdingData.map((holding) => (
-      <TableRow>
-        <TableCell>{holding.symbol}</TableCell>
-        <TableCell>{holding.name}</TableCell>
-        <TableCell>{holding.marketValue} USD</TableCell>
-        <TableCell>{holding.quantity}</TableCell>
-        <TableCell>{holding.currentPrice} USD</TableCell>
-        <TableCell>{holding.priceBought} USD</TableCell>
-        <TableCell
-          className={holding.PL < 0 ? "text-red-500" : "text-green-500"}
-        >
-          {holding.PL.toFixed(2)} USD (
-          {(
-            (holding.PL / (holding.priceBought * holding.quantity)) *
-            100
-          ).toFixed(2)}
-          %)
-        </TableCell>
-      </TableRow>
-    ));
-  }
+    // Calculate the total asset value including cash balance and stocks, and also calculates the p/l and percentage
 
   // Calculate the total asset value including cash balance and stocks, and also calculates the p/l and percentage
-  const CalculateAsset = (u, holdData) => {
-        console.log("calculate asset", u,holdData);
+  const CalculateAsset = (userBalance, holdData) => {
+        console.log("calculate asset", userBalance,holdData);
         let total = 0;
-        for (let i = 0; i < holdData?.length; i++) {
-          if (holdData[i].marketValue < 0) {
-            total -= holdData[i].marketValue;
-          } else {
-            total += holdData[i].marketValue;
-          }
-        }
-        total += parseFloat(u);
-        console.log("total", total);
-        console.log("cash", u);
-        // setAssetValue(total);
+      console.log('holdingdata is ' + holdData, 'type is ' + typeof(holdData))
+      if (!holdData) {
+        console.log('cash balance is ' + userBalance)
+        total += parseFloat(userBalance);
         return total
-      
-    
-  };
+      }
+      for (let i = 0; i < holdData.length; i++) {
+        if (holdData[i].marketValue < 0) {
+          total -= parseFloat(holdData[i].marketValue);
+        }
+        else {
+          total += parseFloat(holdData[i].marketValue);
+        }
+      }
+      console.log(total)
+      total += parseFloat(userBalance);
+      return total
+    }
+
+    async function CalculateAsset2() {
+      let total = 0;
+      for (let i = 0; i < holdingData.length; i++) {
+        if (holdingData[i].marketValue < 0) {
+          total -= holdingData[i].marketValue;
+        }
+        else {
+          total += holdingData[i].marketValue;
+        }
+      }
+      console.log(total)
+      total += parseFloat(userInfo.cashBalance);
+      return total
+    }
 
   return (
     <>
@@ -327,7 +340,17 @@ function UserView() {
                   <div className="flex flex-row gap-10 pt-[8em]">
                     <div className="">
                       {/* Portfolio box */}
-                      <h3 className="text-2xl font-semibold mb-5">Portfolio</h3>
+                      <h3 className="text-2xl font-semibold mb-5">
+                        <HoverCard>
+                          <HoverCardTrigger>
+                            Portfolio
+                          </HoverCardTrigger>
+                          <HoverCardContent className='text-sm'>
+                            Your portfolio is a collection of all your investments
+                            including stocks and cash balance.
+                          </HoverCardContent>
+                        </HoverCard>
+                      </h3>
                       <Card className="bg-gradient-to-tr to-[#103593] from-[#146AB9] grid gap-2">
                         <CardHeader className="pt-6 pb-3">
                           <CardTitle className="text-white font-light text-sm">
@@ -342,13 +365,34 @@ function UserView() {
                         <CardFooter>
                           <div className="flex flex-row justify-between gap-14 w-full">
                             <div>
-                              <h5 className="text-white">Unrealized P&L</h5>
+                              <h5 className="text-white">
+                                <HoverCard>
+                                  <HoverCardTrigger>
+                                    Unrealized P&L
+                                  </HoverCardTrigger>
+                                  <HoverCardContent className='text-sm'>
+                                    Potential profit or loss on your investments that
+                                    have not yet been sold or closed.
+                                  </HoverCardContent>
+                                </HoverCard>
+                              </h5>
                               <p className="text-white font-bold">
                                 ${(assetValue - 10000).toFixed(3)}
                               </p>
                             </div>
                             <div className="mr-20">
-                              <h5 className="text-white">P&L Percentage</h5>
+                              <h5 className="text-white">
+                                  <HoverCard>
+                                    <HoverCardTrigger>
+                                      P&L Percentage
+                                    </HoverCardTrigger>
+                                    <HoverCardContent className='text-sm'>
+                                      The percentage of profit or loss on your investments
+                                      based on your starting balance
+                                      that have not yet been sold or closed.
+                                    </HoverCardContent>
+                                  </HoverCard>
+                              </h5>
                               <p
                                 className={
                                   assetValue - 10000 < 0
@@ -370,7 +414,15 @@ function UserView() {
                     <div className="">
                       {/* Cash balance box */}
                       <h3 className="text-2xl font-semibold mb-5">
-                        Est Cash Balance
+                        <HoverCard>
+                          <HoverCardTrigger>
+                            Cash Balance
+                          </HoverCardTrigger>
+                          <HoverCardContent className='text-sm'>
+                            Your cash balance is the amount of money you have
+                            available to invest in stocks.
+                          </HoverCardContent>
+                        </HoverCard>
                       </h3>
                       <Card className="bg-white grid gap-2 min-w-[25em] max-h-full">
                         <CardHeader className="pt-6 pb-3">
@@ -466,16 +518,90 @@ function UserView() {
                       <h3 className="text-2xl font-semibold mb-5">Holdings</h3>
                       <div>
                         <Table>
-                          <TableCaption>Holdings</TableCaption>
+                          <TableCaption>
+                            <HoverCard>
+                              <HoverCardTrigger>
+                                Holdings
+                              </HoverCardTrigger>
+                              <HoverCardContent className='text-sm'>
+                                Holdings are the stocks that you have
+                                purchased and are currently holding.
+                              </HoverCardContent>
+                            </HoverCard>
+                          </TableCaption>
                           <TableHeader>
                             <TableRow>
-                              <TableHead>Stock</TableHead>
-                              <TableHead>Name</TableHead>
-                              <TableHead>Market Value</TableHead>
-                              <TableHead>Quantity</TableHead>
-                              <TableHead>Current Price</TableHead>
-                              <TableHead>Price Bought</TableHead>
-                              <TableHead>P/L</TableHead>
+                              <TableHead>
+                                <HoverCard>
+                                  <HoverCardTrigger>
+                                    Stock
+                                  </HoverCardTrigger>
+                                  <HoverCardContent className='text-sm'>
+                                    The company you are currently investing in represented by the
+                                    stock symbol.
+                                  </HoverCardContent>
+                                </HoverCard>
+                              </TableHead>
+                              <TableHead>Name
+                                <HoverCard>
+                                  <HoverCardTrigger>
+                                    Name
+                                  </HoverCardTrigger>
+                                  <HoverCardContent className='text-sm'>
+                                    The name of the company you are currently investing in.
+                                  </HoverCardContent>
+                                </HoverCard>
+                              </TableHead>
+                              <TableHead>
+                                <HoverCard>
+                                  <HoverCardTrigger>
+                                    Market Value
+                                  </HoverCardTrigger>
+                                  <HoverCardContent className='text-sm'>
+                                    The total value of the stock you are currently holding.
+                                  </HoverCardContent>
+                                </HoverCard>
+                              </TableHead>
+                              <TableHead>
+                                <HoverCard>
+                                  <HoverCardTrigger>
+                                    Quantity
+                                  </HoverCardTrigger>
+                                  <HoverCardContent className='text-sm'>
+                                    The number of stocks you have purchased.
+                                  </HoverCardContent>
+                                </HoverCard>
+                              </TableHead>
+                              <TableHead>
+                                <HoverCard>
+                                  <HoverCardTrigger>
+                                    Current Price
+                                  </HoverCardTrigger>
+                                  <HoverCardContent className='text-sm'>
+                                    The current price of the stock you are currently holding.
+                                  </HoverCardContent>
+                                </HoverCard>
+                              </TableHead>
+                              <TableHead>
+                                <HoverCard>
+                                  <HoverCardTrigger>
+                                    Price Bought
+                                  </HoverCardTrigger>
+                                  <HoverCardContent className='text-sm'>
+                                    The price at which you purchased the stock.
+                                  </HoverCardContent>
+                                </HoverCard>
+                              </TableHead>
+                              <TableHead>
+                                <HoverCard>
+                                  <HoverCardTrigger>
+                                    P/L
+                                  </HoverCardTrigger>
+                                  <HoverCardContent className='text-sm'>
+                                    The profit or loss you have made on the stock.
+                                  </HoverCardContent>
+                                </HoverCard>
+                              </TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
@@ -484,12 +610,12 @@ function UserView() {
                         </Table>
                         <div className="flex flex-row justify-between w-full">
                           <h5 className="text-sm text-gray-500">
-                            Country Market Cap (USD){" "}
+                            Copyright VirtuTrade{" "}
                             <span className="text-black font-semibold">
-                              82,220
+                              2024
                             </span>
                           </h5>
-                          <div className="text-green-600">14,283</div>
+                          <div className="text-green-600"></div>
                         </div>
                         <div>
                           {/* <StockTable type="profile" data={holdingData}/> */}

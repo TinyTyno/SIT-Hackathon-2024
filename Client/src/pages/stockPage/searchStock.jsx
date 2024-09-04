@@ -110,8 +110,8 @@ function SearchStock() {
     <StableSidebar>
       <div className='Container w-[95%] m-auto grid gap-5'>
         <SearchStockInput />
-        <div style={{paddingLeft:'2.5rem', fontSize:'1.5rem', fontWeight:'semibold'}}>Searching for :<span className='font-bold'> {query}</span></div>
-        <Table style={{ maxHeight: '60vh', width: '60vw', marginLeft:'2.5rem'}}>
+        <span style={{display:'block', marginLeft:'2rem', fontSize:'1.5rem', fontWeight:'800', marginTop:'2rem'}}>Searching for: {query}</span>
+        <Table style={{ maxHeight: '60vh', width: '60vw', marginLeft:'2rem', marginTop: '1.5rem' }}>
           <TableCaption>List of Stocks matching {query}</TableCaption>
           <TableHeader>
             <TableRow>

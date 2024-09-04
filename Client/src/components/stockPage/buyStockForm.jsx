@@ -36,7 +36,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import http from '../../../http.js'
+import http from '../../http.js'
 import UserContext from "../../contexts/UserContext";
   
 
@@ -51,7 +51,7 @@ function BuyStockForm({currentPrice}) {
         quantity: 1,
         buysell: 'buy',
         orderType: 'Market', // Default to 'Market'
-        price: currentPrice,
+        price: parseFloat(currentPrice),
         tradeFee: 1.30,
         duration: 'Day',
         extendedHours: false,
@@ -60,7 +60,7 @@ function BuyStockForm({currentPrice}) {
     useEffect(() => {
         setFormData(prevData => ({
             ...prevData,
-            price: currentPrice || ''
+            price: parseFloat(currentPrice) || ''
         }));
     }, [currentPrice]);
 
@@ -80,7 +80,7 @@ function BuyStockForm({currentPrice}) {
             setFormData({
                 ...formData,
                 orderType: 'Market',
-                price: currentPrice,
+                price: parseFloat(currentPrice),
                 duration: 'Day',
                 extendedHours: false
             });
@@ -252,7 +252,7 @@ function BuyStockForm({currentPrice}) {
                             <TableBody>
                                 <TableRow>
                                     <TableCell>Account ID</TableCell>
-                                    <TableCell>123456789</TableCell>
+                                    <TableCell>{formData.accountID}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell>Buy/Sell</TableCell>
@@ -295,7 +295,7 @@ function BuyStockForm({currentPrice}) {
                         </Table>
                     </DialogDescription>
                     <div className="flex justify-end">
-                        <Button className="m-2" type="submit" onClick={(e) => {handleSubmit(e);navigate('/orders');}}>Buy</Button>
+                        <Button className="m-2" type="button" onClick={(e) => {handleSubmit(e);navigate('/orders');}}>Buy</Button>
                     </div>
                 </DialogContent>
             </Dialog>
