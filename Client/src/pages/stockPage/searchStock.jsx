@@ -32,7 +32,16 @@ function SearchStock() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/stocks/searchSymbol?symbol=${query}`);
+      var uri = ''
+      console.log('query', query);
+      if (query == '*') {
+        uri = `http://localhost:3000/stocks/searchSymbol?symbol=a`;
+      }
+      else {
+        uri = `http://localhost:3000/stocks/searchSymbol?symbol=${query}`;
+      }
+
+      const response = await axios.get(uri);
       const data = response.data.result;
 
       const filteredStockList = [];
@@ -110,8 +119,8 @@ function SearchStock() {
     <StableSidebar>
       <div className='Container w-[95%] m-auto grid gap-5'>
         <SearchStockInput />
-        <span style={{display:'block', marginLeft:'2rem', fontSize:'1.5rem', fontWeight:'800', marginTop:'2rem'}}>Searching for: {query}</span>
-        <Table style={{ maxHeight: '60vh', width: '60vw', marginLeft:'2rem', marginTop: '1.5rem' }}>
+        <span style={{display:'block', marginLeft:'2rem', fontSize:'1.5rem', fontWeight:'800', marginTop:'1.5rem'}}>{query === '*' ? 'Search for a stock' : `Searching for ${query}`}</span>
+        <Table style={{ maxHeight: '60vh', width: '60vw', marginLeft:'2rem' }}>
           <TableCaption>List of Stocks matching {query}</TableCaption>
           <TableHeader>
             <TableRow>
