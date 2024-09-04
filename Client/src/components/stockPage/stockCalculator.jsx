@@ -10,8 +10,9 @@ function StockCalculator({ currentPrice, onCalculate }) {
 
     // Calculate the number of shares based on the amount and the current stock price
     const handleCalculate = () => {
+        console.log('currentPrice', currentPrice, 'amount', amount);
         if (!amount || currentPrice <= 0) return;
-        const numberOfShares = Math.floor(amount / currentPrice); // Only whole shares
+        const numberOfShares = Math.floor(parseFloat(amount) / currentPrice); // Only whole shares
         onCalculate(numberOfShares); // Send the calculated shares back to the parent component
         setNumberOfShares(numberOfShares);
     };
