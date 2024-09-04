@@ -131,7 +131,7 @@ const StableSidebar = ({ children }) => {
                   <Tooltip>
                     <TooltipTrigger>
                       <li className="flex flex-row justify-center gap-4 w-full py-2 rounded-sm hover:bg-[#516e9578] cursor-pointer">
-                        <Link to={`/user/userView/${id}`}>
+                        <Link to={`/user/userView`}>
                           <div className="self-center w-fit">
                             <ImProfile className="text-white" />
                           </div></Link>
