@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
 import StableSidebar from "@/components/StableSidebar";
-import SearchStock from "@/components/stockPage/searchStock";
 import StockCard from "@/components/stockPage/StockCard";
 import axios from "axios";
 import http from "../../../http";
@@ -12,6 +11,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import StockTable from "@/components/stockPage/StockTable";
+import SearchStockInput from "@/components/stockPage/searchStockInput";
 
 const Stock_homepage = () => {
   const [stocks, setStocks] = useState([]);
@@ -55,7 +55,7 @@ const Stock_homepage = () => {
     <div>
       <StableSidebar>
         <div className="w-[90%] m-auto">
-          <SearchStock />
+          <SearchStockInput />
           <h1 className="text-2xl font-bold ml-10 mt-10">Trending Stocks</h1>
           <div className="mt-10 w-[90%] m-auto">
             <Carousel>

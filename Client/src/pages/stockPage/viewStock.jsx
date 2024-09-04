@@ -12,7 +12,7 @@ import {
     HoverCardContent,
     HoverCardTrigger,
 } from "@/components/ui/hover-card"
-import SearchStock from '@/components/stockPage/searchStock'
+import SearchStockInput from '@/components/stockPage/SearchStockInput'
 import StableSidebar from '@/components/StableSidebar'
 import cryptoData from '../../lib/cryptoSearch.json'
 import http from '../../../http.js'
@@ -84,7 +84,7 @@ function ViewStock() {
     return (
         <div className="container" style={{ margin: 'auto' }}>
             <StableSidebar />
-            <SearchStock />
+            <SearchStockInput />
             <div className='flex' style={{ margin: 'auto', marginLeft: '70px', border: '1px solid #D9D9D9', borderRadius: '10px', marginTop: '50px' }}>
                 <div className="flex m-2 flex-col items-start" style={{ textalign: 'left', padding: '10px' }}>
                     <span className="text-4xl font-semibold tracking-tight">{symbol.toUpperCase()}</span>
