@@ -23,6 +23,7 @@ function ViewStock() {
 
     const [dataView, setDataView] = React.useState('1M');
     const [historicalData, setHistoricalData] = React.useState([]);
+    const [stockName, setStockName] = React.useState(null);
     const [price, setPrice] = React.useState(null);
     const [stockChange, setStockChange] = React.useState(0);
     const [stockChangePercent, setStockChangePercent] = React.useState(0);
@@ -45,6 +46,13 @@ function ViewStock() {
             type = 'stock';
             querySymbol = symbol;
         }
+        // Get actual name through API
+        await http.get(`http://localhost:3000/testing/api/stock/${querySymbol}`)
+            .then((response) => {
+                console.log(response.data)
+                setStockName(response.data.displayName)
+            })
+
         //Getting Historical Data
         const res = await http.get(`http://localhost:3000/stocks/stockData?type=${type}&symbol=${querySymbol}&view=${view}`)
             .then((response) => {
@@ -122,8 +130,8 @@ function ViewStock() {
                 <SearchStockInput />
                 <div className='flex' style={{ margin: 'auto', marginLeft: '2rem', marginRight: '30px', marginTop: '50px', border: '1px solid #D9D9D9', borderRadius: '10px' }}>
                     <div className="flex m-2 flex-col items-start" style={{ textalign: 'left', padding: '10px' }}>
-                        <span className="text-4xl font-semibold tracking-tight">{symbol.toUpperCase()}</span>
-                        <span className="text-gray-500 text-sm mt-1">{symbol.toUpperCase()}</span>
+                        <span className="text-4xl font-semibold tracking-tight">{stockName}</span>
+                        <span className="text-gray-500 text-sm mt-1">NASDAQ:{symbol}</span>
                     </div>
                     <div className='grow'></div>
                     <div className="flex items-center justify-center">
@@ -155,7 +163,7 @@ function ViewStock() {
                 </div>
 
                 {historicalData.length > 0 &&
-                    <div className='flex' style={{ margin: 'auto', marginLeft: '70px', marginRight: '30px', marginTop: '20px' }}>
+                    <div className='flex' style={{ margin: 'auto', marginLeft: '2rem', marginRight: '2rem', marginTop: '20px' }}>
                         <div className="flex m-2 flex-col items-start" style={{ textalign: 'left', padding: '10px' }}>
                             <HoverCard>
                                 <HoverCardTrigger><span className="text-5xl font-bold">{price || historicalData[historicalData.length - 1].c.toFixed(2)} <span className='text-gray-600 text-base font-bold'>USD</span></span></HoverCardTrigger>
