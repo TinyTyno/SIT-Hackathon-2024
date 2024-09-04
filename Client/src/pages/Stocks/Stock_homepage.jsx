@@ -11,7 +11,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import StockTable from "@/components/stockPage/StockTable";
-
+import SearchStockInput from '@/components/stockPage/searchStockInput'
 const Stock_homepage = () => {
   const { user } = useContext(UserContext);
 
