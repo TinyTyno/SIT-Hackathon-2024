@@ -81,14 +81,78 @@ function ViewOrder() {
             <TableCaption>List of order history</TableCaption>
             <TableHeader>
                 <TableRow>
-                <TableHead className="w-[100px]">Date Time</TableHead>
-                <TableHead>Order Type</TableHead>
-                <TableHead>Buy/Sell</TableHead>
-                <TableHead>Stock</TableHead>
-                <TableHead>Quantity</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Trade Fee</TableHead>
-                <TableHead>Status</TableHead>
+                    <TableHead>
+                        <HoverCard>
+                            <HoverCardTrigger>Date Time</HoverCardTrigger>                    
+                            <HoverCardContent className="text-xs">
+                                The date and time at which the order was requested.
+                            </HoverCardContent>
+                        </HoverCard>
+                    </TableHead>
+                    <TableHead>
+                        <HoverCard>
+                            <HoverCardTrigger>Order Type</HoverCardTrigger>
+                            <HoverCardContent className="text-xs">
+                                An order type specifies the conditions under which a trade will be executed.
+                                <br /><br />
+                                <b>Market Order</b> executes immediately at the current market price; guarantees execution but not the price.
+                                <br /><br />
+                                <b>Limit Order</b> executes at a specified price or better; guarantees price but not execution.
+                            </HoverCardContent>
+                        </HoverCard>
+                    </TableHead>
+                    <TableHead>
+                        <HoverCard>
+                            <HoverCardTrigger>Buy/Sell</HoverCardTrigger>
+                            <HoverCardContent className="text-xs">
+                                Buying a stock means betting that its price will go up.
+                                If the price rises, you profit, but if it falls, you incur a loss.
+                                <br /> <br />
+                                Selling a stock means betting that its price will go down.
+                                If the price falls, you profit, but if it rises, you incur a loss.
+                            </HoverCardContent>
+                        </HoverCard>
+                    </TableHead>
+                    <TableHead>
+                        <HoverCard>
+                            <HoverCardTrigger>Stock</HoverCardTrigger>
+                            <HoverCardContent className="text-xs">
+                                The stock that you are trading represented by its stock symbol.
+                            </HoverCardContent>
+                        </HoverCard>
+                    </TableHead>
+                    <TableHead>
+                        <HoverCard>
+                            <HoverCardTrigger>Quantity</HoverCardTrigger>
+                            <HoverCardContent className="text-xs">
+                                The number of shares that you are buying or selling.
+                            </HoverCardContent>
+                        </HoverCard>
+                    </TableHead>
+                    <TableHead>
+                        <HoverCard>
+                            <HoverCardTrigger>Price</HoverCardTrigger>
+                            <HoverCardContent className="text-xs">
+                                The price at which which you bought or sold the stock per share.
+                            </HoverCardContent>
+                        </HoverCard>
+                    </TableHead>
+                    <TableHead>
+                        <HoverCard>
+                            <HoverCardTrigger>Trade Fee</HoverCardTrigger>
+                            <HoverCardContent className="text-xs">
+                                The fee charged by the broker for executing the trade.
+                            </HoverCardContent>
+                        </HoverCard>
+                    </TableHead>
+                    <TableHead>
+                        <HoverCard>
+                            <HoverCardTrigger>Status</HoverCardTrigger>
+                            <HoverCardContent className="text-xs">
+                                The status of the order.
+                            </HoverCardContent>
+                        </HoverCard>
+                    </TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
