@@ -104,7 +104,7 @@ function ViewStock() {
     return (
         <StableSidebar>
             <div className="container" style={{ margin: 'auto' }}>
-                <SearchStock />
+                <SearchStockInput />
                 <div className='flex' style={{ margin: 'auto', marginLeft: '70px', marginRight: '30px', marginTop: '50px', border: '1px solid #D9D9D9', borderRadius: '10px' }}>
                     <div className="flex m-2 flex-col items-start" style={{ textalign: 'left', padding: '10px' }}>
                         <span className="text-4xl font-semibold tracking-tight">{symbol.toUpperCase()}</span>
