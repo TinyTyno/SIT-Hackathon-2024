@@ -357,7 +357,7 @@ function UserView() {
                             Your assets USDS
                           </CardTitle>
                         </CardHeader>
-                        <CardContent className="pb-3 pt-2">
+                        <CardContent className="pb-9 pt-2">
                           <p className="text-6xl text-white font-semibold">
                             {assetValue.toFixed(2)}
                           </p>

@@ -29,26 +29,7 @@ import http from '../../http.js';
 import { Navigate, useNavigate, useParams, Link } from "react-router-dom";
 import UserContext from '../../contexts/UserContext';
 
-function DeleteToolbar(props) {
-    const { selected, handleOpenConfirmation, handleOpen } = props;
-    const handleDelete = () => {
-        console.log("data", selected);
-        if (selected !== null) {
-            handleOpenConfirmation();
-        } else {
-            handleOpen()
-        }
-    };
 
-    return (
-        <Grid templateColumns="repeat(1, 1fr)" gap={4}>
-            <Button colorScheme="red" onClick={handleDelete}>
-                Delete
-                <DeleteIcon />
-            </Button>
-        </Grid>
-    );
-}
 
 const style = {
     position: 'absolute',
