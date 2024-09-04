@@ -19,7 +19,8 @@ export default (sequelize, DataTypes) => {
         },
         cashBalance: {
             type: DataTypes.STRING,
-            allowNull: true
+            allowNull: true,
+            default:'10000'
         },
         resetPasswordToken: {
             type: DataTypes.STRING,
