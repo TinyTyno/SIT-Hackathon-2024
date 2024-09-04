@@ -1,14 +1,13 @@
 import { useState, useContext } from 'react';
-import { Box, Text, FormControl, Input, InputRightElement, Button, IconButton, FormLabel, FormErrorMessage, InputGroup,ChakraProvider, Container } from "@chakra-ui/react";
+import { Box, Text, FormControl, Input, InputRightElement, Button, IconButton, FormLabel, FormErrorMessage, InputGroup, ChakraProvider, Container } from "@chakra-ui/react";
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import http from '../../http';
 import { ToastContainer, toast } from 'react-toastify';
 import UserContext from '../../contexts/UserContext';
-import Navbar from '@/components/Navbar'
-import StableSidebar from '@/components/StableSidebar'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useNavigate, Link } from 'react-router-dom';
+
 
 function Login() {
     const navigate = useNavigate();
@@ -44,7 +43,7 @@ function Login() {
             data.email = data.email.trim().toLowerCase();
             data.password = data.password.trim();
             console.log(data);
-        
+
             http.post("/user/login", data)
                 .then((res) => {
                     console.log(res);
@@ -73,23 +72,23 @@ function Login() {
 
 
     return (
-        <ChakraProvider>
-            <StableSidebar>
-                <Container
-                    maxW="container.lg" p={5}
-                    h="100vh" // full screen height
-                    display="flex"
-                    flexDirection="column"
-                // justifyContent="center"
-                // alignItems="center"
-                >
-                    <Box display="flex" justifyContent="space-between" pt={10}>
-                        <Box w="50%" mr={2}>
-                            <Text variant="h4" my={2} fontWeight="bold">
-                                Sign Into
-                            </Text>
-                            <Text variant="h4" my={2} fontWeight="bold" mb={5}>
-                                Your Account
+        <ChakraProvider padding={0}>
+            <Container
+                maxW={'100%'}
+                padding={0}
+                minHeight={'100vh'} // Add this line
+            >
+                <Box display="flex" justifyContent="space-between">
+                    <Box w="60%" mr={2} style={{
+                        backgroundImage: 'url(/login.jpg)',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        height: '100vh',
+                    }} />
+                    <Box w="40%" m={6} mr={8} pt={170}>
+                        <Box justifyContent="center" width='90%'>
+                            <Text variant="h4" my={2} fontSize={32} fontWeight="bold" mb={5}>
+                                Login
                             </Text>
                             <form onSubmit={formik.handleSubmit}>
                                 <FormControl isInvalid={formik.errors.email && formik.touched.email}>
@@ -126,8 +125,8 @@ function Login() {
                                                 padding: '10px',
                                             }}
                                         />
-                                        <InputRightElement width="4.5rem">
-                                        <IconButton
+                                        <InputRightElement>
+                                            <IconButton
                                                 onClick={handleTogglePassword}
                                                 size="sm"
                                                 icon={showPassword ? <ViewIcon /> : <ViewOffIcon />}
@@ -138,22 +137,26 @@ function Login() {
                                 </FormControl>
 
                                 <Box display="flex" justifyContent="space-between" mb={4} mt={1}>
-                                    <Link to="/forgotPassword" color="#AA3535" textDecoration="underline" cursor="pointer">
+                                    <Link to="/forgotPassword" style={{
+                                        color: "#1274CE",
+                                        textDecoration: "underline",
+                                        cursor: "pointer"
+                                    }}>
                                         Forgot Password?
-                                    </Link>
-                                    <Link to="/user/userCreate" color="#AA3535" textDecoration="underline" cursor="pointer">
-                                        Don't have an Account?
                                     </Link>
                                 </Box>
 
-                                <Button type="submit" w="full" mt={2}>
+                                <Button className='submitButton' style={{
+                                    background: 'linear-gradient(to left, #1DB5E4, #1274CE)',
+                                }}
+                                    color="#fff" type="submit" w="full" mt={2}>
                                     Login
                                 </Button>
                             </form>
                         </Box>
                     </Box>
-                </Container>
-            </StableSidebar>
+                </Box>
+            </Container>
         </ChakraProvider>
     );
 }
