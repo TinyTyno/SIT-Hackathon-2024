@@ -168,27 +168,46 @@ async function fulfillOrder(orderId) {
             // Close position and add to cash balance of user function here
         }
 
-        else if (userStock.quantity + quantity < 0 && userStock.quantity + quantity < userStock.quantity) {
-            // further selling, no position closing, update price bought
+        else if (userStock.quantity < 0 && userStock.quantity + quantity < 0 && userStock.quantity > userStock.quantity + quantity ) {
+            // further selling (e.g. -17 to -27), no position closing, update price bought
             userStock.priceBought = (userStock.priceBought * userStock.quantity + order.price * quantity) / (userStock.quantity + quantity);
             userStock.quantity += quantity;
         }
-        else if (userStock.quantity + quantity < 0 && userStock.quantity + quantity > userStock.quantity) {
-            // partial position closing (buying), add to cash balance of user
+        else if (userStock.quantity < 0 && userStock.quantity + quantity < 0 && userStock.quantity < userStock.quantity + quantity) {
+            // partial position closing (buying) in negative value (e.g. -27 to -17), add to cash balance of user
             userStock.quantity += quantity;
-            updateCashBalance(order.accountID, order.price * quantity);
+            updateCashBalance(order.accountID, order.price * quantity); // Adding back into cash balance
         }
-        else if (userStock.quantity + quantity > 0 && userStock.quantity + quantity > userStock.quantity) {
-            // further buying, no position closing, update price bought
+        else if (userStock.quantity > 0 && userStock.quantity + quantity > 0 && userStock.quantity < userStock.quantity + quantity) {
+            // further buying (e.g. 17 to 27), no position closing, update price bought
             console.log('userstock further buying' + userStock)
             userStock.priceBought = (userStock.priceBought * userStock.quantity + order.price * quantity) / (userStock.quantity + quantity);
             userStock.quantity += quantity;
         }
-        else if (userStock.quantity + quantity > 0 && userStock.quantity + quantity < userStock.quantity) {
-            // partial position closing (selling), add to cash balance of user
+        else if (userStock.quantity > 0 && userStock.quantity + quantity > 0 && userStock.quantity > userStock.quantity + quantity) {
+            // partial position closing (selling) (27 to 17), add to cash balance of user
             userStock.quantity += quantity;
             // find out current price of stock
             updateCashBalance(order.accountID, order.price * quantity * -1);
+        }
+        else if (userStock.quantity < 0 && userStock.quantity + quantity > 0) {
+            // Full reversal of position from selling to buying (e.g. -17 to 27, difference of 44)
+            // Close selling position and add to cash balance of user
+            // Open buying position
+
+            updateCashBalance(order.accountID, order.price * userStock.quantity * -1);  // Add back to cash balance of user
+
+            userStock.priceBought = order.price; // Sets price bought to current price
+            userStock.quantity += quantity;
+        }
+        else if (userStock.quantity > 0 && userStock.quantity + quantity < 0) {
+            // Full reversal of position from buying to selling (e.g. 27 to -17)
+            // Close buying position and add to cash balance of user
+            // Open selling position
+            updateCashBalance(order.accountID, order.price * userStock.quantity);  // Add back to cash balance of user
+
+            userStock.priceBought = order.price; // Sets price bought to current price
+            userStock.quantity += quantity;
         }
         await userStock.save();
     }
