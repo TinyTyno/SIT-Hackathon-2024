@@ -4,7 +4,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button'; // Ensure Button is properly imported
 
 function SearchStockInput() {
-    const [inputValue, setInputValue] = useState('');
+    const { query } = useParams();
+    const [inputValue, setInputValue] = useState(query);
     const navigate = useNavigate();
 
     // Handle input change
