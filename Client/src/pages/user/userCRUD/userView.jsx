@@ -36,8 +36,9 @@ import { Input } from "@/components/ui/input";
 function UserView() {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [userInfo, setUserInfo] = useState([]);
+  const [cashBalance, setCashBalance] = useState(0);
   const [accountID, setAccountID] = useState(null);
   const [selected, setSelected] = useState(null);
   const [isOpen, setOpen] = useState(false);
@@ -75,6 +76,7 @@ function UserView() {
     const user = await http.get(`/user/${id}`);
     if (user) {
       setUserInfo(user.data);
+      setCashBalance(user.data.cashBalance);
       setAccountID(user.data.id);
       console.log("user", user);
 
@@ -97,7 +99,6 @@ function UserView() {
           var priceSearch = await http.get(
             `http://localhost:3000/testing/api/stock/${data[i].stock}`
           );
-          console.log(priceSearch);
           var currentPrice = priceSearch.data.regularMarketPrice;
           var holding = {
             symbol: data[i].stock,
@@ -111,13 +112,8 @@ function UserView() {
           holdings.push(holding);
         }
         setHoldingData(holdings);
-        CalculateAsset(user.data, holdings)
-          .then((total) => {
-            setLoading(false)
-          })
-          .catch((error) => {
-            setLoading(true)
-          });
+        let asst = CalculateAsset(user.data.cashBalance, holdings)
+        setAssetValue(asst)
       } catch (e) {
         console.error("Error fetching data:", e);
       }
@@ -154,15 +150,35 @@ function UserView() {
         startingBalance: 10000.0,
       })
       .then((res) => {
-        console.log(res.data);
-        window.location.reload(true);
+        setCashBalance(10000.0);
       })
       .catch((err) => {
         console.log(err);
       });
     handleClose();
+    console.log("holding",holdingData)
+    let asst = CalculateAsset(10000.0, holdingData)
+    setAssetValue(asst)
   };
-
+  const submitTopup = async () => {
+    let inputcash = parseFloat(cash).toFixed(2);
+    await http
+      .put(`/user/${user.id}`, {
+        ...userInfo,
+        cashBalance: inputcash,
+        startingBalance: inputcash,
+      })
+      .then((res) => {
+        setCashBalance(inputcash)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    setOpenForm(false);
+    console.log("holdingtopup",holdingData,inputcash)
+    let asst = CalculateAsset(inputcash, holdingData)
+    setAssetValue(asst)
+  };
   const handleOpenForm = () => {
     setOpenForm(true);
   };
@@ -178,27 +194,14 @@ function UserView() {
   const handleClose = () => {
     setOpen(false);
   };
+
   const handleTopup = (e) => {
     console.log(e);
     setCash(e.target.value);
   };
-  const submitTopup = async () => {
-    let inputcash = parseFloat(cash).toFixed(2);
-    await http
-      .put(`/user/${user.id}`, {
-        ...userInfo,
-        cashBalance: inputcash,
-        startingBalance: inputcash,
-      })
-      .then((res) => {
-        console.log(res.data);
-        window.location.reload(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    setOpenForm(false);
-  };
+
+ 
+
   const handleOpenEditForm = () => {
     setOpenEditForm(true);
   };
@@ -215,12 +218,6 @@ function UserView() {
         ...userInfo,
         name: username,
       })
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
     setOpenEditForm(false);
   };
 
@@ -260,8 +257,7 @@ function UserView() {
 
   // Calculate the total asset value including cash balance and stocks, and also calculates the p/l and percentage
   const CalculateAsset = (u, holdData) => {
-    return new Promise((resolve, reject) => {
-      try {
+        console.log("calculate asset", u,holdData);
         let total = 0;
         for (let i = 0; i < holdData?.length; i++) {
           if (holdData[i].marketValue < 0) {
@@ -270,15 +266,13 @@ function UserView() {
             total += holdData[i].marketValue;
           }
         }
-        total += parseFloat(u.cashBalance);
+        total += parseFloat(u);
         console.log("total", total);
-        console.log("cash", u.cashBalance);
-        setAssetValue(total);
-        resolve(total); // Resolving the promise with the total value
-      } catch (error) {
-        reject(error); // Rejecting the promise if an error occurs
-      }
-    });
+        console.log("cash", u);
+        // setAssetValue(total);
+        return total
+      
+    
   };
 
   return (
@@ -427,7 +421,7 @@ function UserView() {
                         </CardHeader>
                         <CardContent className="pb-3 pt-2">
                           <p className="text-6xl text-black font-semibold">
-                            $ {userInfo.cashBalance}
+                            $ {cashBalance}
                           </p>
                         </CardContent>
                         <CardFooter className="my-4">
