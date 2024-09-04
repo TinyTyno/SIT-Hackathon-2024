@@ -11,8 +11,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import StockTable from "@/components/stockPage/StockTable";
-import SearchStockInput from "@/components/stockPage/searchStockInput";
-
+import SearchStockInput from '@/components/stockPage/searchStockInput'
 const Stock_homepage = () => {
   const { user } = useContext(UserContext);
 
@@ -65,7 +64,7 @@ const Stock_homepage = () => {
             <div className='mt-[3rem]'>
               <h1 className='text-2xl font-bold'>All Stocks</h1>
               <div className='mt-10'>
-                <StockTable />
+                <StockTable data={stocks} />
               </div>
 
             </div>
