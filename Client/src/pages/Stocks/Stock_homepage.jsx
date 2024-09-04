@@ -28,11 +28,11 @@ fetchData()
   return (
     <div>
       <StableSidebar>
-        <div className="w-[90%] m-auto">
+        <div>
            <SearchStockInput/> 
-           <h1 className='text-2xl font-bold ml-10 mt-10'>Trending Stocks</h1>
+           <h1 style={{marginLeft:'2rem'}} className='text-2xl font-bold mt-10'>Trending Stocks</h1>
            <div className='mt-10 w-[90%] m-auto'>
-           <Carousel>
+           <Carousel style={{marginLeft:'2rem', marginRight:'2rem'}}>
             <CarouselContent>
               <CarouselItem className="md:basis-1/2 lg:basis-1/4"><StockCard name={'Nvidia'} desc={'NASA::2'} amount={'119'} pl={'1.78'} percent={'1.9'} duration={'1D'}/></CarouselItem>
               <CarouselItem className="md:basis-1/2 lg:basis-1/4"><StockCard name={'Nvidia'} desc={'NASA::2'} amount={'119'} pl={'1.78'} percent={'1.9'} duration={'1D'}/></CarouselItem>
@@ -46,7 +46,7 @@ fetchData()
           <div className='mt-[3rem]'>
           <h1 className='text-2xl font-bold'>All Stocks</h1>
           <div className='mt-10'>
-          <StockTable/>
+          <StockTable />
           </div>
            
           </div>
