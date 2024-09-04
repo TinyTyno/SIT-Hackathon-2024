@@ -68,30 +68,38 @@ const StableSidebar = ({ children }) => {
                     </div>
                   </li>
                 </Link>
+                <Link to={`/user/userView`}>
                 <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
                   <div className="self-center">
                     <ImProfile className="text-white" />
                   </div>
                   <div className="self-center">Portfolio</div>
                 </li>
+                </Link>
+                <Link to="/login">
                 <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
                   <div className="self-center">
                     <MdLogin className="text-white" />
                   </div>
                   <div className="self-center">Login</div>
                 </li>
+                </Link>
+                <Link to="/user/userCreate">
                 <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
                   <div className="self-center">
                     <MdPersonAdd className="text-white" />
                   </div>
                   <div className="self-center">Sign Up</div>
                 </li>
+                </Link>
+                <Link to={`/changePassword/${id}`}>
                 <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
                   <div className="self-center">
                     <MdVpnKey className="text-white" />
                   </div>
                   <div className="self-center">Change Password</div>
                 </li>
+                </Link>
               </ul>
             </div>
           </div>

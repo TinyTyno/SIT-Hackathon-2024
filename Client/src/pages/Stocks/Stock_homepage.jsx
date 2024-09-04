@@ -29,22 +29,22 @@ const Stock_homepage = () => {
   const fetchData = async () => {
     var symbolList = []
     var symbols = await axios.get(
-      `http://localhost:3000/stocks/availableStocks`
+      `http://localhost:3000/stocks/allStock`
     );
     // const yahooResponse = await axios.get(`http://localhost:3000/testing/api/trendingStocks`);
     // console.log('yahooResponse.data', yahooResponse.data);
-    var data = await axios.get(
-      "http://localhost:3000/stocks/stockData?symbol=AAPL&type=stock&view=1D"
-    );
+    // var data = await axios.get(
+    //   "http://localhost:3000/stocks/stockData?symbol=AAPL&type=stock&view=1D"
+    // );
     symbols.data.map((symbol) => {
       symbolList.push(symbol.symbol)
     })
-    console.log("symbols", symbolList);
-    console.log("data", data);
-    var stockArray = data.data["AAPL"];
-    console.log(stockArray);
-    var latest = stockArray[stockArray.length - 1];
-    console.log(latest);
+    setStocks(symbolList)
+    // console.log("data", data);
+    // var stockArray = data.data["AAPL"];
+    // console.log(stockArray);
+    // var latest = stockArray[stockArray.length - 1];
+    // console.log(latest);
   };
 
   useEffect(() => {
@@ -116,7 +116,7 @@ const Stock_homepage = () => {
             <div className="mt-[3rem]">
               <h1 className="text-2xl font-bold">All Stocks</h1>
               <div className="py-10">
-                <StockTable data={invoiceData} />
+                <StockTable data={stocks} />
               </div>
             </div>
           </div>

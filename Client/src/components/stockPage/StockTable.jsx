@@ -18,24 +18,40 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"; // Adjust the import path
+import axios from "axios";
 
 const StockTable = ({ data, itemsPerPage = 10,type='stock' }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentData, setCurrentData] = useState([]);
 
   const totalPages = Math.ceil(data.length / itemsPerPage);
-
+  console.log(totalPages)
   // Memoize paginated data to avoid recalculation on every render
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     return data.slice(startIndex, startIndex + itemsPerPage);
   }, [currentPage, data]);
 
-
+  console.log(paginatedData)
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
+  const fetchData = async () => {
+    paginatedData.map((stock) => {
+       axios.get(`http://localhost:3000/testing/api/stock?symbol=${stock}`)
+      .then((response) => {
+        console.log(response.data)
+      }).catch((error) => {
+         console.log(error)
+      })
+    }
+    )
+  };
+  useEffect(() => {
+    setCurrentData(paginatedData);
+    fetchData();
+  }
+  , [paginatedData]);
   return (
     <div>
       <Table className="">
@@ -49,7 +65,7 @@ const StockTable = ({ data, itemsPerPage = 10,type='stock' }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {type==='stock'?paginatedData.map((invoice) => (
+          {/* {type==='stock'?paginatedData.map((invoice) => (
             <TableRow key={invoice.id}>
               <TableCell className="font-medium">
                 {invoice.invoiceNumber}
@@ -71,7 +87,7 @@ const StockTable = ({ data, itemsPerPage = 10,type='stock' }) => {
               <TableCell>{holding.amount}</TableCell>
               <TableCell className="text-right">{holding.price}</TableCell>
             </TableRow>
-          ))}
+          ))} */}
         </TableBody>
       </Table>
 
@@ -86,17 +102,7 @@ const StockTable = ({ data, itemsPerPage = 10,type='stock' }) => {
             />
           </PaginationItem>
 
-          {Array.from({ length: totalPages }, (_, index) => (
-            <PaginationItem key={index}>
-              <PaginationLink
-                href="#"
-                onClick={() => handlePageChange(index + 1)}
-                active={currentPage === index + 1}
-              >
-                {index + 1}
-              </PaginationLink>
-            </PaginationItem>
-          ))}
+         
           <PaginationItem>
             <PaginationEllipsis />
           </PaginationItem>
