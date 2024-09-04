@@ -13,7 +13,15 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   Card,
   CardContent,
@@ -23,131 +31,177 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import StockTable from "@/components/stockPage/StockTable";
 import { Input } from "@/components/ui/input";
 
 function DeleteToolbar({ selected, handleOpenConfirmation, handleOpen }) {
-  const handleDelete = () => {
-    console.log("data", selected);
-    if (selected !== null) {
-      handleOpenConfirmation();
-    } else {
-      handleOpen();
-    }
-  };
+    const handleDelete = () => {
+      console.log("data", selected);
+      if (selected !== null) {
+        handleOpenConfirmation();
+      } else {
+        handleOpen();
+      }
+    };
 
-  return (
-    <div className="grid grid-cols-1 gap-4">
-      <button
-        className="bg-red-500 text-white px-4 py-2 rounded"
-        onClick={handleDelete}
-      >
-        Delete
-        <span className="ml-2">🗑️</span>
-      </button>
-    </div>
-  );
+    return (
+      <div className="grid grid-cols-1 gap-4">
+        <button
+          className="bg-red-500 text-white px-4 py-2 rounded"
+          onClick={handleDelete}
+        >
+          Delete
+          <span className="ml-2">🗑️</span>
+        </button>
+      </div>
+    );
 }
 
 function UserView() {
-  const { user, setUser } = useContext(UserContext);
-  const [userInfo, setUserInfo] = useState([]);
-  const [selected, setSelected] = useState(null);
-  const [isOpen, setOpen] = useState(false);
-  const [isOpenForm, setOpenForm] = useState(false);
+    const navigate = useNavigate();
+    const { user, setUser } = useContext(UserContext);
+    const [userInfo, setUserInfo] = useState([]);
+    const [accountID, setAccountID] = useState(null);
+    const [selected, setSelected] = useState(null);
+    const [isOpen, setOpen] = useState(false);
+    const [isOpenForm, setOpenForm] = useState(false);
     const [isOpenEditForm, setOpenEditForm] = useState(false);
     const [username, setUserName] = useState("");
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [cash, setCash] = useState(0);
-  const holdingData = [
-    {
-      symbol: "AAPL",
-      name: "Apple Inc",
-      position: 25,
-      market: 864343.8,
-      last: 137.27,
-      cost: 137.27,
-      unrealisedPL: 100,
-    },
-    {
-      symbol: "BTC",
-      name: "Bitcoin Inc",
-      position: 25,
-      market: 864343.8,
-      last: 137.27,
-      cost: 137.27,
-      unrealisedPL: 100,
-    },
-  ];
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [cash, setCash] = useState(0);
+    const [holdingData, setHoldingData] = useState([]); // User holdings
+    const [assetValue, setAssetValue] = useState(0); // Total asset value
+    
+    // const holdingData = [
+    //   {
+    //     symbol: "AAPL",
+    //     name: "Apple Inc",
+    //     position: 25,
+    //     market: 864343.8,
+    //     last: 137.27,
+    //     cost: 137.27,
+    //     unrealisedPL: 100,
+    //   },
+    //   {
+    //     symbol: "BTC",
+    //     name: "Bitcoin Inc",
+    //     position: 25,
+    //     market: 864343.8,
+    //     last: 137.27,
+    //     cost: 137.27,
+    //     unrealisedPL: 100,
+    //   },
+    // ];
 
-  const fetchData = async (id) => {
-    await http
-      .get(`/user/${id}`)
-      .then((res) => {
-        setUserInfo(res.data), console.log(res.data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  useEffect(() => {
-    if (user) {
-      setUser(user);
-      fetchData(user.id);
-    }
-  }, [user]);
-
-  const navigate = useNavigate();
-
-  const handleReset = async () => {
-    await http
-      .put(`/user/${user.id}`, {
-        ...userInfo,
-        cashBalance: 0,
-      })
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    handleClose();
-  };
-
-  const handleOpenForm = () => {
-    setOpenForm(true);
-  };
-
-  const handleCloseForm = () => {
-    setOpenForm(false);
-  };
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleTopup = (e) => {
-    console.log(e)
-    setCash(e.target.value);
-  };
-  const submitTopup = async () => {
-    console.log("cash", cash);
-    await http.put(`/user/${user.id}`, {
-        ...userInfo,
-        cashBalance: cash,
-        }).then((res) => {
-            console.log(res.data);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-    setOpenForm(false);
-  };
-  const handleOpenEditForm = () => {
-    setOpenEditForm(true);
+    const fetchData = async (id) => {
+      // Gets the current user's information
+      await http
+        .get(`/user/${id}`)
+        .then((res) => {
+          setUserInfo(res.data), console.log(res.data), setAccountID(res.data.id);
+        })
+        .catch((err) => console.log(err));
+      
+      // Gets the current user's holdings and adds them to a dictionary
+      try {
+        var holdings = [];
+        const response = await http.get(`http://localhost:3000/transactions/getUserStocks?id=${id}`);
+        const data = response.data;
+        console.log('holdings list is' + data);
+        for (let i=0; i< data.length; i++) {
+          // Get name of the company
+          var symbolSearch = await http.get(`http://localhost:3000/stocks/searchsymbol?symbol=${data[i].stock}`);
+          var name = symbolSearch.data.result[0].description
+          console.log(symbolSearch.data.result[0].description)
+          // Get current price of the stock
+          var priceSearch = await http.get(`http://localhost:3000/testing/api/stock/${data[i].stock}`);
+          console.log(priceSearch)
+          var currentPrice = priceSearch.data.regularMarketPrice
+          var holding = {
+            symbol: data[i].stock,
+            name: name,
+            marketValue: parseFloat(currentPrice) * parseInt(data[i].quantity),
+            quantity: data[i].quantity,
+            priceBought: data[i].priceBought,
+            currentPrice: currentPrice,
+            PL: (currentPrice - data[i].priceBought) * data[i].quantity
+          };
+          holdings.push(holding);
+        }
+        setHoldingData(holdings);
+      }
+      catch (e) {
+        console.error('Error fetching data:', e);
+      }
+      CalculateAsset();
+      // passes through a loop to access each of the holdings, and also to calculate other variables
     };
+
+// FOR REFERENCE
+{/* <TableHead>Symbol</TableHead>
+<TableHead>Name</TableHead>
+<TableHead>Market Value</TableHead>
+<TableHead>Quantity</TableHead>
+<TableHead>Current Price</TableHead>
+<TableHead>Price Bought</TableHead>
+<TableHead>P/L</TableHead> */}
+
+    useEffect(() => {
+      if (user) {
+        setUser(user);
+        fetchData(user.id);
+      }
+    }, [user]);
+
+    const handleReset = async () => {
+      await http
+        .put(`/user/${user.id}`, {
+          ...userInfo,
+          cashBalance: 10000,
+        })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      handleClose();
+    };
+
+    const handleOpenForm = () => {
+      setOpenForm(true);
+    };
+
+    const handleCloseForm = () => {
+      setOpenForm(false);
+    };
+
+    const handleOpen = () => {
+      setOpen(true);
+    };
+
+    const handleClose = () => {
+      setOpen(false);
+    };
+    const handleTopup = (e) => {
+      console.log(e)
+      setCash(e.target.value);
+    };
+    const submitTopup = async () => {
+      console.log("cash", cash);
+      await http.put(`/user/${user.id}`, {
+          ...userInfo,
+          cashBalance: cash,
+          }).then((res) => {
+              console.log(res.data);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+      setOpenForm(false);
+    };
+    const handleOpenEditForm = () => {
+      setOpenEditForm(true);
+      };
 
     const handleCloseEditForm = () => {
     setOpenEditForm(false);
@@ -167,24 +221,61 @@ function UserView() {
             });
     setOpenEditForm(false);
     };
-  const deleteUser = () => {
-    if (selected.length > 0) {
-      selected.forEach((element) => {
-        http
-          .delete(`/user/${element}`)
-          .then((res) => {
-            console.log(res.data);
-            setOpenConfirm(false);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      });
-    }
-    fetchData();
-  };
+    const deleteUser = () => {
+      if (selected.length > 0) {
+        selected.forEach((element) => {
+          http
+            .delete(`/user/${element}`)
+            .then((res) => {
+              console.log(res.data);
+              setOpenConfirm(false);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        });
+      }
+      fetchData();
+    };
 
-  return (
+    // Output the User holdings tables
+    function UserHoldingsOutput() {
+        if (!Array.isArray(holdingData) || holdingData.length === 0) {
+        return (
+            <TableRow>
+            <TableCell colSpan="4">No data available or failed to fetch.</TableCell>
+            </TableRow>
+        )};
+        
+        return holdingData.map((holding) => (
+          <TableRow>
+            <TableCell>{holding.symbol}</TableCell>
+            <TableCell>{holding.name}</TableCell>
+            <TableCell>{holding.marketValue} USD</TableCell>
+            <TableCell>{holding.quantity}</TableCell>
+            <TableCell>{holding.currentPrice} USD</TableCell>
+            <TableCell>{holding.priceBought} USD</TableCell>
+            <TableCell className={holding.PL < 0 ? 'text-red-500' : 'text-green-500'}>{(holding.PL).toFixed(2)} USD ({(holding.PL / (holding.priceBought * holding.quantity) * 100).toFixed(2)}%)</TableCell>
+          </TableRow>
+        ))
+    }
+
+    // Calculate the total asset value including cash balance and stocks, and also calculates the p/l and percentage
+    const CalculateAsset = async () => {
+      let total = 0;
+      for (let i = 0; i < holdingData.length; i++) {
+        if (holdingData[i].marketValue < 0) {
+          total -= holdingData[i].marketValue;
+        }
+        else {
+          total += holdingData[i].marketValue;
+        }
+      }
+      total += parseFloat(userInfo.cashBalance);
+      setAssetValue(total);
+    }
+
+    return (
     <>
       <StableSidebar>
         <div className="flex">
@@ -232,18 +323,17 @@ function UserView() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="pb-3 pt-2">
-                      <p className="text-6xl text-white font-semibold">17112</p>
+                      <p className="text-6xl text-white font-semibold">{assetValue}</p>
                     </CardContent>
                     <CardFooter>
                       <div className="flex flex-row justify-between gap-14 w-full">
                         <div>
                           <h5 className="text-white">Unrealized P&L</h5>
-                          <p className="text-white font-bold">$15000</p>
+                          <p className="text-white font-bold">${assetValue - 10000}</p>
                         </div>
                         <div className="mr-20">
-                          <h5 className="text-white">Daily P&L</h5>
-                          <p className="text-green-600 font-bold">+9.5%</p>
-                          <p className="text-green-600 font-bold">+9.5%</p>
+                          <h5 className="text-white">P&L Percentage</h5>
+                          <p className={assetValue - 10000 < 0 ? 'text-red-500 font-bold' : 'text-green-500 font-bold'}>+{(assetValue - 10000) / 10000 * 100}%</p>
                         </div>
                       </div>
                     </CardFooter>
@@ -274,7 +364,7 @@ function UserView() {
                               </DialogTitle>
                               <DialogDescription>
                                 This action cannot be undone. This will reset
-                                your cash balance to 0.
+                                your cash balance to 10000 and all your current progress will be cleared.
                               </DialogDescription>
                             </DialogHeader>
                             <DialogFooter>
@@ -337,6 +427,23 @@ function UserView() {
                 <div className="py-[3em]">
                   <h3 className="text-2xl font-semibold mb-5">Holdings</h3>
                   <div>
+                    <Table>
+                      <TableCaption>Holdings</TableCaption>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Stock</TableHead>
+                          <TableHead>Name</TableHead>
+                          <TableHead>Market Value</TableHead>
+                          <TableHead>Quantity</TableHead>
+                          <TableHead>Current Price</TableHead>
+                          <TableHead>Price Bought</TableHead>
+                          <TableHead>P/L</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <UserHoldingsOutput />
+                      </TableBody>
+                    </Table>
                     <div className="flex flex-row justify-between w-full">
                       <h5 className="text-sm text-gray-500">
                         Country Market Cap (USD){" "}
@@ -408,7 +515,7 @@ function UserView() {
         {/* )} */}
       </StableSidebar>
     </>
-  );
+    );
 }
 
 export default UserView;

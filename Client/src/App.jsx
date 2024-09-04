@@ -56,7 +56,7 @@ function App() {
 
 
                 <Route path='/user/userCreate' Component={UserCreate} />
-                <Route path='/user/userView' Component={UserView} />
+                <Route path='/user/view' Component={UserView} />
                 <Route path='/user/userUpdate' Component={UserUpdate} />
                 <Route path='/login' Component={login} />
 

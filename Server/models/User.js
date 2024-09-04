@@ -19,7 +19,13 @@ export default (sequelize, DataTypes) => {
         },
         cashBalance: {
             type: DataTypes.STRING,
-            allowNull: true
+            allowNull: false,
+            default:'10000'
+        },
+        startingBalance: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            default:'10000'
         },
         resetPasswordToken: {
             type: DataTypes.STRING,
