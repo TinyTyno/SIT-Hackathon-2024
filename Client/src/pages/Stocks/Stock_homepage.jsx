@@ -31,9 +31,8 @@ const Stock_homepage = () => {
     var symbols = await axios.get(
       `http://localhost:3000/stocks/availableStocks`
     );
-    var trend = await axios.get(
-      `http://localhost:3000/stocks/recommendationTrends?symbol=AAPL`
-    );
+    // const yahooResponse = await axios.get(`http://localhost:3000/testing/api/trendingStocks`);
+    // console.log('yahooResponse.data', yahooResponse.data);
     var data = await axios.get(
       "http://localhost:3000/stocks/stockData?symbol=AAPL&type=stock&view=1D"
     );

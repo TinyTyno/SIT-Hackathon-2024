@@ -107,12 +107,9 @@ stockRouter.get("/searchSymbol", async (req, res) => {
 
 // Get the available traded stocks
 stockRouter.get("/availableStocks", async (req, res) => {
-  console.log("available");
   const api_key = finnhub.ApiClient.instance.authentications["api_key"];
   api_key.apiKey = process.env.FINNHUB_API_KEY;
   const finnhubClient = new finnhub.DefaultApi();
-
-  console.log("All Stock");
   finnhubClient.stockSymbols(
     "US",
     { securityType: "Common Stock" },

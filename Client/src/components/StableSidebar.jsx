@@ -95,7 +95,7 @@ const StableSidebar = ({ children }) => {
               </ul>
             </div>
           </div>
-          <main className='pl-[16rem] box-border'>{children}</main>
+          <main className='pl-[15rem] box-border'>{children}</main>
         </div>
       ) : (
         <div className="z-50">
@@ -195,7 +195,7 @@ const StableSidebar = ({ children }) => {
               </ul>
             </div>
           </div>
-          <main className="pl-[6rem]">{children}</main>
+          <main className="pl-[5rem]">{children}</main>
         </div>
       )}
     </>

@@ -19,7 +19,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination"; // Adjust the import path
 
-const StockTable = ({ data, itemsPerPage = 10 }) => {
+const StockTable = ({ data, itemsPerPage = 10,type='stock' }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentData, setCurrentData] = useState([]);
 
@@ -49,7 +49,7 @@ const StockTable = ({ data, itemsPerPage = 10 }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {paginatedData.map((invoice) => (
+          {type==='stock'?paginatedData.map((invoice) => (
             <TableRow key={invoice.id}>
               <TableCell className="font-medium">
                 {invoice.invoiceNumber}
@@ -57,6 +57,19 @@ const StockTable = ({ data, itemsPerPage = 10 }) => {
               <TableCell>{invoice.status}</TableCell>
               <TableCell>{invoice.method}</TableCell>
               <TableCell className="text-right">{invoice.amount}</TableCell>
+            </TableRow>
+          )):paginatedData.map((holding) => (
+            <TableRow key={holding.id}>
+              <TableCell className="font-medium">
+                <div className="font-semibold">{holding.symbol}</div>
+                <span>{holding.name}</span>
+              </TableCell>
+              <TableCell>
+                <div className="font-semibold">{holding.position}</div>
+                <span>{holding.market}</span>
+              </TableCell>
+              <TableCell>{holding.amount}</TableCell>
+              <TableCell className="text-right">{holding.price}</TableCell>
             </TableRow>
           ))}
         </TableBody>

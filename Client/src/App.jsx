@@ -12,6 +12,7 @@ import ViewStock from './pages/stockPage/viewStock'
 import BuyStock from './pages/stockPage/buyStock'
 import SellStock from './pages/stockPage/sellStock'
 import Stock_homepage from './pages/Stocks/Stock_homepage'
+import ViewOrder from './pages/stockPage/viewOrder'
 
 
 import UserContext from './contexts/UserContext'
@@ -55,8 +56,8 @@ function App() {
 
 
                 <Route path='/user/userCreate' Component={UserCreate} />
-                <Route path='/user/userView/:id' Component={UserView} />
-                <Route path='/user/userUpdate/:id' Component={UserUpdate} />
+                <Route path='/user/userView' Component={UserView} />
+                <Route path='/user/userUpdate' Component={UserUpdate} />
                 <Route path='/login' Component={login} />
 
                 {/* password reset */}
@@ -72,7 +73,8 @@ function App() {
                 <Route path='/stock/:symbol' element={<ViewStock />} />
                 <Route path='/buyStock/:symbol' element={<BuyStock />} />
                 <Route path='/sellStock/:symbol' element={<SellStock />} />
-                <Route path='/test' element={<View_Ind_Stock />} />
+                <Route path='/orders' element={<ViewOrder />} />
+                {/* <Route path='/test' element={<View_Ind_Stock />} /> */}
             </Routes>
         </Router>
     </UserContext.Provider>

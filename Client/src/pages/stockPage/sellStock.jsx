@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 
 import {
@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import SellStockForm from '@/components/stockPage/SellStockForm'
+import StableSidebar from '@/components/StableSidebar';
 
 function SellStock() {
     const upper = useParams().symbol.toUpperCase();
@@ -75,26 +76,28 @@ function SellStock() {
     };
     
     return (
-        <div class="container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '2rem', textAlign: 'center'}}>
-        <ResizablePanelGroup direction="horizontal" className="border w-[100vw]" style={{ width: '30vw', minWidth:'23rem' , margin:'auto'}}>
-        <ResizablePanel>
-        <div className="flex m-2 flex-col items-start" style={{textalign:'left', padding:'10px'}}>
-            <span className="text-4xl font-semibold tracking-tight">{displayName}</span>
-            <span className="text-gray-500 text-sm mt-1">NASDAQ:{symbol}</span>
-        </div>
-        </ResizablePanel>
-        <ResizableHandle style={{display:'none'}}/>
-        <ResizablePanel defaultSize={25}>
-            <div className="items-center"><span>NASDAQ Market Open</span></div>
-        </ResizablePanel>
-        </ResizablePanelGroup>
-        <ResizablePanelGroup direction="horizontal" className="border w-[100vw]" style={{ width: '30vw', minWidth:'23rem', margin:'auto'}}>
-        <ResizablePanel>
-            <SellStockForm currentPrice={currentPrice} />
-        </ResizablePanel>
-        
-        </ResizablePanelGroup>
-        </div>
+        <StableSidebar>
+            <div class="container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '2rem', textAlign: 'center'}}>
+            <ResizablePanelGroup direction="horizontal" className="border w-[100vw]" style={{ width: '30vw', minWidth:'23rem' , margin:'auto'}}>
+            <ResizablePanel>
+            <div className="flex m-2 flex-col items-start" style={{textalign:'left', padding:'10px'}}>
+                <span className="text-4xl font-semibold tracking-tight">{displayName}</span>
+                <span className="text-gray-500 text-sm mt-1">NASDAQ:{symbol}</span>
+            </div>
+            </ResizablePanel>
+            <ResizableHandle style={{display:'none'}}/>
+            <ResizablePanel defaultSize={25}>
+                <div className="items-center"><span>NASDAQ Market Open</span></div>
+            </ResizablePanel>
+            </ResizablePanelGroup>
+            <ResizablePanelGroup direction="horizontal" className="border w-[100vw]" style={{ width: '30vw', minWidth:'23rem', margin:'auto'}}>
+            <ResizablePanel>
+                <SellStockForm currentPrice={currentPrice} />
+            </ResizablePanel>
+            
+            </ResizablePanelGroup>
+            </div>
+        </StableSidebar>
     )
 
 }

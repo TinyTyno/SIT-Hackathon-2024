@@ -65,7 +65,7 @@ userRouter.post('/create', async (req, res) => {
 
 userRouter.post("/login", async (req, res) => {
     let data = req.body;
-    console.log(data);
+    // console.log(data);
     // Validate request body
     let validationSchema = yup.object({
         email: yup.string().trim().lowercase().email().max(50).required(),
@@ -105,7 +105,7 @@ userRouter.post("/login", async (req, res) => {
         });
     }
     catch (err) {
-        console.log(err);
+        // console.log(err);
         res.status(400).json({ errors: err.errors });
         return;
     }

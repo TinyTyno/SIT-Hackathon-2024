@@ -27,6 +27,16 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "@/components/ui/dialog"
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import http from '../../../http.js'
   
 
 function BuyStockForm({currentPrice}) {
@@ -34,9 +44,13 @@ function BuyStockForm({currentPrice}) {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
+        accountID: '123456789',
+        stock: symbol,
+        quantity: 1,
+        buysell: 'buy',
         orderType: 'Market', // Default to 'Market'
-        quantity: '',
         price: currentPrice,
+        tradeFee: 1.30,
         duration: 'Day',
         extendedHours: false,
     });
@@ -77,10 +91,15 @@ function BuyStockForm({currentPrice}) {
     };
 
     // Handler for form submission
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         console.log('Form data submitted:', formData);
-        // Add your submission logic here
+
+        //Getting Historical Data
+        await http.post(`http://localhost:3000/transactions/addOrder`, formData)
+            .then((response) => {
+                console.log(response);
+            })
     };
 
     const handleCalculatorUpdate = (calculatedQuantity) => {
@@ -218,8 +237,67 @@ function BuyStockForm({currentPrice}) {
                     </div>
                 </div>
             )}
+            <Dialog>
+                <DialogTrigger>
+                    <Button type='button' className="m-2 bg-emerald-800" onSubmit="" onClick="">Buy Stock</Button>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Review Details</DialogTitle>
+                    </DialogHeader>
+                    <DialogDescription>
+                        <Table>
+                            <TableBody>
+                                <TableRow>
+                                    <TableCell>Account ID</TableCell>
+                                    <TableCell>123456789</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell>Buy/Sell</TableCell>
+                                    <TableCell>Buy</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell>Stock</TableCell>
+                                    <TableCell>{symbol}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell>Order Type</TableCell>
+                                    <TableCell>{formData.orderType}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell>Quantity</TableCell>
+                                    <TableCell>{formData.quantity}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell>Price</TableCell>
+                                    <TableCell>{formData.price}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell>Trade Fee</TableCell>
+                                    <TableCell>1.30 USD</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell>Duration</TableCell>
+                                    <TableCell>{formData.duration}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell>Extended Hours</TableCell>
+                                    <TableCell>{formData.extendedHours ? 'Yes' : 'No'}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell>Total</TableCell>
+                                    <TableCell>{(formData.price * formData.quantity + 1.30).toFixed(2)} USD</TableCell>
+                                </TableRow>
 
-            <Button className="m-2 bg-emerald-800" type="submit">Buy Stock</Button>
+                            </TableBody>
+                        </Table>
+                    </DialogDescription>
+                    <div className="flex justify-end">
+                        <Button className="m-2" type="submit" onClick={(e) => {handleSubmit(e);navigate('/orders');}}>Buy</Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
+
             <Button className="m-2" type="input" onClick={() => navigate(`../../stock/${symbol}`)}>Cancel</Button>
         </form>
     );
