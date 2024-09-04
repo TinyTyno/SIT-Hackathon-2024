@@ -64,13 +64,13 @@ function ForgotPassword() {
                 minHeight={'100vh'} // Add this line
             >
                 <Box display="flex" justifyContent="space-between">
-                <Box w="60%" mr={2} style={{
+                    <Box w="60%" mr={2} style={{
                         backgroundImage: 'url(/virtuetrade.jpg)',
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                         height: '100vh',
                     }} />
-                    <Box w="40%" m={6} mr={8} pt={170}>
+                    <Box w="40%" m={6} mr={8} pl={39} pt={170}>
                         <Box justifyContent="center" width='90%'>
                             <Text my={2} fontSize={32} fontWeight="bold" mb={2}>
                                 Forgot Your
@@ -81,7 +81,7 @@ function ForgotPassword() {
                             <Text fontSize={16} mb={4}>
                                 We will send a Password Reset link to your email
                             </Text>
-                            <form onSubmit={formik.handleSubmit}>
+                            <form onSubmit={formik.handleSubmit} width='80%'>
                                 <FormControl isInvalid={formik.errors.email && formik.touched.email}>
                                     <FormLabel>Email *</FormLabel>
                                     <Input
@@ -95,12 +95,16 @@ function ForgotPassword() {
                                             border: '1px solid gray',
                                             borderRadius: '10px',
                                             padding: '10px',
+                                            width: '85%'
                                         }}
                                     />
                                     <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
                                 </FormControl>
 
-                                <Button className='submitButton' type="submit" w="full" mt={2}>
+                                <Button style={{
+                                    background: 'linear-gradient(to left, #1DB5E4, #1274CE)',
+                                }}
+                                    color="#fff" type="submit" w="85%" mt={30}>
                                     Send
                                 </Button>
                             </form>

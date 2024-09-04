@@ -111,6 +111,7 @@ function UserCreate() {
                                             border: '1px solid gray',
                                             borderRadius: '10px',
                                             padding: '10px',
+                                            marginBottom: '15px'
                                         }}
                                     />
                                     <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
@@ -129,6 +130,7 @@ function UserCreate() {
                                             border: '1px solid gray',
                                             borderRadius: '10px',
                                             padding: '10px',
+                                            marginBottom: '15px'
                                         }}
                                     />
                                     <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
@@ -148,6 +150,7 @@ function UserCreate() {
                                                 border: '1px solid gray',
                                                 borderRadius: '10px',
                                                 padding: '10px',
+                                                marginBottom: '15px'
                                             }}
                                         />
                                         <InputRightElement>
@@ -175,6 +178,7 @@ function UserCreate() {
                                                 border: '1px solid gray',
                                                 borderRadius: '10px',
                                                 padding: '10px',
+                                                marginBottom: '15px'
                                             }}
                                         />
                                         <InputRightElement>
@@ -191,7 +195,7 @@ function UserCreate() {
                                 <Button style={{
                                     background: 'linear-gradient(to left, #1DB5E4, #1274CE)',
                                 }}
-                                    color="#fff" type="submit" w="full" mt={2}>
+                                    color="#fff" type="submit" w="full" mt={5}>
                                     Sign Up
                                 </Button>
                                 <Link to="/login">
