@@ -244,6 +244,11 @@ function UserView() {
             <TableCell>{(holding.currentPrice).toFixed(2)} USD</TableCell>
             <TableCell>{(holding.priceBought)} USD</TableCell>
             <TableCell className={holding.PL < 0 ? 'text-red-500' : 'text-green-500'}>{(holding.PL).toFixed(2)} USD ({(holding.PL / (holding.priceBought * holding.quantity) * 100).toFixed(2)}%)</TableCell>
+            <TableCell>
+              <Button className="bg-blue-500 hover:bg-blue-600 mr-1" onClick={() => navigate(`/buyStock/${holding.symbol}`)}>Buy</Button>
+              <Button className="bg-red-500 hover:bg-red-600 mr-1" onClick={() => navigate(`/sellStock/${holding.symbol}`)}>Sell</Button>
+              <Button onClick={() => navigate(`/stock/${holding.symbol}`)}>View</Button>
+            </TableCell>
           </TableRow>
         ))
     }
@@ -569,6 +574,10 @@ function UserView() {
                                   </HoverCardTrigger>
                                   <HoverCardContent className='text-sm'>
                                     The number of stocks you have purchased.
+                                    <br /><br />
+                                    A positive quantity indicates a buying position.
+                                    <br /><br />
+                                    A negative quantity indicates a selling position.
                                   </HoverCardContent>
                                 </HoverCard>
                               </TableHead>
@@ -599,6 +608,20 @@ function UserView() {
                                   </HoverCardTrigger>
                                   <HoverCardContent className='text-sm'>
                                     The profit or loss you have made on the stock.
+                                  </HoverCardContent>
+                                </HoverCard>
+                              </TableHead>
+                              <TableHead>
+                                <HoverCard>
+                                  <HoverCardTrigger>
+                                    Actions
+                                  </HoverCardTrigger>
+                                  <HoverCardContent className='text-sm'>
+                                    Actions you can take on the stock such as buying or selling. Closing a selling position allows you to convert the stock back to cash.
+                                    <br /><br />
+                                    To close a buying position, sell the stock at the same quantity (If 15 is your current quantity, sell at 15 also).
+                                    <br /><br />
+                                    To close a selling position, buy the stock at the same quantity. (-15 is your current quantity, buy at 15 also).
                                   </HoverCardContent>
                                 </HoverCard>
                               </TableHead>

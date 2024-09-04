@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button'; // Ensure Button is properly im
 
 function SearchStockInput() {
     const { query } = useParams();
-    const [inputValue, setInputValue] = useState(query);
+    // Use query only if it is not *
+    const [inputValue, setInputValue] = useState(query === '*' ? '' : query);
     const navigate = useNavigate();
 
     // Handle input change

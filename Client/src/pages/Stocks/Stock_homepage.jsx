@@ -31,13 +31,8 @@ const Stock_homepage = () => {
   };
 
   useEffect(() => {
-    if (user) {
       fetchData()
-    }
-    else {
-      console.log("no user")
-    }
-  }, [user])
+  }, [])
 
 
   return (
