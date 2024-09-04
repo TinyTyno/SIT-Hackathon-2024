@@ -22,8 +22,6 @@ function ViewStock() {
     const [dataView, setDataView] = React.useState('1M');
     const [historicalData, setHistoricalData] = React.useState([]);
     const [price, setPrice] = React.useState(null);
-    const [stockChange, setStockChange] = React.useState(0);
-    const [stockChangePercent, setStockChangePercent] = React.useState(0);
 
     useEffect(() => {
         fetchData(dataView);
@@ -60,11 +58,6 @@ function ViewStock() {
                     }
                     ));
             })
-        
-        console.log(historicalData)
-        setStockChange(historicalData[historicalData.length - 1].c.toFixed(2) - historicalData[historicalData.length - 2].c.toFixed(2))
-        console.log(stockChange)
-        setStockChangePercent(((historicalData[historicalData.length - 1].c.toFixed(2) - historicalData[historicalData.length - 2].c.toFixed(2)) / historicalData[historicalData.length - 2].c.toFixed(2)) * 100)
     };
 
     const marketConnection = () => {
