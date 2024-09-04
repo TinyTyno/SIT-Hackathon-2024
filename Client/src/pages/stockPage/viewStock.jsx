@@ -22,6 +22,8 @@ function ViewStock() {
     const [dataView, setDataView] = React.useState('1M');
     const [historicalData, setHistoricalData] = React.useState([]);
     const [price, setPrice] = React.useState(null);
+    const [stockChange, setStockChange] = React.useState(0);
+    const [stockChangePercent, setStockChangePercent] = React.useState(0);
 
     useEffect(() => {
         fetchData(dataView);
@@ -58,6 +60,9 @@ function ViewStock() {
                     }
                     ));
             })
+            setStockChange(historicalData[historicalData.length - 1].c.toFixed(2) - historicalData[historicalData.length - 2].c.toFixed(2))
+            console.log(stockChange)
+            setStockChangePercent(((historicalData[historicalData.length - 1].c.toFixed(2) - historicalData[historicalData.length - 2].c.toFixed(2)) / historicalData[historicalData.length - 2].c.toFixed(2)) * 100)
     };
 
     const marketConnection = () => {
@@ -105,7 +110,7 @@ function ViewStock() {
         <StableSidebar>
             <div className="container" style={{ margin: 'auto' }}>
                 <SearchStockInput />
-                <div className='flex' style={{ margin: 'auto', marginLeft: '70px', marginRight: '30px', marginTop: '50px', border: '1px solid #D9D9D9', borderRadius: '10px' }}>
+                <div className='flex' style={{ margin: 'auto', marginLeft: '2rem', marginRight: '30px', marginTop: '50px', border: '1px solid #D9D9D9', borderRadius: '10px' }}>
                     <div className="flex m-2 flex-col items-start" style={{ textalign: 'left', padding: '10px' }}>
                         <span className="text-4xl font-semibold tracking-tight">{symbol.toUpperCase()}</span>
                         <span className="text-gray-500 text-sm mt-1">NASDAQ:NVDA</span>
@@ -140,7 +145,7 @@ function ViewStock() {
                 </div>
 
                 {historicalData.length > 0 &&
-                    <div className='flex' style={{ margin: 'auto', marginLeft: '70px', marginRight: '30px', marginTop:'20px' }}>
+                    <div className='flex' style={{ margin: 'auto', marginLeft: '2rem', marginRight: '30px', marginTop:'20px' }}>
                         <div className="flex m-2 flex-col items-start" style={{ textalign: 'left', padding: '10px' }}>
                             <HoverCard>
                                 <HoverCardTrigger><span className="text-5xl font-bold">{price || historicalData[historicalData.length - 1].c.toFixed(2)} <span className='text-gray-600 text-base font-bold'>USD</span></span></HoverCardTrigger>
@@ -150,7 +155,11 @@ function ViewStock() {
                             </HoverCard>
                             <HoverCard>
                                 <HoverCardTrigger>
-                                    <span className="text-green-600 text-base font-semibold mt-1">+ 1.79 (1.51%) <span className='text-gray-600 font-bold'>1D</span></span>
+                                    <span className={`text-base font-semibold mt-1 ${historicalData[historicalData.length - 1].c.toFixed(2) - historicalData[historicalData.length - 2].c.toFixed(2) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                        {historicalData[historicalData.length - 1].c.toFixed(2) - historicalData[historicalData.length - 2].c.toFixed(2) >= 0 ? '+' : ''} 
+                                        {(historicalData[historicalData.length - 1].c - historicalData[historicalData.length - 2].c).toFixed(2)} ({(((historicalData[historicalData.length - 1].c - historicalData[historicalData.length - 2].c) / historicalData[historicalData.length - 2].c) * 100).toFixed(2)}%)
+                                        <span className='text-gray-600 font-bold'> 1D</span>
+                                    </span>
                                 </HoverCardTrigger>
                                 <HoverCardContent className="text-xs">
                                     The change in the stock price compared to the previous day's closing price.
