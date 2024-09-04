@@ -12,7 +12,6 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import StockTable from "@/components/stockPage/StockTable";
-import SearchStockInput from "@/components/stockPage/searchStockInput";
 
 const Stock_homepage = () => {
   const { user } = useContext(UserContext);
@@ -48,7 +47,7 @@ const Stock_homepage = () => {
         <div className="w-[90%] m-auto">
           <SearchStockInput />
           <h1 className='text-2xl font-bold ml-10 mt-10'>
-            Welcome Back, <span className='underline'>{user.name}</span>!
+            Welcome Back, <span className='underline'>{user?.name}</span>!
           </h1>
           <h1 className='text-2xl font-bold ml-10 mt-10'>Trending Stocks</h1>
           <div className='mt-10 w-[90%] m-auto'>
@@ -66,7 +65,7 @@ const Stock_homepage = () => {
             <div className='mt-[3rem]'>
               <h1 className='text-2xl font-bold'>All Stocks</h1>
               <div className='mt-10'>
-                <StockTable />
+                <StockTable data={stocks} />
               </div>
 
             </div>
