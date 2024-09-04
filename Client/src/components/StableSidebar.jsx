@@ -93,7 +93,7 @@ const StableSidebar = ({ children }) => {
                   <div className="self-center">Sign Up</div>
                 </li>
                 </Link>
-                <Link to={`/changePassword/${id}`}>
+                <Link to={`/changePassword/${user?.id}`}>
                 <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
                   <div className="self-center">
                     <MdVpnKey className="text-white" />
@@ -189,7 +189,7 @@ const StableSidebar = ({ children }) => {
                   <Tooltip>
                     <TooltipTrigger>
                       <li className="flex flex-row justify-center gap-4 w-full py-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
-                        <Link to={`/changePassword/${user.id}`}>
+                        <Link to={`/changePassword/${user?.id}`}>
                           <div className="self-center w-fit">
                             <MdVpnKey className="text-white" />
                           </div>
