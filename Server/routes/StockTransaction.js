@@ -116,7 +116,7 @@ async function checkLimitOrder() {
     // If it is, fulfill the order
 }
 
-// setInterval(checkLimitOrder, 10000);
+setInterval(checkLimitOrder, 10000);
 
 async function fulfillOrder(orderId) {
     const order = await db.Order.findOne({

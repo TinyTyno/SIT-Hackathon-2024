@@ -190,6 +190,7 @@ function BuyStockForm({currentPrice}) {
                     onChange={handleInputChange}
                     placeholder="Price"
                     style={{marginBottom:'9px'}}
+                    step='0.01'
                 />
             </div>
             <HoverCard>

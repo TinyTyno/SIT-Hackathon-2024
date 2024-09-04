@@ -46,7 +46,7 @@ function SearchStock() {
 
       const filteredStockList = [];
       for (let i = 0; i < data.length; i++) {
-        if (data[i].type === 'Common Stock' && !data[i].symbol.includes('.')) {
+        if (data[i].type === 'Common Stock' && !data[i].symbol.includes('.')) { // find a way to include cryptocurrency
           const stockData = await searchSymbol(data[i].symbol);
           if (stockData) { // Only push if stockData is not null
             filteredStockList.push(stockData);
@@ -68,7 +68,7 @@ function SearchStock() {
 
       const yahooResponse = await axios.get(`http://localhost:3000/testing/api/stock/${symbol}`);
       console.log('yahooResponse.data', yahooResponse.data.regularMarketVolume);
-      const displayName = yahooResponse.data.displayName;
+      const displayName = yahooResponse.data.shortName;
       const regularMarketChange = yahooResponse.data.regularMarketChange.toFixed(2);
       const regularMarketChangePercent = yahooResponse.data.regularMarketChangePercent.toFixed(2);
 

@@ -173,6 +173,7 @@ function SellStockForm({currentPrice}) {
                     onChange={handleInputChange}
                     placeholder="Quantity"
                     min="1"
+                    step="0.01"
                     required
                 />
             </div>

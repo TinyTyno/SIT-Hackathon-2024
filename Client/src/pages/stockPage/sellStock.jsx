@@ -60,7 +60,7 @@ function SellStock() {
             setVolumeWeightedAveragePrice(volumeWeightedAveragePrice.toFixed(2));
 
             var yahoo = await axios.get(`http://localhost:3000/testing/api/stock/${symbol}`);
-            const displayName = yahoo.data.displayName;
+            const displayName = yahoo.data.shortName;
             const regularMarketChange = yahoo.data.regularMarketChange;
             const regularMarketChangePercent = yahoo.data.regularMarketChangePercent;
             const regularMarketPreviousClose = yahoo.data.regularMarketPreviousClose;
@@ -81,7 +81,7 @@ function SellStock() {
             <ResizablePanelGroup direction="horizontal" className="border w-[100vw]" style={{ width: '30vw', minWidth:'23rem' , margin:'auto'}}>
             <ResizablePanel>
             <div className="flex m-2 flex-col items-start" style={{textalign:'left', padding:'10px'}}>
-                <span className="text-4xl font-semibold tracking-tight">{displayName}</span>
+                <span className="text-4xl font-semibold tracking-tight" style={{textAlign:'left'}}>{displayName}</span>
                 <span className="text-gray-500 text-sm mt-1">NASDAQ:{symbol}</span>
             </div>
             </ResizablePanel>
