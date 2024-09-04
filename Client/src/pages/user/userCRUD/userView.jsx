@@ -30,6 +30,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -338,7 +343,17 @@ function UserView() {
                   <div className="flex flex-row gap-10 pt-[8em]">
                     <div className="">
                       {/* Portfolio box */}
-                      <h3 className="text-2xl font-semibold mb-5">Portfolio</h3>
+                      <h3 className="text-2xl font-semibold mb-5">
+                        <HoverCard>
+                          <HoverCardTrigger>
+                            Portfolio
+                          </HoverCardTrigger>
+                          <HoverCardContent className='text-sm'>
+                            Your portfolio is a collection of all your investments
+                            including stocks and cash balance.
+                          </HoverCardContent>
+                        </HoverCard>
+                      </h3>
                       <Card className="bg-gradient-to-tr to-[#103593] from-[#146AB9] grid gap-2">
                         <CardHeader className="pt-6 pb-3">
                           <CardTitle className="text-white font-light text-sm">
@@ -353,13 +368,34 @@ function UserView() {
                         <CardFooter>
                           <div className="flex flex-row justify-between gap-14 w-full">
                             <div>
-                              <h5 className="text-white">Unrealized P&L</h5>
+                              <h5 className="text-white">
+                                <HoverCard>
+                                  <HoverCardTrigger>
+                                    Unrealized P&L
+                                  </HoverCardTrigger>
+                                  <HoverCardContent className='text-sm'>
+                                    Potential profit or loss on your investments that
+                                    have not yet been sold or closed.
+                                  </HoverCardContent>
+                                </HoverCard>
+                              </h5>
                               <p className="text-white font-bold">
                                 ${(assetValue - 10000).toFixed(3)}
                               </p>
                             </div>
                             <div className="mr-20">
-                              <h5 className="text-white">P&L Percentage</h5>
+                              <h5 className="text-white">
+                                  <HoverCard>
+                                    <HoverCardTrigger>
+                                      P&L Percentage
+                                    </HoverCardTrigger>
+                                    <HoverCardContent className='text-sm'>
+                                      The percentage of profit or loss on your investments
+                                      based on your starting balance
+                                      that have not yet been sold or closed.
+                                    </HoverCardContent>
+                                  </HoverCard>
+                              </h5>
                               <p
                                 className={
                                   assetValue - 10000 < 0
@@ -381,7 +417,15 @@ function UserView() {
                     <div className="">
                       {/* Cash balance box */}
                       <h3 className="text-2xl font-semibold mb-5">
-                        Cash Balance
+                        <HoverCard>
+                          <HoverCardTrigger>
+                            Cash Balance
+                          </HoverCardTrigger>
+                          <HoverCardContent className='text-sm'>
+                            Your cash balance is the amount of money you have
+                            available to invest in stocks.
+                          </HoverCardContent>
+                        </HoverCard>
                       </h3>
                       <Card className="bg-white grid gap-2 min-w-[25em] max-h-full">
                         <CardHeader className="pt-6 pb-3">
@@ -477,16 +521,90 @@ function UserView() {
                       <h3 className="text-2xl font-semibold mb-5">Holdings</h3>
                       <div>
                         <Table>
-                          <TableCaption>Holdings</TableCaption>
+                          <TableCaption>
+                            <HoverCard>
+                              <HoverCardTrigger>
+                                Holdings
+                              </HoverCardTrigger>
+                              <HoverCardContent className='text-sm'>
+                                Holdings are the stocks that you have
+                                purchased and are currently holding.
+                              </HoverCardContent>
+                            </HoverCard>
+                          </TableCaption>
                           <TableHeader>
                             <TableRow>
-                              <TableHead>Stock</TableHead>
-                              <TableHead>Name</TableHead>
-                              <TableHead>Market Value</TableHead>
-                              <TableHead>Quantity</TableHead>
-                              <TableHead>Current Price</TableHead>
-                              <TableHead>Price Bought</TableHead>
-                              <TableHead>P/L</TableHead>
+                              <TableHead>
+                                <HoverCard>
+                                  <HoverCardTrigger>
+                                    Stock
+                                  </HoverCardTrigger>
+                                  <HoverCardContent className='text-sm'>
+                                    The company you are currently investing in represented by the
+                                    stock symbol.
+                                  </HoverCardContent>
+                                </HoverCard>
+                              </TableHead>
+                              <TableHead>Name
+                                <HoverCard>
+                                  <HoverCardTrigger>
+                                    Name
+                                  </HoverCardTrigger>
+                                  <HoverCardContent className='text-sm'>
+                                    The name of the company you are currently investing in.
+                                  </HoverCardContent>
+                                </HoverCard>
+                              </TableHead>
+                              <TableHead>
+                                <HoverCard>
+                                  <HoverCardTrigger>
+                                    Market Value
+                                  </HoverCardTrigger>
+                                  <HoverCardContent className='text-sm'>
+                                    The total value of the stock you are currently holding.
+                                  </HoverCardContent>
+                                </HoverCard>
+                              </TableHead>
+                              <TableHead>
+                                <HoverCard>
+                                  <HoverCardTrigger>
+                                    Quantity
+                                  </HoverCardTrigger>
+                                  <HoverCardContent className='text-sm'>
+                                    The number of stocks you have purchased.
+                                  </HoverCardContent>
+                                </HoverCard>
+                              </TableHead>
+                              <TableHead>
+                                <HoverCard>
+                                  <HoverCardTrigger>
+                                    Current Price
+                                  </HoverCardTrigger>
+                                  <HoverCardContent className='text-sm'>
+                                    The current price of the stock you are currently holding.
+                                  </HoverCardContent>
+                                </HoverCard>
+                              </TableHead>
+                              <TableHead>
+                                <HoverCard>
+                                  <HoverCardTrigger>
+                                    Price Bought
+                                  </HoverCardTrigger>
+                                  <HoverCardContent className='text-sm'>
+                                    The price at which you purchased the stock.
+                                  </HoverCardContent>
+                                </HoverCard>
+                              </TableHead>
+                              <TableHead>
+                                <HoverCard>
+                                  <HoverCardTrigger>
+                                    P/L
+                                  </HoverCardTrigger>
+                                  <HoverCardContent className='text-sm'>
+                                    The profit or loss you have made on the stock.
+                                  </HoverCardContent>
+                                </HoverCard>
+                              </TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
