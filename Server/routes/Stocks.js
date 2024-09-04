@@ -1,5 +1,5 @@
 import express from 'express';
-import yahooFinance from 'yahoo-finance2';
+// import yahooFinance from 'yahoo-finance2';
 import WebSocket from 'ws';
 import finnhub from 'finnhub';
 import axios from 'axios';
@@ -93,7 +93,6 @@ stockRouter.get('/stockData', async (req, res) => {
     }
 });
 
-//Search Symbol
 stockRouter.get('/searchSymbol', async (req, res) => {
     const symbol = req.query.symbol;
 
@@ -123,5 +122,32 @@ stockRouter.get('/allStock', async (req, res) => {
     });
 });
 
+// Check current price only using a symbol
+// stockRouter.get('/currentPrice', async (req, res) => {
+//     var symbol = req.query.symbol;
+//     var uri = `https://data.alpaca.markets/v2/stocks/bars?symbols=${symbol}&timeframe=1D&limit=10000&adjustment=raw&feed=sip&sort=asc`
+//     var options = {
+//         method: 'GET',
+//         url: encodeURI(uri),
+//         headers: {
+//             accept: 'application/json',
+//             'APCA-API-KEY-ID': process.env.APCA_API_KEY_ID,
+//             'APCA-API-SECRET-KEY': process.env.APCA_API_SECRET_KEY
+//         }
+//     };
+//     try {
+//         axios
+//             .request(options)
+//             .then((response) => {
+//                 res.status(200).send((response.data.bars)[symbol.toUpperCase()][0]['c']);
+//             })
+//             .catch(function (error) {
+//                 res.status(500).send(error);
+//             });
+
+//     } catch (error) {
+//         res.status(500).send
+//     }
+// });
 
 export default stockRouter;
