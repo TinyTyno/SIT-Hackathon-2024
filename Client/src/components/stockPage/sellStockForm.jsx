@@ -173,7 +173,6 @@ function SellStockForm({currentPrice}) {
                     onChange={handleInputChange}
                     placeholder="Quantity"
                     min="1"
-                    step="0.01"
                     required
                 />
             </div>
@@ -194,6 +193,7 @@ function SellStockForm({currentPrice}) {
                     onChange={handleInputChange}
                     placeholder="Price"
                     style={{marginBottom:'9px'}}
+                    step="0.01"
                 />
             </div>
             <HoverCard>
