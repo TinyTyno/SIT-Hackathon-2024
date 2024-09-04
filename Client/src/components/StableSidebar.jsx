@@ -16,7 +16,7 @@ import http from '../../http';
 
 
 const StableSidebar = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
@@ -43,7 +43,7 @@ const StableSidebar = ({ children }) => {
 
   return (
     <>
-      {!isOpen ? (
+      {isOpen ? (
         <div className="z-50">
           <div className="h-screen fixed top-0 left-0 w-[15rem] bg-[#233F59] py-[1em] px-5">
             <div className="justify-center flex flex-col gap-7 ">
@@ -95,7 +95,7 @@ const StableSidebar = ({ children }) => {
               </ul>
             </div>
           </div>
-          <main className='pl-[16rem] box-border'>{children}</main>
+          <main className='pl-[15rem] box-border'>{children}</main>
         </div>
       ) : (
         <div className="z-50">
@@ -131,7 +131,7 @@ const StableSidebar = ({ children }) => {
                   <Tooltip>
                     <TooltipTrigger>
                       <li className="flex flex-row justify-center gap-4 w-full py-2 rounded-sm hover:bg-[#516e9578] cursor-pointer">
-                        <Link to={`/user/userView/${id}`}>
+                        <Link to={`/user/userView`}>
                           <div className="self-center w-fit">
                             <ImProfile className="text-white" />
                           </div></Link>
@@ -195,7 +195,7 @@ const StableSidebar = ({ children }) => {
               </ul>
             </div>
           </div>
-          <main className="pl-[6rem]">{children}</main>
+          <main className="pl-[5rem]">{children}</main>
         </div>
       )}
     </>

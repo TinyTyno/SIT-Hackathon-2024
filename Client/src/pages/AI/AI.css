@@ -1,0 +1,60 @@
+/* Animated background */
+.animated-bg {
+    background: linear-gradient(270deg, #ff9a9e, #fad0c4, #fad0c4);
+    background-size: 600% 600%;
+    animation: gradientAnimation 16s ease infinite;
+  }
+  
+  @keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  /* Typing indicator */
+  .typing-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .typing-indicator > div {
+    width: 8px;
+    height: 8px;
+    margin: 0 2px;
+    background-color: #999;
+    border-radius: 50%;
+    animation: bounce 1.4s infinite ease-in-out both;
+  }
+  
+  @keyframes bounce {
+    0%, 100% { transform: scale(0); }
+    50% { transform: scale(1); }
+  }
+  
+  .typing-indicator > div:nth-child(1) {
+    animation-delay: -0.32s;
+  }
+  
+  .typing-indicator > div:nth-child(2) {
+    animation-delay: -0.16s;
+  }
+  
+  /* Chat container */
+  .chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 20px;
+    background: #f7f9fc;
+  }
+  
+  .chat-input {
+    margin-top: auto;
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+  }
+  

@@ -78,7 +78,7 @@ const AIChat = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type your message..."
-              className="flex-grow p-2 rounded-lg text-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:text-white"
+              className="flex-grow p-2 rounded-lg text-black border bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
               disabled={isLoading || !chatModel}
             />
             <button

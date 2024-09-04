@@ -3,6 +3,7 @@ import db from '../models/model_index.js';
 import UserStock from '../models/UserStock.js';
 import Order from '../models/Order.js';
 import axios from 'axios';
+import finnhub from 'finnhub';
 
 const StockTransactionRouter = express.Router();
 
@@ -128,26 +129,41 @@ StockTransactionRouter.post('/addOrder', async (req, res) => {
 // });
 
 async function checkStockPrice(stock) {
-    const uri = `https://data.alpaca.markets/v2/stocks/bars?symbols=${stock}&timeframe=1D&limit=10000&adjustment=raw&feed=sip&sort=asc`;
-    const options = {
-        method: 'GET',
-        url: encodeURI(uri),
-        headers: {
-            accept: 'application/json',
-            'APCA-API-KEY-ID': process.env.APCA_API_KEY_ID,
-            'APCA-API-SECRET-KEY': process.env.APCA_API_SECRET_KEY,
-        },
-    };
+    // const uri = `https://data.alpaca.markets/v2/stocks/bars?symbols=${stock}&timeframe=1D&limit=10000&adjustment=raw&feed=sip&sort=asc`;
+    // const options = {
+    //     method: 'GET',
+    //     url: encodeURI(uri),
+    //     headers: {
+    //         accept: 'application/json',
+    //         'APCA-API-KEY-ID': process.env.APCA_API_KEY_ID,
+    //         'APCA-API-SECRET-KEY': process.env.APCA_API_SECRET_KEY,
+    //     },
+    // };
 
-    try {
-        const response = await axios.request(options); // Await the request to complete
-        const currentPrice = response.data.bars[stock.toUpperCase()][0]['c'];
-        return currentPrice; // Return the current price correctly
+    // try {
+    //     const response = await axios.request(options); // Await the request to complete
+    //     console.log('Response:', response);
+    //     const currentPrice = response.data.bars[stock.toUpperCase()][0]['c'];
+    //     console.log('Current price:', currentPrice);
+    //     return currentPrice; // Return the current price correctly
 
-    } catch (error) {
-        console.error('Error fetching stock price:', error);
-        return undefined; // Return undefined if there's an error
-    }
+    // } catch (error) {
+    //     console.error('Error fetching stock price:', error);
+    //     return undefined; // Return undefined if there's an error
+    // }
+    const api_key = finnhub.ApiClient.instance.authentications['api_key'];
+    api_key.apiKey = process.env.FINNHUB_API_KEY;
+    const finnhubClient = new finnhub.DefaultApi()
+
+    finnhubClient.quote(stock, (error, data, response) => {
+        if (error) {
+            console.log(error);
+            return undefined
+        }
+        else {
+            return (data["c"])
+        }
+    });
 }
 
 async function checkLimitOrder() {
@@ -174,7 +190,7 @@ async function checkLimitOrder() {
     // If it is, fulfill the order
 }
 
-setInterval(checkLimitOrder, 5000);
+setInterval(checkLimitOrder, 10000);
 
 async function fulfillOrder(orderId) {
     const order = await db.Order.findOne({

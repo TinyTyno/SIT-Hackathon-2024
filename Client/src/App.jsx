@@ -5,9 +5,9 @@ import './index.css'
 
 import View_Ind_Stock from './pages/Stocks/View_Ind_Stock'
 import Homepage from './pages/homepage'
-import QuestionArea from './pages/Comments'
+import QuestionArea from './pages/Comments/Comments'
 
-import AI from './pages/AI'
+import AI from './pages/AI/AI'
 import ViewStock from './pages/stockPage/viewStock'
 import BuyStock from './pages/stockPage/buyStock'
 import SellStock from './pages/stockPage/sellStock'
@@ -56,8 +56,8 @@ function App() {
 
 
                 <Route path='/user/userCreate' Component={UserCreate} />
-                <Route path='/user/userView/:id' Component={UserView} />
-                <Route path='/user/userUpdate/:id' Component={UserUpdate} />
+                <Route path='/user/userView' Component={UserView} />
+                <Route path='/user/userUpdate' Component={UserUpdate} />
                 <Route path='/login' Component={login} />
 
                 {/* password reset */}

@@ -1,192 +1,414 @@
+import { React, useState, useCallback, useEffect, useContext } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import UserContext from "../../../contexts/UserContext";
+import http from "../../../http.js";
+import StableSidebar from "@/components/StableSidebar";
 import {
-    ChakraProvider,
-    Box,
-    Container,
-    Text,
-    Button,
-    Table,
-    Thead,
-    Tbody,
-    Tr,
-    Th,
-    Td,
-    Checkbox,
-    Flex,
-    Grid,
-    GridItem,
-    Tab,
-} from '@chakra-ui/react';
-import { React, useState, useCallback, useEffect, useContext, IconButton } from 'react';
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import StockTable from "@/components/stockPage/StockTable";
+import { Input } from "@/components/ui/input";
 
-import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
+function DeleteToolbar({ selected, handleOpenConfirmation, handleOpen }) {
+  const handleDelete = () => {
+    console.log("data", selected);
+    if (selected !== null) {
+      handleOpenConfirmation();
+    } else {
+      handleOpen();
+    }
+  };
 
-import { Modal, ModalHeader, ModalBody, ModalFooter } from '@chakra-ui/modal';
-import Navbar from '@/components/Navbar'
-import StableSidebar from '@/components/StableSidebar'
-import '@fontsource/inter';
-import http from '../../../http.js';
-import { Navigate, useNavigate, useParams, Link } from "react-router-dom";
-import UserContext from '../../../contexts/UserContext';
-
-function DeleteToolbar(props) {
-    const { selected, handleOpenConfirmation, handleOpen } = props;
-    const handleDelete = () => {
-        console.log("data", selected);
-        if (selected !== null) {
-            handleOpenConfirmation();
-        } else {
-            handleOpen()
-        }
-    };
-
-    return (
-        <Grid templateColumns="repeat(1, 1fr)" gap={4}>
-            <Button colorScheme="red" onClick={handleDelete}>
-                Delete
-                <DeleteIcon />
-            </Button>
-        </Grid>
-    );
+  return (
+    <div className="grid grid-cols-1 gap-4">
+      <button
+        className="bg-red-500 text-white px-4 py-2 rounded"
+        onClick={handleDelete}
+      >
+        Delete
+        <span className="ml-2">🗑️</span>
+      </button>
+    </div>
+  );
 }
 
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bg: 'white',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-    outline: 'none'
-};
-
 function UserView() {
-    const { user, setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
+  const [userInfo, setUserInfo] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const [isOpen, setOpen] = useState(false);
+  const [isOpenForm, setOpenForm] = useState(false);
+    const [isOpenEditForm, setOpenEditForm] = useState(false);
+    const [username, setUserName] = useState("");
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [cash, setCash] = useState(0);
+  const holdingData = [
+    {
+      symbol: "AAPL",
+      name: "Apple Inc",
+      position: 25,
+      market: 864343.8,
+      last: 137.27,
+      cost: 137.27,
+      unrealisedPL: 100,
+    },
+    {
+      symbol: "BTC",
+      name: "Bitcoin Inc",
+      position: 25,
+      market: 864343.8,
+      last: 137.27,
+      cost: 137.27,
+      unrealisedPL: 100,
+    },
+  ];
 
-    const { id } = useParams(); // get the id from the URL parameter
-    const [userInfo, setUserInfo] = useState([]);
+  const fetchData = async (id) => {
+    await http
+      .get(`/user/${id}`)
+      .then((res) => {
+        setUserInfo(res.data), console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
 
-    const fetchData = async (id) => {
-        await http.get(`/user/${id}`).then((res) => {
-            setUserInfo(res.data);
-        }).catch((r) => console.log(r))
-    };
-
-    useEffect(() => {
-        if (user) {
-            setUser(user);
-            fetchData(id);
-        }
-    }, [user]); //synchronises it such that only when useContext loads user in, data is fetched
-
-    const navigate = useNavigate()
-    const [selected, setSelected] = useState(null);
-    const [open, setopen] = useState(false);
-    const [openConfirm, setopenConfirm] = useState(false);
-    const [selectedUser, setselectedUser] = useState(null)
-
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    const handleOpenConfirmation = () => {
-        const temp = []
-        for (var i = 0; i < userList.length; i++) {
-            for (var j = 0; j < selected.length; j++) {
-                if (userList[i].id == selected[j]) {
-                    temp.push(userList[i].name)
-                }
-            }
-        }
-        setselectedUser(temp)
-        setopenConfirm(true)
+  useEffect(() => {
+    if (user) {
+      setUser(user);
+      fetchData(user.id);
     }
-    const handleCloseConfirmation = () => {
-        setopenConfirm(false);
-        setSelected(null)
-    };
-    const handleOpen = () => {
-        setopen(true);
-    };
-    const handleClose = () => {
-        setopen(false);
-    };
-    const Click = (user) => () => {
-        navigate(`/user/userUpdate/${user.id}`)
+  }, [user]);
+
+  const navigate = useNavigate();
+
+  const handleReset = async () => {
+    await http
+      .put(`/user/${user.id}`, {
+        ...userInfo,
+        cashBalance: 0,
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    handleClose();
+  };
+
+  const handleOpenForm = () => {
+    setOpenForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setOpenForm(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleTopup = (e) => {
+    console.log(e)
+    setCash(e.target.value);
+  };
+  const submitTopup = async () => {
+    console.log("cash", cash);
+    await http.put(`/user/${user.id}`, {
+        ...userInfo,
+        cashBalance: cash,
+        }).then((res) => {
+            console.log(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+    setOpenForm(false);
+  };
+  const handleOpenEditForm = () => {
+    setOpenEditForm(true);
     };
 
-    const onSelectChange = (val) => {
-        setSelected(val);
+    const handleCloseEditForm = () => {
+    setOpenEditForm(false);
     };
-
-    const deleteUser = () => {
-        if (selected.length > 0) {
-            selected.forEach((element) => {
-                http
-                    .delete(`/user/${element}`)
-                    .then((res) => {
-                        console.log(res.data);
-                        setopenConfirm(false);
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
+    const handleUserName = (e) => {
+    setUserName(e.target.value);
+    };
+    const confirmEditing = async () => {
+    await http.put(`/user/${user.id}`, {
+        ...userInfo,
+        name: username,
+        }).then((res) => {
+            console.log(res.data);
+            })
+            .catch((err) => {
+            console.log(err);
             });
-        }
-        fetchData()
+    setOpenEditForm(false);
     };
+  const deleteUser = () => {
+    if (selected.length > 0) {
+      selected.forEach((element) => {
+        http
+          .delete(`/user/${element}`)
+          .then((res) => {
+            console.log(res.data);
+            setOpenConfirm(false);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
+    }
+    fetchData();
+  };
 
-    return (
-        <>
-            <StableSidebar>
-                <Container maxW="container.lg" p={4}>
-                    <Box
-                        component="main"
-                        sx={{ flexGrow: 1, pl: { xs: 6, md: 0 }, position: "relative" }}
-                    >
+  return (
+    <>
+      <StableSidebar>
+        <div className="flex">
+          <main className="flex-grow ">
+            <div className="relative p-10">
+              <div className=" absolute top-0 left-0  bg-[url('/bgProfile.svg')] bg-cover bg-center px-10 py-5 w-full">
+                <div className="flex justify-between mb-2 mt-1">
+                  <h1 className="text-3xl font-semibold">{userInfo.name}</h1>
+                  <Dialog open={isOpenEditForm} onOpenChange={setOpenEditForm} className="p-5">
+                        <DialogTrigger onClick={handleOpenEditForm}>
+                          <Button className="text-lg font-semibold bg-transparent hover:bg-transparent text-red-500 hover:text-red-600 cursor-pointer">
+                    Edit
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="pt-12 pb-8 w-[20em]">
+                          <form>
+                            <Input
+                              type="string"
+                              name="username"
+                              value={username}
+                              onChange={handleUserName}
+                              placeholder="Change Username"
+                              required
+                            />
+                          </form>
+                          <DialogFooter>
+                          <Button onClick={confirmEditing} className="bg-[#2C74E1] hover:bg-[#2460b9]">
+                             Change
+                            </Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                  
+                </div>
+                <p className="text-lg font-semibold">{userInfo.email}</p>
+              </div>
+              <div className="flex flex-row gap-10 pt-[8em]">
+                <div className="">
+                  {/* Portfolio box */}
+                  <h3 className="text-2xl font-semibold mb-5">Portfolio</h3>
+                  <Card className="bg-gradient-to-tr to-[#103593] from-[#146AB9] grid gap-2">
+                    <CardHeader className="pt-6 pb-3">
+                      <CardTitle className="text-white font-light text-sm">
+                        Your assets USDS
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="pb-3 pt-2">
+                      <p className="text-6xl text-white font-semibold">17112</p>
+                    </CardContent>
+                    <CardFooter>
+                      <div className="flex flex-row justify-between gap-14 w-full">
+                        <div>
+                          <h5 className="text-white">Unrealized P&L</h5>
+                          <p className="text-white font-bold">$15000</p>
+                        </div>
+                        <div className="mr-20">
+                          <h5 className="text-white">Daily P&L</h5>
+                          <p className="text-green-600 font-bold">+9.5%</p>
+                          <p className="text-green-600 font-bold">+9.5%</p>
+                        </div>
+                      </div>
+                    </CardFooter>
+                  </Card>
+                </div>
+                <div className="">
+                  {/* Cash balance box */}
+                  <h3 className="text-2xl font-semibold mb-5">
+                    Est Cash Balance
+                  </h3>
+                  <Card className="bg-white grid gap-2 min-w-[25em] max-h-full">
+                    <CardHeader className="pt-6 pb-3">
+                      <CardTitle className="flex flex-row justify-between items-center">
+                        <h5 className="text-black font-light text-sm self-center">
+                          Your assets USD
+                        </h5>
+                        <Dialog open={isOpen} onOpenChange={setOpen} className="p-[3em]">
+                          <DialogTrigger
+                            onClick={handleOpen}
+                            className="  text-red-500 hover:text-red-600 self-center text-sm cursor-pointer"
+                          >
+                            Reset
+                          </DialogTrigger>
+                          <DialogContent className="">
+                            <DialogHeader className={"grid gap-2"}>
+                              <DialogTitle>
+                                Are you sure you want to reset?
+                              </DialogTitle>
+                              <DialogDescription>
+                                This action cannot be undone. This will reset
+                                your cash balance to 0.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                              <Button
+                                type="button"
+                                onClick={handleClose}
+                                variant="secondary"
+                              >
+                                Close
+                              </Button>
+                              <Button
+                                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                                onClick={handleReset}
+                              >
+                                Reset
+                              </Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="pb-3 pt-2">
+                      <p className="text-6xl text-black font-semibold">
+                        $ {userInfo.cashBalance}
+                      </p>
+                    </CardContent>
+                    <CardFooter className="my-4">
+                      <Dialog open={isOpenForm} onOpenChange={setOpenForm} className="p-5">
+                        <DialogTrigger onClick={handleOpenForm}>
+                          <Button className="bg-[#2C74E1] hover:bg-[#2460b9]">
+                            Top Up
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="pt-12 pb-8 w-[20em]">
+                          <form>
+                            <Input
+                              type="number"
+                              name="quantity"
+                              value={cash}
+                            
+                              onChange={handleTopup}
+                              placeholder="Cash Amount"
+                              min="1"
+                              required
+                            />
+                          
+                          </form>
+                          <DialogFooter>
+                          <Button onClick={submitTopup} className="bg-[#2C74E1] hover:bg-[#2460b9]">
+                              Top Up
+                            </Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    </CardFooter>
+                  </Card>
+                </div>
+              </div>
+              <div>
+                <div className="py-[3em]">
+                  <h3 className="text-2xl font-semibold mb-5">Holdings</h3>
+                  <div>
+                    <div className="flex flex-row justify-between w-full">
+                      <h5 className="text-sm text-gray-500">
+                        Country Market Cap (USD){" "}
+                        <span className="text-black font-semibold">82,220</span>
+                      </h5>
+                      <div className="text-green-600">14,283</div>
+                    </div>
+                    <div>
+                      {/* <StockTable type="profile" data={holdingData}/> */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
 
-                        <Box sx={{ maxWidth: "95%", mt: { xs: '5em', lg: 0 }, ml: 10 }}>
-                            <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between', mb: 4, mt: 1 }}>
-                                <Text variant="subtitle1" fontSize="42" fontWeight="bold">
-                                    {userInfo.name}
-                                </Text>
-                                <Link to={`/user/userUpdate/${id}`}>
-                                    <Text
-                                        variant="subtitle1"
-                                        sx={{
-                                            fontWeight: "bold", color: '#AA3535', textDecoration: 'underline', cursor: 'pointer', mt: 10
-                                        }}
-                                    >
-                                        Edit
-                                    </Text>
-                                </Link>
-                            </Box>
-                            <Text variant="subtitle1" fontSize="20" fontWeight="bold">
-                                    {userInfo.email}
-                                </Text>
-                        </Box>
-                        {/* box for portfolio and cash balance */}
-                        <Container maxW="container.lg" p={5} h="100vh" display="flex" flexDirection="column">
-                            <Box display="flex" justifyContent="space-between" pt={10}>
-                                {/* portfolio box */}
-                                
-                                <Box w="70%" mr={2}>
+        {/* Confirmation Modal
+        {openConfirm && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="bg-white border border-gray-300 shadow-lg p-4 w-96">
+              <h2 className="text-xl font-bold mb-4">Confirm Deletion</h2>
+              <p>Are you sure you want to delete the following users?</p>
+              <ul className="list-disc pl-5 mt-2">
+                {selectedUser?.map((name) => (
+                  <li key={name}>{name}</li>
+                ))}
+              </ul>
+              <div className="flex justify-end gap-2 mt-4">
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                  onClick={deleteUser}
+                >
+                  Confirm
+                </button>
+                <button
+                  className="bg-gray-500 text-white px-4 py-2 rounded"
+                  onClick={handleCloseConfirmation}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
-                                </Box>
-                                {/* Cash balance box */}
-                                <Box w="30%" ml={2}>
-
-                                </Box>
-                            </Box>
-                        </Container>
-                    </Box>
-                </Container>
-            </StableSidebar>
-        </>
-    );
+        {/* Edit Modal */}
+        {/* {open && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="bg-white border border-gray-300 shadow-lg p-4 w-96">
+              <h2 className="text-xl font-bold mb-4">Edit User</h2>
+              {/* Add form to edit user here */}
+        {/* <div className="flex justify-end gap-2 mt-4">
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                  onClick={handleClose}
+                >
+                  Save
+                </button>
+                <button
+                  className="bg-gray-500 text-white px-4 py-2 rounded"
+                  onClick={handleClose}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>  */}
+        {/* )} */}
+      </StableSidebar>
+    </>
+  );
 }
 
 export default UserView;
