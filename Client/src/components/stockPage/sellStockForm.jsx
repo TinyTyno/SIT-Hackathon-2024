@@ -1,4 +1,4 @@
-import React, { useState, initialFormState, useEffect } from "react";
+import React, { useState, initialFormState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { RulerHorizontalIcon } from "@radix-ui/react-icons";
@@ -37,14 +37,16 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import http from '../../../http.js'
+import UserContext from "../../contexts/UserContext";
 
 
 function SellStockForm({currentPrice}) {
     const { symbol } = useParams();
     const navigate = useNavigate();
+    const { user } = useContext(UserContext);
 
     const [formData, setFormData] = useState({
-        accountID: '123456789',
+        accountID: user.id,
         stock: symbol,
         quantity: 1,
         buysell: 'sell',
