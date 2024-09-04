@@ -138,13 +138,13 @@ function UserView() {
 <TableHead>P/L</TableHead> */
   }
 
-  useEffect(() => {
-    if (user) {
-      console.log(user);
-      setUser(user);
-      fetchData(user.id);
-    }
-  }, [user]);
+    useEffect(() => {
+      if (user) {
+        setUser(user);
+        fetchData(user.id);
+        CalculateAsset();
+      }
+    }, [user]);
 
   const handleReset = async () => {
     await http
@@ -224,62 +224,67 @@ function UserView() {
     setOpenEditForm(false);
   };
 
-  // Output the User holdings tables
-  function UserHoldingsOutput() {
-    if (!Array.isArray(holdingData) || holdingData.length === 0) {
-      return (
-        <TableRow>
-          <TableCell colSpan="4">
-            No data available or failed to fetch.
-          </TableCell>
-        </TableRow>
-      );
+    // Output the User holdings tables
+    function UserHoldingsOutput() {
+        CalculateAsset();
+        if (!Array.isArray(holdingData) || holdingData.length === 0) {
+        return (
+            <TableRow>
+            <TableCell colSpan="4">No data available or failed to fetch.</TableCell>
+            </TableRow>
+        )};
+        return holdingData.map((holding) => (
+          <TableRow>
+            <TableCell>{holding.symbol}</TableCell>
+            <TableCell>{holding.name}</TableCell>
+            <TableCell>{(holding.marketValue).toFixed(2)} USD</TableCell>
+            <TableCell>{holding.quantity}</TableCell>
+            <TableCell>{(holding.currentPrice).toFixed(2)} USD</TableCell>
+            <TableCell>{(holding.priceBought)} USD</TableCell>
+            <TableCell className={holding.PL < 0 ? 'text-red-500' : 'text-green-500'}>{(holding.PL).toFixed(2)} USD ({(holding.PL / (holding.priceBought * holding.quantity) * 100).toFixed(2)}%)</TableCell>
+          </TableRow>
+        ))
     }
 
-    return holdingData.map((holding) => (
-      <TableRow>
-        <TableCell>{holding.symbol}</TableCell>
-        <TableCell>{holding.name}</TableCell>
-        <TableCell>{holding.marketValue} USD</TableCell>
-        <TableCell>{holding.quantity}</TableCell>
-        <TableCell>{holding.currentPrice} USD</TableCell>
-        <TableCell>{holding.priceBought} USD</TableCell>
-        <TableCell
-          className={holding.PL < 0 ? "text-red-500" : "text-green-500"}
-        >
-          {holding.PL.toFixed(2)} USD (
-          {(
-            (holding.PL / (holding.priceBought * holding.quantity)) *
-            100
-          ).toFixed(2)}
-          %)
-        </TableCell>
-      </TableRow>
-    ));
-  }
+    // Calculate the total asset value including cash balance and stocks, and also calculates the p/l and percentage
+    const CalculateAsset = async () => {
+      let total = 0;
 
-  // Calculate the total asset value including cash balance and stocks, and also calculates the p/l and percentage
-  const CalculateAsset = (u, holdData) => {
-    return new Promise((resolve, reject) => {
-      try {
-        let total = 0;
-        for (let i = 0; i < holdData?.length; i++) {
-          if (holdData[i].marketValue < 0) {
-            total -= holdData[i].marketValue;
-          } else {
-            total += holdData[i].marketValue;
-          }
-        }
-        total += parseFloat(u.cashBalance);
-        console.log("total", total);
-        console.log("cash", u.cashBalance);
+      console.log('holdingdata is ' + holdingData, 'type is ' + typeof(holdingData))
+      if (!holdingData) {
+        console.log('cash balance is ' + userInfo.cashBalance)
+        total += parseFloat(userInfo.cashBalance);
         setAssetValue(total);
-        resolve(total); // Resolving the promise with the total value
-      } catch (error) {
-        reject(error); // Rejecting the promise if an error occurs
+        return
       }
-    });
-  };
+      for (let i = 0; i < holdingData.length; i++) {
+        if (holdingData[i].marketValue < 0) {
+          total -= parseFloat(holdingData[i].marketValue);
+        }
+        else {
+          total += parseFloat(holdingData[i].marketValue);
+        }
+      }
+      console.log(total)
+      total += parseFloat(userInfo.cashBalance);
+      setAssetValue(total);
+      console.log('asset value is ' + assetValue + 'type is ' + typeof(assetValue))
+    }
+
+    async function CalculateAsset2() {
+      let total = 0;
+      for (let i = 0; i < holdingData.length; i++) {
+        if (holdingData[i].marketValue < 0) {
+          total -= holdingData[i].marketValue;
+        }
+        else {
+          total += holdingData[i].marketValue;
+        }
+      }
+      console.log(total)
+      total += parseFloat(userInfo.cashBalance);
+      return total
+    }
 
   return (
     <>
@@ -376,7 +381,7 @@ function UserView() {
                     <div className="">
                       {/* Cash balance box */}
                       <h3 className="text-2xl font-semibold mb-5">
-                        Est Cash Balance
+                        Cash Balance
                       </h3>
                       <Card className="bg-white grid gap-2 min-w-[25em] max-h-full">
                         <CardHeader className="pt-6 pb-3">
@@ -490,12 +495,12 @@ function UserView() {
                         </Table>
                         <div className="flex flex-row justify-between w-full">
                           <h5 className="text-sm text-gray-500">
-                            Country Market Cap (USD){" "}
+                            Copyright VirtuTrade{" "}
                             <span className="text-black font-semibold">
-                              82,220
+                              2024
                             </span>
                           </h5>
-                          <div className="text-green-600">14,283</div>
+                          <div className="text-green-600"></div>
                         </div>
                         <div>
                           {/* <StockTable type="profile" data={holdingData}/> */}

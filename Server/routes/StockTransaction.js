@@ -128,7 +128,9 @@ async function fulfillOrder(orderId) {
     order.status = 'fulfilled';
 
     // minus from cash balance of user
-    updateCashBalance(order.accountID, -1 * order.price * quantity - order.tradeFee);
+    var amountDeducted = -1 * parseFloat(order.price) * parseFloat(order.quantity) - parseFloat(order.tradeFee);
+    console.log('amount to be deducted is', amountDeducted)
+    updateCashBalance(order.accountID, amountDeducted);
     
     // Checks if the order is a buy or sell order
     var quantity = order.quantity;
@@ -214,8 +216,10 @@ async function updateCashBalance(accountID, amount) {
             id: accountID
         }
     });
-    user.cashBalance += amount;
-    user.save();
+    console.log('cash balance is ' + user.cashBalance, 'cash balance type is', typeof(user.cashBalance))
+    console.log('amount is ' + amount, 'amount type is', typeof(amount))
+    user.cashBalance = parseFloat(user.cashBalance) + parseFloat(amount);
+    await user.save();
 }
 
 
