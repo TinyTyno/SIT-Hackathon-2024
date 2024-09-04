@@ -47,7 +47,7 @@ function ViewStock() {
         //Getting Historical Data
         await http.get(`http://localhost:3000/stocks/stockData?type=${type}&symbol=${querySymbol}&view=${view}`)
             .then((response) => {     
-                console.log(response.data[querySymbol.toUpperCase()])           
+                console.log('response data is '+ response.data[querySymbol.toUpperCase()])           
                 setHistoricalData(response.data[querySymbol.toUpperCase()]
                     .map((data) => {
                         return {
@@ -126,7 +126,7 @@ function ViewStock() {
                                 </HoverCardTrigger>
                                 <HoverCardContent className="text-xs">
                                     Buying a stock means betting that its price will go up.
-                                    If the price rises, you profit, but if it falls, you incur a loss
+                                    If the price rises, you profit, but if it falls, you incur a loss.
                                 </HoverCardContent>
                             </HoverCard>
                             <HoverCard>
@@ -136,8 +136,8 @@ function ViewStock() {
                                     </Button>
                                 </HoverCardTrigger>
                                 <HoverCardContent className="text-xs">
-                                    Buying a stock means betting that its price will go down.
-                                    If the price falls, you profit, but if it rises, you incur a loss
+                                    Selling a stock means betting that its price will go down.
+                                    If the price falls, you profit, but if it rises, you incur a loss.
                                 </HoverCardContent>
                             </HoverCard>
                         </div>
