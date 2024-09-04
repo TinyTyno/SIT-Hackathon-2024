@@ -22,7 +22,7 @@ stockRouter.get('/stockData', async (req, res) => {
             interval = '1Min';
             break;
         case '5D':
-            interval = '5Min';
+            interval = '1Min';
             break;
         default:
             interval = '1D';

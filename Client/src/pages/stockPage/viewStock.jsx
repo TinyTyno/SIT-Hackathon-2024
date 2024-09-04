@@ -11,6 +11,8 @@ import StableSidebar from '@/components/StableSidebar'
 import cryptoData from '../../lib/cryptoSearch.json'
 import http from '../../../http.js'
 import { LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line, ResponsiveContainer } from 'recharts'
+import { ToastContainer, toast } from 'react-toastify';
+
 
 
 function ViewStock() {
@@ -41,15 +43,17 @@ function ViewStock() {
             type = 'stock';
             querySymbol = symbol;
         }
-        console.log(view)
         //Getting Historical Data
-        await http.get(`http://localhost:3000/stocks/stockData?type=${type}&symbol=${querySymbol}&view=${view}`)
-            .then((response) => {     
-                console.log(response.data[querySymbol.toUpperCase()])           
+        const res = await http.get(`http://localhost:3000/stocks/stockData?type=${type}&symbol=${querySymbol}&view=${view}`)
+            .then((response) => {
+                if (Object.keys(response.data).length === 0 && view == '1D') {
+                    document.getElementById('button1').setAttribute('disabled', 'true');
+                    return 'button error';
+                }
                 setHistoricalData(response.data[querySymbol.toUpperCase()]
                     .map((data) => {
                         return {
-                            t: view == '1D' || view == '5D' ? new Date(data.t).toLocaleTimeString('en-GB', {day:'numeric', month: 'short', year: 'numeric'}) : new Date(data.t).toLocaleDateString('en-GB', {day:'numeric', month: 'short', year: '2-digit'}),
+                            t: view == '1D' || view == '5D' ? new Date(data.t).toLocaleTimeString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : new Date(data.t).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: '2-digit' }),
                             o: data.o,
                             h: data.h,
                             l: data.l,
@@ -58,6 +62,9 @@ function ViewStock() {
                     }
                     ));
             })
+        if (res === 'button error') {
+            return res;
+        }
     };
 
     const marketConnection = () => {
@@ -73,9 +80,9 @@ function ViewStock() {
         });
 
         // Listen for messages
-        socket.addEventListener('message', function (event) {
-            if (JSON.parse(event.data).data) {
-                setPrice(JSON.parse(event.data).data[0].p.toFixed(2));
+        socket.addEventListener('message', function (event) {            
+            if (JSON.parse(event.data).data) {            
+                setPrice(JSON.parse(event.data).data[0].p.toFixed(2));                
             }
         });
 
@@ -83,7 +90,6 @@ function ViewStock() {
 
         return () => connection.close();
     }
-    // var data = axios.get(`http://localhost:3000/api/stock/${symbol}`)
 
     // Button Group for Views
     const [buttonGroupOn, setButtonGroupOn] = useState('button3')
@@ -92,23 +98,30 @@ function ViewStock() {
             return;
         }
         document.getElementById(buttonGroupOn).classList.remove('bg-blue-500', 'text-white');
-        setButtonGroupOn(buttonId); 
+        setButtonGroupOn(buttonId);
         document.getElementById(buttonId).classList.add('bg-blue-500', 'text-white');
     }
 
-    const handleDataView = (view) => {
+    const handleDataView = async (view, buttonId) => {
+        const res = await fetchData(view)
+        if (res === 'button error') {
+            toast.error("1D View is not available")
+            return;
+        }
         setDataView(view);
-        fetchData(view);
+        buttonGroupChange(buttonId);
+
     }
 
     return (
         <StableSidebar>
             <div className="container" style={{ margin: 'auto' }}>
+                <ToastContainer />
                 <SearchStockInput />
                 <div className='flex' style={{ margin: 'auto', marginLeft: '70px', marginRight: '30px', marginTop: '50px', border: '1px solid #D9D9D9', borderRadius: '10px' }}>
                     <div className="flex m-2 flex-col items-start" style={{ textalign: 'left', padding: '10px' }}>
                         <span className="text-4xl font-semibold tracking-tight">{symbol.toUpperCase()}</span>
-                        <span className="text-gray-500 text-sm mt-1">NASDAQ:NVDA</span>
+                        <span className="text-gray-500 text-sm mt-1">{symbol.toUpperCase()}</span>
                     </div>
                     <div className='grow'></div>
                     <div className="flex items-center justify-center">
@@ -140,7 +153,7 @@ function ViewStock() {
                 </div>
 
                 {historicalData.length > 0 &&
-                    <div className='flex' style={{ margin: 'auto', marginLeft: '70px', marginRight: '30px', marginTop:'20px' }}>
+                    <div className='flex' style={{ margin: 'auto', marginLeft: '70px', marginRight: '30px', marginTop: '20px' }}>
                         <div className="flex m-2 flex-col items-start" style={{ textalign: 'left', padding: '10px' }}>
                             <HoverCard>
                                 <HoverCardTrigger><span className="text-5xl font-bold">{price || historicalData[historicalData.length - 1].c.toFixed(2)} <span className='text-gray-600 text-base font-bold'>USD</span></span></HoverCardTrigger>
@@ -202,30 +215,30 @@ function ViewStock() {
                 }
                 <div>
                     <div className="flex space-x-4 mx-8 mt-10 justify-end">
-                        <Button id='button1' variant="outline" size='icon' className="px-7 py-5 rounded-lg" onClick={() => {handleDataView('1D'); buttonGroupChange('button1')}}>
+                        <Button id='button1' variant="outline" size='icon' className="px-7 py-5 rounded-lg" onClick={() => handleDataView('1D', 'button1')}>
                             1D
                         </Button>
-                        <Button id='button2' variant="outline" size='icon' className="px-7 py-5 rounded-lg" onClick={() => {handleDataView('5D'); buttonGroupChange('button2')}}>
+                        <Button id='button2' variant="outline" size='icon' className="px-7 py-5 rounded-lg" onClick={() => handleDataView('5D', 'button2')}>
                             5D
                         </Button>
-                        <Button id='button3' variant="outline" size='icon' className="px-7 py-5 rounded-lg bg-blue-500 text-white" onClick={() => {handleDataView('1M'); buttonGroupChange('button3')}}>
+                        <Button id='button3' variant="outline" size='icon' className="px-7 py-5 rounded-lg bg-blue-500 text-white" onClick={() => handleDataView('1M', 'button3')}>
                             1M
                         </Button>
-                        <Button id='button4' variant="outline" size='icon' className="px-7 py-5 rounded-lg" onClick={() => {handleDataView('1Y'); buttonGroupChange('button4')}}>
+                        <Button id='button4' variant="outline" size='icon' className="px-7 py-5 rounded-lg" onClick={() => handleDataView('1Y', 'button4')}>
                             1Y
                         </Button>
                     </div>
                 </div>
                 <div>
-                    <ResponsiveContainer width="100%" height={500} style={{marginTop: '70px', marginRight: '30px'}}>
+                    <ResponsiveContainer width="100%" height={500} style={{ marginTop: '70px', marginRight: '30px' }}>
                         <LineChart data={historicalData}
                             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                             <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="t" />
-                            <YAxis domain={['auto', 'auto']}/>
-                            <Tooltip/>
+                            <XAxis dataKey="t" hide={true} />
+                            <YAxis domain={['auto', 'auto']} />
+                            <Tooltip />
                             <Legend />
-                            <Line type="linear" dataKey="c" name='Price' stroke="#8884d8" dot={false}/>
+                            <Line type="linear" dataKey="c" name='Price' stroke="#8884d8" dot={false} />
                         </LineChart>
                     </ResponsiveContainer>
                 </div>
