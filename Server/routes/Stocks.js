@@ -1,9 +1,8 @@
 import express from 'express';
-// import yahooFinance from 'yahoo-finance2';
-import WebSocket from 'ws';
 import finnhub from 'finnhub';
 import axios from 'axios';
 import dotenv from 'dotenv';
+import cryptoData from '../cryptoSearch.json' with { type: "json" };
 
 
 const stockRouter = express.Router();
@@ -51,7 +50,7 @@ stockRouter.get('/stockData', async (req, res) => {
     // Creating the URI for the request of the stock data
     var uri;
     var options;
-    if (type === 'crypto') {        
+    if (type === 'crypto') {
         uri = `https://data.alpaca.markets/v1beta3/crypto/us/bars?symbols=${symbol}&timeframe=${interval}&start=${start}&limit=10000&sort=asc`
         options = {
             method: 'GET',
@@ -94,20 +93,38 @@ stockRouter.get('/stockData', async (req, res) => {
 });
 
 stockRouter.get('/searchSymbol', async (req, res) => {
-    const symbol = req.query.symbol;
+    var symbol = req.query.symbol;
+    symbol = symbol.toUpperCase();
+
+    //Search for the symbol in the crypto market        
+    if (cryptoData[symbol]) {    
+        res.status(200).send([cryptoData[symbol]]);
+        return;
+    }
+
 
     const api_key = finnhub.ApiClient.instance.authentications['api_key'];
     api_key.apiKey = process.env.FINNHUB_API_KEY;
     const finnhubClient = new finnhub.DefaultApi()
 
+    var queryData = [];
+    // Search for the symbol in the stock market
     finnhubClient.symbolSearch(symbol, (error, data, response) => {
         if (error) {
             res.status(500).send(error);
+            return;
         }
         else {
-            res.status(200).send(data);
-        }
+            try {
+                queryData = data['result'].filter(stock => stock['type'] === 'Common Stock');
+            } catch (error) {
+                res.status(500).send(error);
+                return;
+            }
+        }   
+        res.status(200).send(queryData);
     });
+
 });
 
 stockRouter.get('/allStock', async (req, res) => {
@@ -115,8 +132,14 @@ stockRouter.get('/allStock', async (req, res) => {
     api_key.apiKey = process.env.FINNHUB_API_KEY;
     const finnhubClient = new finnhub.DefaultApi()
 
-    finnhubClient.stockSymbols('US', {securityType: 'Common Stock'}, (error, data, response) => {
-        res.status(200).send(data);
+    var queryData;
+    await finnhubClient.stockSymbols('US', { securityType: 'Common Stock' }, (error, data, response) => {
+        queryData = data['result'];
+    });
+
+    finnhubClient.cryptoSymbols('BINANCE', (error, data, response) => {
+        queryData = queryData.concat(data['result']);
+        res.status(200).send(queryData);
     });
 });
 

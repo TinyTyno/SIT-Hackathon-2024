@@ -1,15 +1,14 @@
 import { Search } from 'lucide-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import SearchStockInput from '@/components/stockPage/searchStockInput';
@@ -20,130 +19,130 @@ import {
     HoverCardTrigger,
 } from "@/components/ui/hover-card"
 import UserContext from '@/contexts/UserContext';
+import http from '@/http';
+import { Skeleton } from "@/components/ui/skeleton"
+
 
 function SearchStock() {
-  const { query } = useParams();
-  const navigate = useNavigate();
-  const {user} = useContext(UserContext)
-  const [loading, setLoading] = useState(true);
-  const [stockList, setStockList] = useState([]);
-
-  useEffect(() => {
-    if(user){
-      fetchData();
-      setLoading(false);
-    }
-    else if(!user && !loading){
-      navigate('/login');
-    }
-  }, [query,user,loading,navigate]);
-
-  const fetchData = async () => {
-    try {
-      var uri = ''
-      console.log('query', query);
-      if (query == '*') {
-        uri = `http://localhost:3000/stocks/searchSymbol?symbol=a`;
-      }
-      else {
-        uri = `http://localhost:3000/stocks/searchSymbol?symbol=${query}`;
-      }
-
-      const response = await axios.get(uri);
-      const data = response.data.result;
-
-      const filteredStockList = [];
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].type === 'Common Stock' && !data[i].symbol.includes('.')) { // find a way to include cryptocurrency
-          const stockData = await searchSymbol(data[i].symbol);
-          if (stockData) { // Only push if stockData is not null
-            filteredStockList.push(stockData);
-          }
+    const { query } = useParams();
+    const navigate = useNavigate();
+    const { user } = useContext(UserContext)
+    const [loading, setLoading] = useState(true);
+    const [stockList, setStockList] = useState([]);
+    useEffect(() => {
+        if (user) {
+            fetchData();
         }
-      }
-      setStockList(filteredStockList);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
+        else if (!user && !loading) {
+            navigate('/login');
+        }
+    }, [query, user, loading, navigate]);
 
-  const searchSymbol = async (symbol) => {
-    try {
-      const stockResponse = await axios.get(`http://localhost:3000/stocks/stockData?symbol=${symbol}&type=stock&view=5D`);
-      const stockArray = stockResponse.data[symbol];
-      const latest = stockArray[stockArray.length - 1];
-      const currentPrice = latest.c.toFixed(2);
+    const fetchData = async () => {
+        try {
+            var uri;
+            if (query == '*') {
+                uri = `/stocks/searchSymbol?symbol=a`;
+            }
+            else {
+                uri = `/stocks/searchSymbol?symbol=${query}`;
+            }
+            const response = await http.get(uri);
+            var data = await response.data;
 
-      const yahooResponse = await axios.get(`http://localhost:3000/testing/api/stock/${symbol}`);
-      const displayName = yahooResponse.data.shortName;
-      const regularMarketChange = yahooResponse.data.regularMarketChange.toFixed(2);
-      const regularMarketChangePercent = yahooResponse.data.regularMarketChangePercent.toFixed(2);
+            data = data.filter(stock => !stock.displaySymbol.includes('.')).map(async (stock) => {
+                return await searchSymbol(stock.displaySymbol);
+            });
 
-      // Return the stock object to be added to the list
-      return {
-        symbol,
-        name: displayName,
-        price: currentPrice,
-        change: regularMarketChange,
-        percent: regularMarketChangePercent,
-      };
-    } catch (error) {
-      console.error(`Error fetching symbol data for ${symbol}:`, error);
-      return null; // Return null on failure to prevent adding to the list
-    }
-  };
+            setStockList(await Promise.all(data));
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+        setLoading(false);
+    };
 
-  function TableOutput() {
-    // Check if stockList contains valid objects
-    if (!Array.isArray(stockList) || stockList.length === 0) {
-      return (
-        <TableRow>
-          <TableCell colSpan="4">No data available or failed to fetch.</TableCell>
-        </TableRow>
-      );
-    }
+    const searchSymbol = async (symbol) => {
+        try {
+            const stockResponse = await http.get(`/stocks/stockData?symbol=${symbol}&type=stock&view=5D`);
+            const stockArray = stockResponse.data[symbol];
+            const latest = stockArray[stockArray.length - 1];
+            const currentPrice = latest.c.toFixed(2);
 
-    return stockList.map((stock, index) => (
-      <TableRow key={index}>
-        <TableCell>{stock.symbol || 'N/A'}</TableCell>
-        <TableCell>{stock.name || 'N/A'}</TableCell>
-        <TableCell>
-          {stock.price || 'N/A'}{' '}
-          <span className={`text-sm font-bold ${stock.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-            {stock.change >= 0 ? '+' : ''}{stock.change || 0} ({stock.percent || 0}%)
-          </span>
-        </TableCell>
-        <TableCell className="text-right">
-            <Button className="mr-2 bg-blue-500 hover:bg-blue-600" onClick={() => navigate(`/buyStock/${stock.symbol}`)}>Buy</Button>
-            <Button className="mr-2 bg-red-500 hover:bg-red-600" onClick={() => navigate(`/sellStock/${stock.symbol}`)}>Sell</Button>
-            <Button onClick={() => navigate(`/Stock/${stock.symbol}`)}>View</Button>
-        </TableCell>
-      </TableRow>
-    ));
-  }
+            const yahooResponse = await http.get(`/testing/api/stock/${symbol}`);
+            const displayName = yahooResponse.data.shortName;
+            const regularMarketChange = yahooResponse.data.regularMarketChange.toFixed(2);
+            const regularMarketChangePercent = yahooResponse.data.regularMarketChangePercent.toFixed(2);
 
-  return (
-    <StableSidebar>
-      <div className='Container grid gap-5'>
-        <SearchStockInput />
-        <span style={{display:'block', marginLeft:'2rem', fontSize:'1.5rem', fontWeight:'800', marginTop:'1.5rem'}}>{query === '*' ? 'Search for a stock' : `Searching for ${query}`}</span>
-        <Table style={{ maxHeight: '60vh', width: '60vw', marginLeft:'2rem' }}>
-          <TableCaption>List of Stocks matching {query}</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Symbol</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Current Price</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+            // Return the stock object to be added to the list
+            return {
+                symbol,
+                name: displayName,
+                price: currentPrice,
+                change: regularMarketChange,
+                percent: regularMarketChangePercent,
+            };
+        } catch (error) {
+            console.error(`Error fetching symbol data for ${symbol}:`, error);
+            return null; // Return null on failure to prevent adding to the list
+        }
+    };
+
+    function TableOutput() {
+        // Check if stockList contains valid objects
+        if (!Array.isArray(stockList) || stockList.length === 0) {
+            return (
+                <TableRow>
+                    <TableCell colSpan="4">No data available or failed to fetch.</TableCell>
+                </TableRow>
+            );
+        }
+
+        return stockList.filter(stock => stock != null).map((stock, index) => (
+            <TableRow key={index}>
+                <TableCell>{stock.symbol || 'N/A'}</TableCell>
+                <TableCell>{stock.name || 'N/A'}</TableCell>
+                <TableCell>
+                    {stock.price || 'N/A'}{' '}
+                    <span className={`text-sm font-bold ${stock.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                        {stock.change >= 0 ? '+' : ''}{stock.change || 0} ({stock.percent || 0}%)
+                    </span>
+                </TableCell>
+                <TableCell className="text-right">
+                    <Button className="mr-2 bg-blue-500 hover:bg-blue-600" onClick={() => navigate(`/buyStock/${stock.symbol}`)}>Buy</Button>
+                    <Button className="mr-2 bg-red-500 hover:bg-red-600" onClick={() => navigate(`/sellStock/${stock.symbol}`)}>Sell</Button>
+                    <Button onClick={() => navigate(`/Stock/${stock.symbol}`)}>View</Button>
+                </TableCell>
             </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableOutput />
-          </TableBody>
-        </Table>
-      </div>
-    </StableSidebar>
-  );
+        ));
+    }
+
+    return (
+        <StableSidebar>
+            <div className='Container grid gap-5'>
+                <SearchStockInput />
+                <span style={{ display: 'block', marginLeft: '2rem', fontSize: '1.5rem', fontWeight: '800', marginTop: '1.5rem' }}>{query === '*' ? 'Search for a stock' : `Searching for ${query}`}</span>
+                {!loading &&
+                    <Table style={{ maxHeight: '60vh', width: '60vw', marginLeft: '2rem' }}>
+                        <TableCaption>List of Stocks matching {query}</TableCaption>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[100px]">Symbol</TableHead>
+                                <TableHead>Name</TableHead>
+                                <TableHead>Current Price</TableHead>
+                                <TableHead className="text-right">Actions</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableOutput />
+                        </TableBody>
+                    </Table>
+                }
+                {loading &&
+                    <Skeleton className="w-[50%] h-[20px] rounded-full ml-10" />
+                }
+            </div>
+        </StableSidebar>
+    );
 }
 
 export default SearchStock;

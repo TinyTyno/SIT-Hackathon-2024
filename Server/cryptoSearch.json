@@ -1,0 +1,8 @@
+{
+    "BTC" : {
+        "displaySymbol" : "BTC"
+    },
+    "ETH" : {
+        "displaySymbol" : "ETH"
+    }
+}
