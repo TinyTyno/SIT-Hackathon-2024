@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import http from '../../../http'; // Import your HTTP client here
@@ -17,11 +17,15 @@ import { IoSend } from 'react-icons/io5';
 import { FaArrowDown } from 'react-icons/fa'; // Icon for scroll-to-bottom button
 import { motion } from 'framer-motion'; // Import framer-motion for animations
 import StableSidebar from '@/components/StableSidebar';
+import UserContext from '@/contexts/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 function QuestionArea() {
     const [messages, setMessages] = useState([]);
+    const [loading, setLoading] = useState(true);
     const chatEndRef = useRef(null); // Reference to the end of the chat box
-
+    const {user} = useContext(UserContext)
+    const navigate = useNavigate()
     // Fetch messages for Q&A
     const fetchQNA = async () => {
         try {
@@ -34,8 +38,14 @@ function QuestionArea() {
     };
 
     useEffect(() => {
-        fetchQNA(); // Fetch messages when component mounts
-    }, []);
+        if(user){
+            fetchQNA(); // Fetch messages when component mounts
+            setLoading(false);
+        }
+        else if(!user && !loading){
+            navigate('/login');	
+        }
+    }, [user,loading,navigate]);
 
     const formik = useFormik({
         initialValues: {

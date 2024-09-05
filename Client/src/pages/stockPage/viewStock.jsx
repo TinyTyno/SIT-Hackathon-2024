@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import {
@@ -12,11 +12,13 @@ import cryptoData from '../../lib/cryptoSearch.json'
 import http from '../../../http.js'
 import { LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line, ResponsiveContainer } from 'recharts'
 import { ToastContainer, toast } from 'react-toastify';
+import UserContext from '@/contexts/UserContext'
 
 
 
 function ViewStock() {
     var { symbol } = useParams();
+    const {user} = useContext(UserContext);
     const navigate = useNavigate();
     const connection = useRef(null)
     var cryptoDetails = null;
@@ -29,9 +31,14 @@ function ViewStock() {
     const [stockChangePercent, setStockChangePercent] = React.useState(0);
 
     useEffect(() => {
-        fetchData(dataView);
+        if(user){
+            fetchData(dataView);
         marketConnection();
-    }, []);
+        }
+        else{
+            navigate('/login');
+        }
+    }, [user]);
 
     const fetchData = async (view) => {
         //Setting Crypto Details

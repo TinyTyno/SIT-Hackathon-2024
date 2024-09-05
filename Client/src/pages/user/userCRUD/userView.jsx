@@ -145,6 +145,9 @@ function UserView() {
         fetchData(user.id);
         CalculateAsset();
       }
+      else{
+        navigate("/login");
+      }
     }, [user]);
 
   const handleReset = async () => {

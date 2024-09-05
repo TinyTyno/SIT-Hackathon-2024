@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 
@@ -11,12 +11,14 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import SellStockForm from '@/components/stockPage/SellStockForm'
 import StableSidebar from '@/components/StableSidebar';
+import UserContext from '@/contexts/UserContext';
 
 function SellStock() {
     const upper = useParams().symbol.toUpperCase();
     const symbol = upper;
     const navigate = useNavigate();
-
+    const {user} = useContext(UserContext);
+    const [loading, setLoading] = useState(true);
     const [currentPrice, setCurrentPrice] = useState(null);
     const [highPrice, setHighPrice] = useState(null);
     const [lowPrice, setLowPrice] = useState(null);
@@ -31,8 +33,14 @@ function SellStock() {
     const [regularMarketPreviousClose, setRegularMarketPreviousClose] = useState(null);
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        if(user){
+            fetchData();
+            setLoading(false);
+        }
+        else if	(!user && !loading){
+            navigate('/login');
+        }
+    }, [user,loading,navigate]);
 
     const fetchData = async () => {
         try {

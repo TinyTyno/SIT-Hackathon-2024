@@ -12,12 +12,13 @@ import {
 } from "@/components/ui/carousel";
 import StockTable from "@/components/stockPage/StockTable";
 import SearchStockInput from '@/components/stockPage/searchStockInput'
+import { useNavigate } from 'react-router-dom'
 const Stock_homepage = () => {
   const { user } = useContext(UserContext);
-
+  const [loginedUser,setLoginedUser] = useState(null)
   const [stocks, setStocks] = useState([]);
-  const [search, setSearch] = useState("");
-
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate()
   const fetchData = async () => {
     var symbolList = []
     var symbols = await axios.get(
@@ -31,8 +32,16 @@ const Stock_homepage = () => {
   };
 
   useEffect(() => {
-      fetchData()
-  }, [])
+    console.log('user', user)
+      if(user){
+        setLoginedUser(user)
+        fetchData()
+        setLoading(false)
+      }
+      else if(!user && !loading){
+        navigate('/login')
+      }
+  }, [user,loading,navigate])
 
 
   return (

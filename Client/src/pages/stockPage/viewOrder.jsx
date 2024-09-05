@@ -24,16 +24,23 @@ function ViewOrder() {
     const { query } = useParams();
     const navigate = useNavigate();
     const { user } = useContext(UserContext);
+    const [loading, setLoading] = useState(true);
 
     const [ordersList, setOrdersList] = useState([]);
 
     // Fetch data on component load and when query changes
     useEffect(() => {
-        fetchData();
+        if(user){
+            fetchData();
+            setLoading(false);
         // Optionally set up polling
         const interval = setInterval(fetchData, 10000); // Fetch every 10 seconds
         return () => clearInterval(interval); // Cleanup on unmount
-    }, [query]);
+        }
+        else if(!user && !loading){
+            navigate('/login');
+        }
+    }, [query,user,loading,navigate]);
 
     // Function to fetch order data
     const fetchData = async () => {

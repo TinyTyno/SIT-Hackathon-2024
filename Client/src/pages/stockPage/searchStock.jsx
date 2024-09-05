@@ -1,5 +1,5 @@
 import { Search } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
@@ -19,16 +19,24 @@ import {
     HoverCardContent,
     HoverCardTrigger,
 } from "@/components/ui/hover-card"
+import UserContext from '@/contexts/UserContext';
 
 function SearchStock() {
   const { query } = useParams();
   const navigate = useNavigate();
-
+  const {user} = useContext(UserContext)
+  const [loading, setLoading] = useState(true);
   const [stockList, setStockList] = useState([]);
 
   useEffect(() => {
-    fetchData();
-  }, [query]);
+    if(user){
+      fetchData();
+      setLoading(false);
+    }
+    else if(!user && !loading){
+      navigate('/login');
+    }
+  }, [query,user,loading,navigate]);
 
   const fetchData = async () => {
     try {
@@ -67,7 +75,6 @@ function SearchStock() {
       const currentPrice = latest.c.toFixed(2);
 
       const yahooResponse = await axios.get(`http://localhost:3000/testing/api/stock/${symbol}`);
-      console.log('yahooResponse.data', yahooResponse.data.regularMarketVolume);
       const displayName = yahooResponse.data.shortName;
       const regularMarketChange = yahooResponse.data.regularMarketChange.toFixed(2);
       const regularMarketChangePercent = yahooResponse.data.regularMarketChangePercent.toFixed(2);
