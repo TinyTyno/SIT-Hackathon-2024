@@ -75,33 +75,41 @@ const Stock_homepage = () => {
       <StableSidebar>
         <div className="">
           <SearchStockInput />
-          <h1 className="text-2xl font-bold ml-10 mt-10">
+          <h1
+            className="text-2xl font-bold ml-10 mt-10 text-[#103593] "
+          >
             Welcome Back, <span className="underline">{user?.name}</span>!
           </h1>
-          {scoreboard.length > 0 && (<div className=" ml-10 mt-10 mb-5">
-            <h1 className="text-2xl font-bold mb-3">Ranking</h1>
-            <div className="w-[30%]">
-              <Table className="">
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[100px]">Username</TableHead>
-                    <TableHead className="w-[80px]">Profit</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {scoreboard.map((u, index) => (
-                    <TableRow key={index}>
-                    <TableCell>
-                      <div className="text-sm font-semibold">{u.username}</div>
-                      <div className="text-xs text-gray-500">{u.email}</div>
-                    </TableCell>
-                    <TableCell className="text-green-600 font-bold">${u.profit}</TableCell>
-                  </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+          {scoreboard.length > 0 && (
+            <div className=" ml-10 mt-10 mb-5">
+              <h1 className="text-2xl font-bold mb-3">Ranking</h1>
+              <div className="w-[30%]">
+                <Table className="">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[100px]">Username</TableHead>
+                      <TableHead className="w-[80px]">Profit</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {scoreboard.map((u, index) => (
+                      <TableRow key={index}>
+                        <TableCell>
+                          <div className="text-sm font-semibold">
+                            {u.username}
+                          </div>
+                          <div className="text-xs text-gray-500">{u.email}</div>
+                        </TableCell>
+                        <TableCell className="text-green-600 font-bold">
+                          ${u.profit}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             </div>
-          </div>)}
+          )}
           <h1 className="text-2xl font-bold ml-10 mt-12">Trending Stocks</h1>
           <div className="mt-10 w-[90%] m-auto">
             <Carousel>
