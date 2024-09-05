@@ -173,14 +173,14 @@ function ViewStock() {
                     <div className='flex' style={{ margin: 'auto', marginLeft: '2rem', marginRight: '2rem', marginTop: '20px' }}>
                         <div className="flex m-2 flex-col items-start" style={{ textalign: 'left', padding: '10px' }}>
                             <HoverCard>
-                                <HoverCardTrigger><span className="text-5xl font-bold">{price || historicalData[historicalData.length - 1].c.toFixed(2)} <span className='text-gray-600 text-base font-bold'>USD</span></span></HoverCardTrigger>
+                                <HoverCardTrigger><span className="text-5xl font-bold cursor-pointer">{price || historicalData[historicalData.length - 1].c.toFixed(2)} <span className='text-gray-600 text-base font-bold'>USD</span></span></HoverCardTrigger>
                                 <HoverCardContent className="text-xs">
                                     The current price of the stock. This price is constantly changing as the stock is bought and sold.
                                 </HoverCardContent>
                             </HoverCard>
                             <HoverCard>
                                 <HoverCardTrigger>
-                                    <span className={`text-base font-semibold mt-1 ${historicalData[historicalData.length - 1].c.toFixed(2) - historicalData[historicalData.length - 2].c.toFixed(2) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                    <span className={`text-base font-semibold mt-1 cursor-pointer ${historicalData[historicalData.length - 1].c.toFixed(2) - historicalData[historicalData.length - 2].c.toFixed(2) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                                         {historicalData[historicalData.length - 1].c.toFixed(2) - historicalData[historicalData.length - 2].c.toFixed(2) >= 0 ? '+' : ''} 
                                         {(historicalData[historicalData.length - 1].c - historicalData[historicalData.length - 2].c).toFixed(2)} ({(((historicalData[historicalData.length - 1].c - historicalData[historicalData.length - 2].c) / historicalData[historicalData.length - 2].c) * 100).toFixed(2)}%)
                                         <span className='text-gray-600 font-bold'> 1D</span>
@@ -196,7 +196,7 @@ function ViewStock() {
                         <div className='flex flex-row'>
                             <div className="flex flex-col h-full items-start justify-center text-sm" style={{ margin: 'auto' }}>
                                 <HoverCard>
-                                    <HoverCardTrigger>
+                                    <HoverCardTrigger className='cursor-pointer'>
                                         <span>High: {historicalData[historicalData.length - 1].h.toFixed(2)}</span>
                                     </HoverCardTrigger>
                                     <HoverCardContent className="text-xs">
@@ -204,7 +204,7 @@ function ViewStock() {
                                     </HoverCardContent>
                                 </HoverCard>
                                 <HoverCard>
-                                    <HoverCardTrigger>
+                                    <HoverCardTrigger className='cursor-pointer' style={{marginTop: '10px'}}>
                                         <span>Low: {historicalData[historicalData.length - 1].l.toFixed(2)}</span>
                                     </HoverCardTrigger>
                                     <HoverCardContent className="text-xs">
@@ -215,7 +215,7 @@ function ViewStock() {
                             <div className='w-20'></div>
                             <div className="flex flex-col h-full items-start justify-center text-sm" style={{ margin: 'auto' }}>
                                 <HoverCard>
-                                    <HoverCardTrigger>
+                                    <HoverCardTrigger className='cursor-pointer' >
                                         <span>Open: {historicalData[historicalData.length - 1].o.toFixed(2)}</span>
                                     </HoverCardTrigger>
                                     <HoverCardContent className="text-xs">
@@ -223,7 +223,7 @@ function ViewStock() {
                                     </HoverCardContent>
                                 </HoverCard>
                                 <HoverCard>
-                                    <HoverCardTrigger>
+                                    <HoverCardTrigger className='cursor-pointer' style={{marginTop: '10px'}}>
                                         <span>Prev Close: {historicalData[historicalData.length - 1].c.toFixed(2)}</span>
                                     </HoverCardTrigger>
                                     <HoverCardContent className="text-xs">
