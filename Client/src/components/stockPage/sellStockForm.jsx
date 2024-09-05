@@ -1,4 +1,4 @@
-import React, { useState, initialFormState, useEffect } from "react";
+import React, { useState, initialFormState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { RulerHorizontalIcon } from "@radix-ui/react-icons";
@@ -37,19 +37,21 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import http from '../../../http.js'
+import UserContext from "../../contexts/UserContext";
 
 
 function SellStockForm({currentPrice}) {
     const { symbol } = useParams();
     const navigate = useNavigate();
+    const { user } = useContext(UserContext);
 
     const [formData, setFormData] = useState({
-        accountID: '123456789',
+        accountID: user.id,
         stock: symbol,
         quantity: 1,
         buysell: 'sell',
         orderType: 'Market', // Default to 'Market'
-        price: currentPrice,
+        price: parseFloat(currentPrice),
         tradeFee: 1.30,
         duration: 'Day',
         extendedHours: false,
@@ -58,7 +60,7 @@ function SellStockForm({currentPrice}) {
     useEffect(() => {
         setFormData(prevData => ({
             ...prevData,
-            price: currentPrice || ''
+            price: parseFloat(currentPrice) || ''
         }));
     }, [currentPrice]);
 
@@ -78,7 +80,7 @@ function SellStockForm({currentPrice}) {
             setFormData({
                 ...formData,
                 orderType: 'Market',
-                price: currentPrice,
+                price: parseFloat(currentPrice),
                 duration: 'Day',
                 extendedHours: false
             });
@@ -94,10 +96,15 @@ function SellStockForm({currentPrice}) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         console.log('Form data submitted:', formData);
+
+        // Getting Historical Data
         await http.post(`http://localhost:3000/transactions/addOrder`, formData)
             .then((response) => {
                 console.log(response);
             })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
     };
 
     const handleCalculatorUpdate = (calculatedQuantity) => {
@@ -186,6 +193,7 @@ function SellStockForm({currentPrice}) {
                     onChange={handleInputChange}
                     placeholder="Price"
                     style={{marginBottom:'9px'}}
+                    step="0.01"
                 />
             </div>
             <HoverCard>
@@ -248,7 +256,7 @@ function SellStockForm({currentPrice}) {
                             <TableBody>
                                 <TableRow>
                                     <TableCell>Account ID</TableCell>
-                                    <TableCell>123456789</TableCell>
+                                    <TableCell>{formData.accountID}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell>Buy/Sell</TableCell>
@@ -290,11 +298,10 @@ function SellStockForm({currentPrice}) {
                         </Table>
                     </DialogDescription>
                     <div className="flex justify-end">
-                        <Button className="m-2" type="submit" onClick={(e) => {handleSubmit(e);navigate('/orders');}}>Sell</Button>
+                        <Button className="m-2" type="button" onClick={(e) => {handleSubmit(e);navigate('/orders');}}>Sell</Button>
                     </div>
                 </DialogContent>
             </Dialog>
-
 
             <Button className="m-2" type="input" onClick={() => navigate(`../../stock/${symbol}`)}>Cancel</Button>
         </form>

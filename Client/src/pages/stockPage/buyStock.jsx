@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 
@@ -11,12 +11,14 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import BuyStockForm from '@/components/stockPage/buyStockForm'
 import StableSidebar from '@/components/StableSidebar';
+import UserContext from '@/contexts/UserContext';
 
 function BuyStock() {
     const upper = useParams().symbol.toUpperCase();
     const symbol = upper;
     const navigate = useNavigate();
-
+    const {user} = useContext(UserContext)
+    const [loading, setLoading] = useState(true);
     const [currentPrice, setCurrentPrice] = useState(null);
     const [highPrice, setHighPrice] = useState(null);
     const [lowPrice, setLowPrice] = useState(null);
@@ -31,8 +33,14 @@ function BuyStock() {
     const [regularMarketPreviousClose, setRegularMarketPreviousClose] = useState(null);
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        if(user){
+            fetchData();
+            setLoading(false);
+        }
+        else if	(!user && !loading){
+            navigate('/login');
+        }
+    }, [user,loading,navigate]);
 
     const fetchData = async () => {
         try {
@@ -60,7 +68,7 @@ function BuyStock() {
             setVolumeWeightedAveragePrice(volumeWeightedAveragePrice.toFixed(2));
 
             var yahoo = await axios.get(`http://localhost:3000/testing/api/stock/${symbol}`);
-            const displayName = yahoo.data.displayName;
+            const displayName = yahoo.data.shortName;
             const regularMarketChange = yahoo.data.regularMarketChange;
             const regularMarketChangePercent = yahoo.data.regularMarketChangePercent;
             const regularMarketPreviousClose = yahoo.data.regularMarketPreviousClose;
@@ -81,7 +89,7 @@ function BuyStock() {
             <ResizablePanelGroup direction="horizontal" className="border w-[100vw]" style={{ width: '30vw', minWidth:'23rem', margin:'auto'}}>
             <ResizablePanel>
             <div className="flex m-2 flex-col items-start" style={{textalign:'left', padding:'10px'}}>
-                <span className="text-4xl font-semibold tracking-tight">{displayName}</span>
+                <span className="text-4xl font-semibold tracking-tight" style={{textAlign:'left'}}>{displayName}</span>
                 <span className="text-gray-500 text-sm mt-1">NASDAQ:{symbol}</span>
             </div>
             </ResizablePanel>

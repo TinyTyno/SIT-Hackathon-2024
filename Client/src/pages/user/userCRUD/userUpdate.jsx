@@ -5,7 +5,6 @@ import http from '../../../http'
 import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import Navbar from '@/components/Navbar'
-import StableSidebar from '@/components/StableSidebar'
 import UserContext from '../../../contexts/UserContext';
 import { React, useState, useRef, useEffect, useContext } from 'react'
 

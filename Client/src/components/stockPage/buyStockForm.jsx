@@ -1,4 +1,4 @@
-import React, { useState, initialFormState, useEffect } from "react";
+import React, { useState, initialFormState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { RulerHorizontalIcon } from "@radix-ui/react-icons";
@@ -36,20 +36,22 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import http from '../../../http.js'
+import http from '../../http.js'
+import UserContext from "../../contexts/UserContext";
   
 
 function BuyStockForm({currentPrice}) {
     const { symbol } = useParams();
     const navigate = useNavigate();
+    const { user } = useContext(UserContext);
 
     const [formData, setFormData] = useState({
-        accountID: '123456789',
+        accountID: user.id,
         stock: symbol,
         quantity: 1,
         buysell: 'buy',
         orderType: 'Market', // Default to 'Market'
-        price: currentPrice,
+        price: parseFloat(currentPrice),
         tradeFee: 1.30,
         duration: 'Day',
         extendedHours: false,
@@ -58,7 +60,7 @@ function BuyStockForm({currentPrice}) {
     useEffect(() => {
         setFormData(prevData => ({
             ...prevData,
-            price: currentPrice || ''
+            price: parseFloat(currentPrice) || ''
         }));
     }, [currentPrice]);
 
@@ -78,7 +80,7 @@ function BuyStockForm({currentPrice}) {
             setFormData({
                 ...formData,
                 orderType: 'Market',
-                price: currentPrice,
+                price: parseFloat(currentPrice),
                 duration: 'Day',
                 extendedHours: false
             });
@@ -188,6 +190,7 @@ function BuyStockForm({currentPrice}) {
                     onChange={handleInputChange}
                     placeholder="Price"
                     style={{marginBottom:'9px'}}
+                    step='0.01'
                 />
             </div>
             <HoverCard>
@@ -250,7 +253,7 @@ function BuyStockForm({currentPrice}) {
                             <TableBody>
                                 <TableRow>
                                     <TableCell>Account ID</TableCell>
-                                    <TableCell>123456789</TableCell>
+                                    <TableCell>{formData.accountID}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell>Buy/Sell</TableCell>
@@ -293,7 +296,7 @@ function BuyStockForm({currentPrice}) {
                         </Table>
                     </DialogDescription>
                     <div className="flex justify-end">
-                        <Button className="m-2" type="submit" onClick={(e) => {handleSubmit(e);navigate('/orders');}}>Buy</Button>
+                        <Button className="m-2" type="button" onClick={(e) => {handleSubmit(e);navigate('/orders');}}>Buy</Button>
                     </div>
                 </DialogContent>
             </Dialog>

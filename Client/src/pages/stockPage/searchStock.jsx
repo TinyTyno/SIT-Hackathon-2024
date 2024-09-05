@@ -1,5 +1,5 @@
 import { Search } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
@@ -19,25 +19,42 @@ import {
     HoverCardContent,
     HoverCardTrigger,
 } from "@/components/ui/hover-card"
+import UserContext from '@/contexts/UserContext';
 
 function SearchStock() {
   const { query } = useParams();
   const navigate = useNavigate();
-
+  const {user} = useContext(UserContext)
+  const [loading, setLoading] = useState(true);
   const [stockList, setStockList] = useState([]);
 
   useEffect(() => {
-    fetchData();
-  }, [query]);
+    if(user){
+      fetchData();
+      setLoading(false);
+    }
+    else if(!user && !loading){
+      navigate('/login');
+    }
+  }, [query,user,loading,navigate]);
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/stocks/searchSymbol?symbol=${query}`);
+      var uri = ''
+      console.log('query', query);
+      if (query == '*') {
+        uri = `http://localhost:3000/stocks/searchSymbol?symbol=a`;
+      }
+      else {
+        uri = `http://localhost:3000/stocks/searchSymbol?symbol=${query}`;
+      }
+
+      const response = await axios.get(uri);
       const data = response.data.result;
 
       const filteredStockList = [];
       for (let i = 0; i < data.length; i++) {
-        if (data[i].type === 'Common Stock' && !data[i].symbol.includes('.')) {
+        if (data[i].type === 'Common Stock' && !data[i].symbol.includes('.')) { // find a way to include cryptocurrency
           const stockData = await searchSymbol(data[i].symbol);
           if (stockData) { // Only push if stockData is not null
             filteredStockList.push(stockData);
@@ -58,8 +75,7 @@ function SearchStock() {
       const currentPrice = latest.c.toFixed(2);
 
       const yahooResponse = await axios.get(`http://localhost:3000/testing/api/stock/${symbol}`);
-      console.log('yahooResponse.data', yahooResponse.data.regularMarketVolume);
-      const displayName = yahooResponse.data.displayName;
+      const displayName = yahooResponse.data.shortName;
       const regularMarketChange = yahooResponse.data.regularMarketChange.toFixed(2);
       const regularMarketChangePercent = yahooResponse.data.regularMarketChangePercent.toFixed(2);
 
@@ -108,10 +124,10 @@ function SearchStock() {
 
   return (
     <StableSidebar>
-      <div className='Container'>
+      <div className='Container grid gap-5'>
         <SearchStockInput />
-        <span style={{marginLeft:'2rem', fontSize:'1.5rem', fontWeight:'800', marginTop:'1rem'}}>Searching for: {query}</span>
-        <Table style={{ maxHeight: '60vh', width: '60vw', marginLeft:'2rem', marginTop: '1.5rem' }}>
+        <span style={{display:'block', marginLeft:'2rem', fontSize:'1.5rem', fontWeight:'800', marginTop:'1.5rem'}}>{query === '*' ? 'Search for a stock' : `Searching for ${query}`}</span>
+        <Table style={{ maxHeight: '60vh', width: '60vw', marginLeft:'2rem' }}>
           <TableCaption>List of Stocks matching {query}</TableCaption>
           <TableHeader>
             <TableRow>

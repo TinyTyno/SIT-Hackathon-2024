@@ -2,7 +2,7 @@ import { React, useState, useRef, useEffect, useContext } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import Navbar from '@/components/Navbar'
 import StableSidebar from '@/components/StableSidebar'
-import { ChakraProvider, Box, Text, Grid, Button, Input, FormLabel, FormControl, FormErrorMessage, Container, IconButton } from '@chakra-ui/react';
+import { Box, Text, FormControl, Input, InputRightElement, Button, IconButton, FormLabel, FormErrorMessage, InputGroup, ChakraProvider, Container } from "@chakra-ui/react";
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import http from '../../http.js';
@@ -121,26 +121,27 @@ function ChangePassword() {
 
     return (
         <ChakraProvider>
-            <StableSidebar>            
-                <Container 
-                maxW="container.lg" p={5}
-                h="100vh" // full screen height
-                display="flex"
-                flexDirection="column"
+            <StableSidebar>
+                <Container
+                    maxW="container.lg" p={5}
+                    h="100vh" // full screen height
+                    display="flex"
+                    flexDirection="column"
                 // justifyContent="center"
                 // alignItems="center"
                 >
-                        <Box display="flex" justifyContent="space-between" pt={10}>
-                            <Box w="50%" mr={2}>
-                                <Text variant="h4" my={2} fontWeight="bold">
-                                    Change
-                                </Text>
-                                <Text variant="h4" my={2} fontWeight="bold" mb={5}>
-                                    Password
-                                </Text>
-                                <form onSubmit={formik.handleSubmit}>
-                                    <FormControl isInvalid={formik.touched.currentPassword && Boolean(formik.errors.currentPassword)}>
-                                        <FormLabel>Current Password</FormLabel>
+                    <Box display="flex" justifyContent="space-between" pt={10}>
+                        <Box w="50%" mr={2}>
+                            <Text variant="h4" fontSize={32} my={2} fontWeight="bold">
+                                Change
+                            </Text>
+                            <Text variant="h4" fontSize={32} my={2} fontWeight="bold" mb={5}>
+                                Password
+                            </Text>
+                            <form onSubmit={formik.handleSubmit}>
+                                <FormControl isInvalid={formik.errors.currentPassword && formik.touched.currentPassword}>
+                                    <FormLabel>Current Password *</FormLabel>
+                                    <InputGroup>
                                         <Input
                                             type={showCurrentPassword ? 'text' : 'password'}
                                             name="currentPassword"
@@ -152,13 +153,23 @@ function ChangePassword() {
                                                 border: '1px solid gray',
                                                 borderRadius: '10px',
                                                 padding: '10px',
+                                                marginBottom: '15px'
                                             }}
                                         />
-                                        <IconButton onClick={handleToggleCurrentPassword} size="sm" icon={showCurrentPassword ? <ViewIcon /> : <ViewOffIcon />} />
-                                        <FormErrorMessage>{formik.errors.currentPassword}</FormErrorMessage>
-                                    </FormControl>
-                                    <FormControl isInvalid={formik.touched.newPassword && Boolean(formik.errors.newPassword)}>
-                                        <FormLabel>New Password</FormLabel>
+                                        <InputRightElement>
+                                            <IconButton
+                                                onClick={handleToggleCurrentPassword}
+                                                size="sm"
+                                                icon={showCurrentPassword ? <ViewIcon /> : <ViewOffIcon />}
+                                            />
+                                        </InputRightElement>
+                                    </InputGroup>
+                                    <FormErrorMessage>{formik.errors.currentPassword}</FormErrorMessage>
+                                </FormControl>
+
+                                <FormControl isInvalid={formik.errors.newPassword && formik.touched.newPassword}>
+                                    <FormLabel>New Password *</FormLabel>
+                                    <InputGroup>
                                         <Input
                                             type={showPassword ? 'text' : 'password'}
                                             name="newPassword"
@@ -170,13 +181,23 @@ function ChangePassword() {
                                                 border: '1px solid gray',
                                                 borderRadius: '10px',
                                                 padding: '10px',
+                                                marginBottom: '15px'
                                             }}
                                         />
-                                        <IconButton onClick={handleTogglePassword} size="sm" icon={showPassword ? <ViewIcon /> : <ViewOffIcon />} />
-                                        <FormErrorMessage>{formik.errors.newPassword}</FormErrorMessage>
-                                    </FormControl>
-                                    <FormControl isInvalid={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}>
-                                        <FormLabel>Confirm Password</FormLabel>
+                                        <InputRightElement>
+                                            <IconButton
+                                                onClick={handleTogglePassword}
+                                                size="sm"
+                                                icon={showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                                            />
+                                        </InputRightElement>
+                                    </InputGroup>
+                                    <FormErrorMessage>{formik.errors.newPassword}</FormErrorMessage>
+                                </FormControl>
+
+                                <FormControl isInvalid={formik.errors.confirmPassword && formik.touched.confirmPassword}>
+                                    <FormLabel>Confirm Password *</FormLabel>
+                                    <InputGroup>
                                         <Input
                                             type={confirmShowPassword ? 'text' : 'password'}
                                             name="confirmPassword"
@@ -188,51 +209,62 @@ function ChangePassword() {
                                                 border: '1px solid gray',
                                                 borderRadius: '10px',
                                                 padding: '10px',
+                                                marginBottom: '20px'
                                             }}
                                         />
-                                        <IconButton onClick={handleToggleConfirmPassword} size="sm" icon={confirmShowPassword ? <ViewIcon /> : <ViewOffIcon />} />
-                                        <FormErrorMessage>{formik.errors.confirmPassword}</FormErrorMessage>
-                                    </FormControl>
-                                    <Button type="submit" w="full" mt={2}>
-                                        Change Password
-                                    </Button>
-                                </form>
-                            </Box>
-                            <Box w="40%" ml={5} display="flex" flexDirection="column" justifyContent="center" mt="-10">
-                                <Text variant="h6" my={2} fontWeight="bold" mb={5}>
-                                    Password must contain:
-                                </Text>
-                                <Box ml={4} textAlign="left">
-                                    <ul>
-                                        <li>
-                                            <Text fontSize={16}>
-                                                At least 8 characters
-                                            </Text>
-                                        </li>
-                                        <li>
-                                            <Text fontSize={16}>
-                                                One uppercase letter
-                                            </Text>
-                                        </li>
-                                        <li>
-                                            <Text fontSize={16}>
-                                                One lowercase letter
-                                            </Text>
-                                        </li>
-                                        <li>
-                                            <Text fontSize={16}>
-                                                One number
-                                            </Text>
-                                        </li>
-                                        <li>
-                                            <Text fontSize={16}>
-                                                One special symbol
-                                            </Text>
-                                        </li>
-                                    </ul>
-                                </Box>
+                                        <InputRightElement>
+                                            <IconButton
+                                                onClick={handleToggleConfirmPassword}
+                                                size="sm"
+                                                icon={confirmShowPassword ? <ViewIcon /> : <ViewOffIcon />}
+                                            />
+                                        </InputRightElement>
+                                    </InputGroup>
+                                    <FormErrorMessage>{formik.errors.confirmPassword}</FormErrorMessage>
+                                </FormControl>
+                                <Button type="submit" style={{
+                                    background: 'linear-gradient(to left, #1DB5E4, #1274CE)',
+                                }}
+                                    color="#fff" w="full" mt={19}>
+                                    Change Password
+                                </Button>
+                            </form>
+                        </Box>
+                        <Box w="40%" ml={5} display="flex" flexDirection="column" justifyContent="center" mt="-10">
+                            <Text variant="h6" my={2} fontWeight="bold" mb={5}>
+                                Password must contain:
+                            </Text>
+                            <Box ml={4} textAlign="left">
+                                <ul>
+                                    <li>
+                                        <Text fontSize={16}>
+                                            At least 8 characters
+                                        </Text>
+                                    </li>
+                                    <li>
+                                        <Text fontSize={16}>
+                                            One uppercase letter
+                                        </Text>
+                                    </li>
+                                    <li>
+                                        <Text fontSize={16}>
+                                            One lowercase letter
+                                        </Text>
+                                    </li>
+                                    <li>
+                                        <Text fontSize={16}>
+                                            One number
+                                        </Text>
+                                    </li>
+                                    <li>
+                                        <Text fontSize={16}>
+                                            One special symbol
+                                        </Text>
+                                    </li>
+                                </ul>
                             </Box>
                         </Box>
+                    </Box>
                 </Container>
             </StableSidebar>
         </ChakraProvider>

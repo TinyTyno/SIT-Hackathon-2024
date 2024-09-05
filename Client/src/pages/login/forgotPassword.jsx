@@ -1,14 +1,12 @@
 import React, { useContext, useState } from 'react';
-import { Box, Text, Input, Button, Container, Flex } from '@chakra-ui/react';
+import { Box, Text, FormControl, Input, InputRightElement, Button, IconButton, FormLabel, FormErrorMessage, InputGroup, ChakraProvider, Container } from "@chakra-ui/react";
 import { useNavigate, Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import http from '../../http';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import UserContext from '../../contexts/UserContext';
-import Navbar from '@/components/Navbar'
-import StableSidebar from '@/components/StableSidebar'
+
 
 
 function ForgotPassword() {
@@ -29,7 +27,7 @@ function ForgotPassword() {
             http.post("/user/forgot-password", values)
                 .then((res) => {
                     console.log('Response:', res);
-                    
+
                     if (res && res.data) {
                         if (res.data.Status === "User does not exist") {
                             toast.error("No such email exists in our userbase")
@@ -59,52 +57,63 @@ function ForgotPassword() {
 
 
     return (
-        <>
-            <Navbar role={"user"} />
-            <Box mt={16} display="flex" flexDirection="column" alignItems="center">
-                <Box className='LoginBox' maxW="600px" alignItems="center" p={5}>
-                    <Text fontSize="xl" fontWeight="bold" mb={2}>
-                        Forgot Your
-                    </Text>
-                    <Text fontSize="xl" fontWeight="bold" mb={4}>
-                        Password?
-                    </Text>
-                    <Text fontSize="sm" mb={4}>
-                        We will send a Password Reset link to your email
-                    </Text>
-                    <Box as="form" maxW="500px" alignItems="center" mt={2} onSubmit={formik.handleSubmit}>
-                        <Input
-                            type="email"
-                            name="email"
-                            value={formik.values.email}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            isInvalid={formik.touched.email && Boolean(formik.errors.email)}
-                            errorBorderColor="red.300"
-                            placeholder="Email"
-                        />
-                        {formik.touched.email && formik.errors.email ? (
-                            <Text fontSize="sm" color="red.300">
-                                {formik.errors.email}
+        <ChakraProvider padding={0}>
+            <Container
+                maxW={'100%'}
+                padding={0}
+                minHeight={'100vh'} // Add this line
+            >
+                <Box display="flex" justifyContent="space-between">
+                    <Box w="60%" mr={2} style={{
+                        backgroundImage: 'url(/virtuetrade.jpg)',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        height: '100vh',
+                    }} />
+                    <Box w="40%" m={6} mr={8} pl={39} pt={170}>
+                        <Box justifyContent="center" width='90%'>
+                            <Text my={2} fontSize={32} fontWeight="bold" mb={2}>
+                                Forgot Your
                             </Text>
-                        ) : null}
+                            <Text my={2} fontSize={32} fontWeight="bold" mb={4}>
+                                Password?
+                            </Text>
+                            <Text fontSize={16} mb={4}>
+                                We will send a Password Reset link to your email
+                            </Text>
+                            <form onSubmit={formik.handleSubmit} width='80%'>
+                                <FormControl isInvalid={formik.errors.email && formik.touched.email}>
+                                    <FormLabel>Email *</FormLabel>
+                                    <Input
+                                        type="email"
+                                        name="email"
+                                        value={formik.values.email}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        style={{
+                                            backgroundColor: 'white',
+                                            border: '1px solid gray',
+                                            borderRadius: '10px',
+                                            padding: '10px',
+                                            width: '85%'
+                                        }}
+                                    />
+                                    <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
+                                </FormControl>
 
-                        <Button
-                            className='submitBox'
-                            w="full"
-                            variant="solid"
-                            colorScheme="blue"
-                            mt={2}
-                            mb={3}
-                            type="submit"
-                        >
-                            Send
-                        </Button>
+                                <Button style={{
+                                    background: 'linear-gradient(to left, #1DB5E4, #1274CE)',
+                                }}
+                                    color="#fff" type="submit" w="85%" mt={30}>
+                                    Send
+                                </Button>
+                            </form>
+                        </Box>
                     </Box>
                 </Box>
-                <ToastContainer />
-            </Box>
-        </>
+            </Container>
+        </ChakraProvider>
+
     );
 }
 

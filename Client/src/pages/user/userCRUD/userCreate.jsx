@@ -1,13 +1,12 @@
 import React, { useState, useContext } from 'react';
-import { Box, Text, FormControl, Input, InputRightElement, Button, IconButton, FormLabel, FormErrorMessage, InputGroup,ChakraProvider, Container } from "@chakra-ui/react";
+import { Box, Text, FormControl, Input, InputRightElement, Button, IconButton, FormLabel, FormErrorMessage, InputGroup, ChakraProvider, Container } from "@chakra-ui/react";
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import http from '../../../http';
-import { useNavigate } from 'react-router-dom';
+import http from '../../../../http';
+import { useNavigate, Link } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import UserContext from '../../../contexts/UserContext';
-import StableSidebar from '@/components/StableSidebar'
 
 
 function UserCreate() {
@@ -31,6 +30,8 @@ function UserCreate() {
             email: '',
             password: '',
             confirmPassword: '',
+            cashBalance: 10000.00,
+            startingBalance: 10000.00,
         },
         validationSchema: yup.object({
             name: yup.string().required('User Name is required'),
@@ -54,7 +55,8 @@ function UserCreate() {
             data.name = data.name.trim();
             data.email = data.email.trim();
             data.password = data.password.trim();
-
+            data.cashBalance = 10000.00;
+            data.startingBalance = 10000.00;
             http.post('/user/create', data)
                 .then((res) => {
                     console.log(res); // Log the entire response object
@@ -77,23 +79,23 @@ function UserCreate() {
     };
 
     return (
-        <ChakraProvider>
-            <StableSidebar>
-                <Container
-                    maxW="container.lg" p={5}
-                    h="100vh" // full screen height
-                    display="flex"
-                    flexDirection="column"
-                // justifyContent="center"
-                // alignItems="center"
-                >
-                    <Box display="flex" justifyContent="space-between" pt={10}>
-                        <Box w="50%" mr={2}>
-                            <Text variant="h4" my={2} fontWeight="bold">
-                                Create
-                            </Text>
-                            <Text variant="h4" my={2} fontWeight="bold" mb={5}>
-                                Your Account
+        <ChakraProvider padding={0}>
+            <Container
+                maxW={'100%'}
+                padding={0}
+                minHeight={'100vh'}
+            >
+                <Box display="flex" justifyContent="space-between">
+                    <Box w="60%" mr={2} style={{
+                        backgroundImage: 'url(/signUp.jpg)',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        height: '100vh',
+                    }} />
+                    <Box w="40%" m={6} mr={8} pt={170}>
+                        <Box justifyContent="center" width='90%'>
+                            <Text variant="h4" my={2} fontSize={32} fontWeight="bold" mb={5}>
+                                Sign Up
                             </Text>
                             <form onSubmit={formik.handleSubmit}>
                                 <FormControl isInvalid={formik.errors.name && formik.touched.name}>
@@ -109,6 +111,7 @@ function UserCreate() {
                                             border: '1px solid gray',
                                             borderRadius: '10px',
                                             padding: '10px',
+                                            marginBottom: '15px'
                                         }}
                                     />
                                     <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
@@ -122,11 +125,12 @@ function UserCreate() {
                                         value={formik.values.email}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
-                                        style=                                        {{
+                                        style={{
                                             backgroundColor: 'white',
                                             border: '1px solid gray',
                                             borderRadius: '10px',
                                             padding: '10px',
+                                            marginBottom: '15px'
                                         }}
                                     />
                                     <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
@@ -146,6 +150,7 @@ function UserCreate() {
                                                 border: '1px solid gray',
                                                 borderRadius: '10px',
                                                 padding: '10px',
+                                                marginBottom: '15px'
                                             }}
                                         />
                                         <InputRightElement>
@@ -173,6 +178,7 @@ function UserCreate() {
                                                 border: '1px solid gray',
                                                 borderRadius: '10px',
                                                 padding: '10px',
+                                                marginBottom: '15px'
                                             }}
                                         />
                                         <InputRightElement>
@@ -186,23 +192,24 @@ function UserCreate() {
                                     <FormErrorMessage>{formik.errors.confirmPassword}</FormErrorMessage>
                                 </FormControl>
 
-                                <Button type="submit" w="full" mt={2}>
+                                <Button style={{
+                                    background: 'linear-gradient(to left, #1DB5E4, #1274CE)',
+                                }}
+                                    color="#fff" type="submit" w="full" mt={5}>
                                     Sign Up
                                 </Button>
-                                <Button
-                                    variant="outline"
-                                    colorScheme="red"
-                                    size="lg"
-                                    fontSize="md"
-                                    onClick={handleCancel}
-                                >
-                                    Cancel
-                                </Button>
+                                <Link to="/login">
+                                    Already have an Account? <span style={{
+                                        color: "#1274CE",
+                                        textDecoration: "underline",
+                                        cursor: "pointer"
+                                    }}>Log In</span>
+                                </Link>
                             </form>
                         </Box>
                     </Box>
-                </Container>
-            </StableSidebar>
+                </Box>
+            </Container>
         </ChakraProvider>
     );
 }

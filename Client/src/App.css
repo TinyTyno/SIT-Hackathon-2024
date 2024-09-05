@@ -1,9 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Prosto+One&display=swap');
+
 #root {
   max-width: 1000rem;
   margin: 0 auto;
   padding: 0;
 }
-
+.deco-font{
+  font-family: 'Prosto One', cursive;
+}
 .logo {
   height: 6em;
   padding: 1.5em;

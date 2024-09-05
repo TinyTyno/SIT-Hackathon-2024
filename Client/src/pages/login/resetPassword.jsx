@@ -73,17 +73,25 @@ function ResetPassword() {
 
 
     return (
-        <ChakraProvider>
-            <StableSidebar>
-                <Container maxW="container.lg" p={5} h="100vh" display="flex" flexDirection="column">
-                    <Box display="flex" justifyContent="space-between" pt={10}>
-                        <Box w="50%" mr={2}>
-                            <Text variant="h4" my={2} fontWeight="bold">
-                                Reset
+        <ChakraProvider padding={0}>
+            <Container
+                maxW={'100%'}
+                padding={0}
+                minHeight={'100vh'} // Add this line
+            >
+                <Box display="flex" justifyContent="space-between">
+                    <Box w="60%" mr={2} style={{
+                        backgroundImage: 'url(/virtuetrade.jpg)',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        height: '100vh',
+                    }} />
+                    <Box w="40%" m={6} mr={8} pt={170}>
+                        <Box justifyContent="center" width='90%'>
+                            <Text variant="h4" my={2} fontSize={32} fontWeight="bold" mb={5}>
+                                Reset Password
                             </Text>
-                            <Text variant="h4" my={2} fontWeight="bold" mb={5}>
-                                Password
-                            </Text>
+
                             <form onSubmit={formik.handleSubmit}>
                                 <FormControl isInvalid={formik.touched.newPassword && Boolean(formik.errors.newPassword)}>
                                     <FormLabel>New Password</FormLabel>
@@ -99,6 +107,7 @@ function ResetPassword() {
                                                 border: '1px solid gray',
                                                 borderRadius: '10px',
                                                 padding: '10px',
+                                                marginBottom: '15px'
                                             }}
                                         />
                                         <InputRightElement>
@@ -121,6 +130,7 @@ function ResetPassword() {
                                                 border: '1px solid gray',
                                                 borderRadius: '10px',
                                                 padding: '10px',
+                                                marginBottom: '15px'
                                             }}
                                         />
                                         <InputRightElement>
@@ -129,12 +139,15 @@ function ResetPassword() {
                                     </InputGroup>
                                     <FormErrorMessage>{formik.errors.confirmPassword}</FormErrorMessage>
                                 </FormControl>
-                                <Button type="submit" w="full" mt={2}>
+                                <Button type="submit" w="full" mt={5} mb={2} style={{
+                                    background: 'linear-gradient(to left, #1DB5E4, #1274CE)',
+                                }}
+                                    color="#fff">
                                     Change Password
                                 </Button>
                             </form>
                         </Box>
-                        <Box w="40%" ml={5} display="flex" flexDirection="column" justifyContent="center" mt="-10">
+                        <Box w="40%" ml={5} display="flex" flexDirection="column" justifyContent="center" mt={5}>
                             <Text variant="h6" my={2} fontWeight="bold" mb={5}>
                                 Password must contain:
                             </Text>
@@ -169,8 +182,8 @@ function ResetPassword() {
                             </Box>
                         </Box>
                     </Box>
-                </Container>
-            </StableSidebar>
+                </Box>
+            </Container>
         </ChakraProvider>
     );
 }
