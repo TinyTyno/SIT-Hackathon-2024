@@ -110,69 +110,10 @@ const Stock_homepage = () => {
               </div>
             </div>
           )}
-          <h1 className="text-2xl font-bold ml-10 mt-12">Trending Stocks</h1>
+          <h1 className="text-2xl font-bold ml-10 mt-12">All Stocks</h1>
           <div className="mt-10 w-[90%] m-auto">
-            <Carousel>
-              <CarouselContent>
-                <CarouselItem className="md:basis-1/2 lg:basis-1/4">
-                  <StockCard
-                    name={"Nvidia"}
-                    desc={"NASA::2"}
-                    amount={"119"}
-                    pl={"1.78"}
-                    percent={"1.9"}
-                    duration={"1D"}
-                  />
-                </CarouselItem>
-                <CarouselItem className="md:basis-1/2 lg:basis-1/4">
-                  <StockCard
-                    name={"Nvidia"}
-                    desc={"NASA::2"}
-                    amount={"119"}
-                    pl={"1.78"}
-                    percent={"1.9"}
-                    duration={"1D"}
-                  />
-                </CarouselItem>
-                <CarouselItem className="md:basis-1/2 lg:basis-1/4">
-                  <StockCard
-                    name={"Nvidia"}
-                    desc={"NASA::2"}
-                    amount={"119"}
-                    pl={"1.78"}
-                    percent={"1.9"}
-                    duration={"1D"}
-                  />
-                </CarouselItem>
-                <CarouselItem className="md:basis-1/2 lg:basis-1/4">
-                  <StockCard
-                    name={"Nvidia"}
-                    desc={"NASA::2"}
-                    amount={"119"}
-                    pl={"1.78"}
-                    percent={"1.9"}
-                    duration={"1D"}
-                  />
-                </CarouselItem>
-                <CarouselItem className="md:basis-1/2 lg:basis-1/4">
-                  <StockCard
-                    name={"Nvidia"}
-                    desc={"NASA::2"}
-                    amount={"119"}
-                    pl={"1.78"}
-                    percent={"1.9"}
-                    duration={"1D"}
-                  />
-                </CarouselItem>
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
-            <div className="mt-[3rem]">
-              <h1 className="text-2xl font-bold">All Stocks</h1>
-              <div className="mt-10">
-                <StockTable data={stocks} />
-              </div>
+            <div className="mt-10">
+              <StockTable data={stocks} />
             </div>
           </div>
         </div>

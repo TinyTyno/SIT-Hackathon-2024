@@ -44,20 +44,28 @@ function ViewStock() {
         //Setting Crypto Details
         var type;
         var querySymbol;
+        var yahooQuerySymbol;
+        console.log(symbol)
         if (cryptoData[symbol.toUpperCase()]) {
             cryptoDetails = cryptoData[symbol.toUpperCase()]
             type = 'crypto';
             querySymbol = cryptoDetails.alpaca;
+            yahooQuerySymbol = cryptoDetails.yahoo;            
         }
         else {
             type = 'stock';
             querySymbol = symbol;
+            yahooQuerySymbol = symbol;
         }
         // Get actual name through API
-        await http.get(`http://localhost:3000/testing/api/stock/${querySymbol}`)
+        await http.get(`/testing/api/stock/${yahooQuerySymbol}`)
             .then((response) => {
                 console.log(response.data)
-                setStockName(response.data.displayName)
+                if (type == 'stock') {
+                    setStockName(response.data.displayName)
+                } else if (type == 'crypto') {
+                    setStockName(cryptoData[symbol.toUpperCase()].name)
+                }
             })
 
         //Getting Historical Data

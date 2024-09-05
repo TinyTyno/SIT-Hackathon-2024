@@ -133,14 +133,20 @@ stockRouter.get('/allStock', async (req, res) => {
     const finnhubClient = new finnhub.DefaultApi()
 
     var queryData;
-    await finnhubClient.stockSymbols('US', { securityType: 'Common Stock' }, (error, data, response) => {
-        queryData = data['result'];
-    });
-
-    finnhubClient.cryptoSymbols('BINANCE', (error, data, response) => {
-        queryData = queryData.concat(data['result']);
+    finnhubClient.stockSymbols('US', { securityType: 'Common Stock' }, (error, data, response) => {
+        queryData = data;
+        // console.log(queryData);
+        Object.keys(cryptoData).forEach((key) => {
+            queryData.push(cryptoData[key]);
+        });
         res.status(200).send(queryData);
     });
+    // console.log(queryData);
+
+    // finnhubClient.cryptoSymbols('BINANCE', (error, data, response) => {
+    //     queryData = queryData.concat(data['result']);
+    //     res.status(200).send(queryData);
+    // });
 });
 
 // Check current price only using a symbol

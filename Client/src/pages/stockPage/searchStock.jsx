@@ -63,15 +63,24 @@ function SearchStock() {
 
     const searchSymbol = async (symbol) => {
         try {
-            const stockResponse = await http.get(`/stocks/stockData?symbol=${symbol}&type=stock&view=5D`);
-            const stockArray = stockResponse.data[symbol];
-            const latest = stockArray[stockArray.length - 1];
-            const currentPrice = latest.c.toFixed(2);
-
-            const yahooResponse = await http.get(`/testing/api/stock/${symbol}`);
+            var querySymbol;
+            var type;
+            if (symbol.toUpperCase() == "BTC") {
+                querySymbol = "BTC-USD";
+                symbol = "BTC/USD";
+                type = 'crypto';
+            } else{
+                querySymbol = symbol;
+                type = 'stock';
+            }
+            console.log(symbol);            
+            
+            const yahooResponse = await http.get(`/testing/api/stock/${querySymbol}`);
             const displayName = yahooResponse.data.shortName;
             const regularMarketChange = yahooResponse.data.regularMarketChange.toFixed(2);
             const regularMarketChangePercent = yahooResponse.data.regularMarketChangePercent.toFixed(2);
+            const currentPrice = yahooResponse.data.regularMarketPrice.toFixed(2);
+
 
             // Return the stock object to be added to the list
             return {
