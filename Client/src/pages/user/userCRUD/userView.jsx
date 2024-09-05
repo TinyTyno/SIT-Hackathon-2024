@@ -44,6 +44,7 @@ function UserView() {
   const [loading, setLoading] = useState(false);
   const [userInfo, setUserInfo] = useState([]);
   const [cashBalance, setCashBalance] = useState(0);
+  const [startingBalance, setStartingBalance] = useState(0);
   const [accountID, setAccountID] = useState(null);
   const [selected, setSelected] = useState(null);
   const [isOpen, setOpen] = useState(false);
@@ -82,6 +83,7 @@ function UserView() {
     if (user) {
       setUserInfo(user.data);
       setCashBalance(user.data.cashBalance);
+      setStartingBalance(user.data.startingBalance);
       setAccountID(user.data.id);
       console.log("user", user);
 
@@ -95,15 +97,15 @@ function UserView() {
         console.log("holdings list is" + data);
         for (let i = 0; i < data.length; i++) {
           // Get name of the company
-          var symbolSearch = await http.get(
-            `http://localhost:3000/stocks/searchsymbol?symbol=${data[i].stock}`
-          );
-          var name = symbolSearch.data.result[0].description;
-          console.log(symbolSearch.data.result[0].description);
+          // var symbolSearch = await http.get(
+          //   `http://localhost:3000/stocks/searchsymbol?symbol=${data[i].stock}`
+          // );
+          // var name = symbolSearch.data.result[0].description;
           // Get current price of the stock
           var priceSearch = await http.get(
             `http://localhost:3000/testing/api/stock/${data[i].stock}`
           );
+          var name = priceSearch.data.shortName;
           var currentPrice = priceSearch.data.regularMarketPrice;
           var holding = {
             symbol: data[i].stock,
@@ -158,6 +160,7 @@ function UserView() {
         startingBalance: 10000.0,
       })
       .then((res) => {
+        setStartingBalance(10000.0);
         setCashBalance(10000.0);
       })
       .catch((err) => {
@@ -178,6 +181,7 @@ function UserView() {
       })
       .then((res) => {
         setCashBalance(parseFloat(inputcash) + parseFloat(cashBalance))
+        setStartingBalance(parseFloat(inputcash) + parseFloat(cashBalance))
       })
       .catch((err) => {
         console.log(err);
@@ -385,7 +389,7 @@ function UserView() {
                                 </HoverCard>
                               </h5>
                               <p className="text-white font-bold">
-                                ${(assetValue - 10000).toFixed(3)}
+                                ${(assetValue - startingBalance).toFixed(3)}
                               </p>
                             </div>
                             <div className="mr-20">
@@ -403,13 +407,13 @@ function UserView() {
                               </h5>
                               <p
                                 className={
-                                  assetValue - 10000 < 0
+                                  assetValue - startingBalance < 0
                                     ? "text-red-500 font-bold"
                                     : "text-green-500 font-bold"
                                 }
                               >
                                 +
-                                {(((assetValue - 10000) / 10000) * 100).toFixed(
+                                {(((assetValue - startingBalance) / startingBalance) * 100).toFixed(
                                   3
                                 )}
                                 %

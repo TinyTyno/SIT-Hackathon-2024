@@ -62,7 +62,7 @@ function ViewStock() {
             .then((response) => {
                 console.log(response.data)
                 if (type == 'stock') {
-                    setStockName(response.data.displayName)
+                    setStockName(response.data.shortName)
                 } else if (type == 'crypto') {
                     setStockName(cryptoData[symbol.toUpperCase()].name)
                 }
@@ -98,23 +98,37 @@ function ViewStock() {
             querySymbol = cryptoDetails.finnhub;
         }
         const socket = new WebSocket(`wss://ws.finnhub.io?token=${import.meta.env.VITE_FINNHUB_API_KEY}`);
-
+    
+        let latestPrice = null;  // Variable to store the latest price
+    
         // Connection opened -> Subscribe
         socket.addEventListener('open', function (event) {
-            socket.send(JSON.stringify({ 'type': 'subscribe', 'symbol': querySymbol.toUpperCase() }))
+            socket.send(JSON.stringify({ 'type': 'subscribe', 'symbol': querySymbol.toUpperCase() }));
         });
-
-        // Listen for messages
-        socket.addEventListener('message', function (event) {            
-            if (JSON.parse(event.data).data) {            
-                setPrice(JSON.parse(event.data).data[0].p.toFixed(2));                
+    
+        // Listen for messages and store the latest data
+        socket.addEventListener('message', function (event) {
+            if (JSON.parse(event.data).data) {
+                latestPrice = JSON.parse(event.data).data[0].p.toFixed(2);  // Store latest price
             }
         });
-
+    
+        // Update the price every 10 seconds
+        const interval = setInterval(() => {
+            if (latestPrice !== null) {
+                setPrice(latestPrice);  // Update state with the latest price
+            }
+        }, 5000); // 10000 milliseconds = 10 seconds
+    
         connection.current = socket;
-
-        return () => connection.close();
-    }
+    
+        // Cleanup function: close connection and clear interval
+        return () => {
+            connection.current.close();
+            clearInterval(interval);
+        };
+    };
+    
 
     // Button Group for Views
     const [buttonGroupOn, setButtonGroupOn] = useState('button3')

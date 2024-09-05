@@ -68,7 +68,6 @@ function SearchStock() {
             var displaySymbol;
             if (symbol.toUpperCase() == "BTC") {
                 querySymbol = "BTC-USD";
-                symbol = "BTC/USD";
                 type = 'crypto';
                 displaySymbol = "BTC";
             } else{
@@ -86,7 +85,7 @@ function SearchStock() {
             // Return the stock object to be added to the list            
             return {
                 symbol: querySymbol,
-                name: displaySymbol,
+                name: displayName,
                 price: currentPrice,
                 change: regularMarketChange,
                 percent: regularMarketChangePercent,

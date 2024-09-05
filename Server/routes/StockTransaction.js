@@ -2,8 +2,9 @@ import express, { response } from 'express';
 import db from '../models/model_index.js';
 import UserStock from '../models/UserStock.js';
 import Order from '../models/Order.js';
-import axios from 'axios';
-import finnhub from 'finnhub';
+// import axios from 'axios';
+// import finnhub from 'finnhub';
+import yahooFinance from "yahoo-finance2"; // Importing the default export from yahoo-finance2
 
 const StockTransactionRouter = express.Router();
 
@@ -77,19 +78,25 @@ async function checkStockPrice(stock) {
     //     console.error('Error fetching stock price:', error);
     //     return undefined; // Return undefined if there's an error
     // }
-    const api_key = finnhub.ApiClient.instance.authentications['api_key'];
-    api_key.apiKey = process.env.FINNHUB_API_KEY;
-    const finnhubClient = new finnhub.DefaultApi()
+    // const api_key = finnhub.ApiClient.instance.authentications['api_key'];
+    // api_key.apiKey = process.env.FINNHUB_API_KEY;
+    // const finnhubClient = new finnhub.DefaultApi()
 
-    finnhubClient.quote(stock, (error, data, response) => {
-        if (error) {
-            console.log(error);
-            return undefined
-        }
-        else {
-            return (data["c"])
-        }
-    });
+    // finnhubClient.quote(stock, (error, data, response) => {
+    //     if (error) {
+    //         console.log(error);
+    //         return undefined
+    //     }
+    //     else {
+    //         return (data["c"])
+    //     }
+    // });
+    try {
+        const quote = await yahooFinance.quote(stock); // Using the default export directly
+        return quote.regularMarketPrice.toFixed(2);
+    } catch (error) {
+        console.log("Error fetching stock data");
+    }
 }
 
 async function checkLimitOrder() {
