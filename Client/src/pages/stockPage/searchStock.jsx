@@ -117,7 +117,7 @@ function SearchStock() {
 
   return (
     <StableSidebar>
-      <div className='Container w-[95%] m-auto grid gap-5'>
+      <div className='Container grid gap-5'>
         <SearchStockInput />
         <span style={{display:'block', marginLeft:'2rem', fontSize:'1.5rem', fontWeight:'800', marginTop:'1.5rem'}}>{query === '*' ? 'Search for a stock' : `Searching for ${query}`}</span>
         <Table style={{ maxHeight: '60vh', width: '60vw', marginLeft:'2rem' }}>

@@ -38,7 +38,7 @@ const Stock_homepage = () => {
   return (
     <div>
       <StableSidebar>
-        <div className="w-[90%] m-auto">
+        <div className="">
           <SearchStockInput />
           <h1 className='text-2xl font-bold ml-10 mt-10'>
             Welcome Back, <span className='underline'>{user?.name}</span>!

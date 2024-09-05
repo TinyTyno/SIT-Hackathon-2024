@@ -81,8 +81,8 @@ function ViewOrder() {
         <StableSidebar>
             <div className='Container'>
                 <SearchStockInput />
-                <span style={{display:'block', marginLeft:'2rem', fontSize:'1.5rem', fontWeight:'800', marginTop:'2rem'}}>Order History</span>
-                <Table style={{ maxHeight: '60vh', width: '60vw', marginLeft:'2rem', marginTop: '1.5rem' }}>
+                <span style={{display:'block', marginLeft:'2.5rem', fontSize:'1.5rem', fontWeight:'800', marginTop:'2rem'}}>Order History</span>
+                <Table style={{ maxHeight: '60vh', marginLeft:'2.5rem',width: '60vw', marginTop: '1.5rem' }}>
                     <TableCaption>List of order history</TableCaption>
                     <TableHeader>
                         <TableRow>
