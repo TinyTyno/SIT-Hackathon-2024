@@ -29,6 +29,7 @@ import forgetSuccess from './pages/login/forgetSuccess'
 import changePassword from './pages/login/changePassword'
 import changePasswordSuccess from './pages/login/changePasswordSuccess'
 import SearchStock from './pages/stockPage/searchStock'
+import Questions from './pages/Questionnaire/questions'
 
 
 function App() {
@@ -74,6 +75,7 @@ function App() {
                 <Route path='/buyStock/:symbol' element={<BuyStock />} />
                 <Route path='/sellStock/:symbol' element={<SellStock />} />
                 <Route path='/orders' element={<ViewOrder />} />
+                <Route path='/questionnaire' element={<Questions />} />
                 {/* <Route path='/test' element={<View_Ind_Stock />} /> */}
             </Routes>
         </Router>
