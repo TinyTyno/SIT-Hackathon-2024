@@ -102,25 +102,37 @@ function BuyStock() {
     return (
         <StableSidebar>
             <div class="container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '2rem', textAlign: 'center' }}>
-                {/* <ResizablePanelGroup direction="horizontal" className="border w-[100vw]" style={{ width: '30vw', minWidth:'23rem', margin:'auto'}}>
-            <ResizablePanel>
-            <div className="flex m-2 flex-col items-start" style={{textalign:'left', padding:'10px'}}>
-                <span className="text-4xl font-semibold tracking-tight" style={{textAlign:'left'}}>{displayName}</span>
-                <span className="text-gray-500 text-sm mt-1">NASDAQ:{symbol}</span>
-            </div>
-            </ResizablePanel>
-            <ResizableHandle style={{display:'none'}}/>
-            <ResizablePanel defaultSize={25}>
-                <div className="items-center"><span>NASDAQ Market Open</span></div>
-            </ResizablePanel>
-            </ResizablePanelGroup>
-            <ResizablePanelGroup direction="horizontal" className="border w-[100vw]" style={{ width: '30vw', minWidth:'23rem', margin:'auto'}}>
-            <ResizablePanel>
-                <BuyStockForm currentPrice={currentPrice} />
-            </ResizablePanel>
-            
-            </ResizablePanelGroup> */}
-                <div className='flex justify-between' style={{ margin: 'auto', marginLeft: '2rem', marginRight: '30px', marginTop: '50px' }}>
+                <ResizablePanelGroup direction="horizontal" className="border w-[100vw]" style={{ width: '30vw', minWidth:'23rem', margin:'auto'}}>
+                <ResizablePanel>
+                <div className="flex m-2 flex-col items-start" style={{textalign:'left', padding:'10px'}}>
+                    <span className="text-4xl font-semibold tracking-tight" style={{textAlign:'left'}}>{displayName}</span>
+                    <span className="text-gray-500 text-sm mt-1">NASDAQ:{symbol}</span>
+                </div>
+                </ResizablePanel>
+                <ResizableHandle style={{display:'none'}}/>
+                </ResizablePanelGroup>
+                <ResizablePanelGroup direction="horizontal" className="border w-[100vw]" style={{ width: '30vw', minWidth:'23rem', margin:'auto'}}>
+                <ResizablePanel>
+                        <div className="ml-4 flex flex-col h-full items-start justify-center text-sm" style={{padding:'10px'}}>
+                            <span>High: {highPrice}</span>
+                            <span>Low: {lowPrice}</span>
+                        </div>
+                </ResizablePanel>
+                <ResizableHandle style={{display:'none'}}/>
+                <ResizablePanel>
+                        <div className="flex flex-col h-full items-start justify-center text-sm">
+                            <span>Open: {openPrice}</span>
+                            <span>Prev Close: {regularMarketPreviousClose}</span>
+                        </div>
+                </ResizablePanel>
+                </ResizablePanelGroup>
+                <ResizablePanelGroup direction="horizontal" className="border w-[100vw]" style={{ width: '30vw', minWidth:'23rem', margin:'auto'}}>
+                <ResizablePanel>
+                    <BuyStockForm currentPrice={currentPrice} />
+                </ResizablePanel>
+                
+                </ResizablePanelGroup>
+                {/* <div className='flex justify-between' style={{ margin: 'auto', marginLeft: '2rem', marginRight: '30px', marginTop: '50px' }}>
                     <div className="flex m-2 flex-col items-start" style={{ textalign: 'left', padding: '10px' }}>
                         <span className="text-4xl font-semibold tracking-tight">{displayName}</span>
                         <span className="text-gray-500 text-sm mt-1">{symbol}</span>
@@ -140,7 +152,7 @@ function BuyStock() {
                 </div>
                 <div className="border w-[100vw]" style={{ width: '30vw', minWidth: '23rem', margin: 'auto' }}>
                     <BuyStockForm currentPrice={currentPrice} />
-                </div>
+                </div> */}
             </div>
         </StableSidebar>
     )
