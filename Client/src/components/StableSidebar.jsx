@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { MdDashboard, MdOutlineClose, MdLogin, MdPersonAdd, MdVpnKey,MdSearch, } from "react-icons/md";
+import { MdDashboard, MdOutlineClose, MdLogin, MdPersonAdd, MdVpnKey, MdSearch, } from "react-icons/md";
 import { ImProfile } from "react-icons/im";
 import { LuClipboard, LuClipboardList } from "react-icons/lu";
 import { FaAngleLeft, FaRobot } from "react-icons/fa6";
@@ -44,6 +44,12 @@ const StableSidebar = ({ children }) => {
     });
   }
 
+  const logout = () => {
+    console.log("logout successful")
+    localStorage.clear();
+    window.location = "/";
+  };
+
   return (
     <>
       {isOpen ? (
@@ -72,69 +78,61 @@ const StableSidebar = ({ children }) => {
                   </li>
                 </Link>
                 <Link to={'/user/view'}>
-                <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
-                  <div className="self-center">
-                    <ImProfile className="text-white" />
-                  </div>
-                  <div className="self-center">Portfolio</div>
-                </li>
+                  <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
+                    <div className="self-center">
+                      <ImProfile className="text-white" />
+                    </div>
+                    <div className="self-center">Portfolio</div>
+                  </li>
                 </Link>
                 <Link to={'/search/*'}>
-                <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
-                  <div className="self-center">
-                    <MdSearch className="text-white" />
-                  </div>
-                  <div className="self-center">Search</div>
-                </li>
+                  <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
+                    <div className="self-center">
+                      <MdSearch className="text-white" />
+                    </div>
+                    <div className="self-center">Search</div>
+                  </li>
                 </Link>
                 <Link to={'/orders'}>
-                <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
-                  <div className="self-center">
-                    <LuClipboard className="text-white" />
-                  </div>
-                  <div className="self-center">Orders</div>
-                </li>
+                  <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
+                    <div className="self-center">
+                      <LuClipboard className="text-white" />
+                    </div>
+                    <div className="self-center">Orders</div>
+                  </li>
                 </Link>
                 <Link to={'/qna'}>
-                <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
-                  <div className="self-center">
-                    <RiQuestionAnswerLine className="text-white" />
-                  </div>
-                  <div className="self-center">Q&A</div>
-                </li>
+                  <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
+                    <div className="self-center">
+                      <RiQuestionAnswerLine className="text-white" />
+                    </div>
+                    <div className="self-center">Q&A</div>
+                  </li>
                 </Link>
-                
+
                 <Link to={'/ai'}>
-                <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
-                  <div className="self-center">
-                    <FaRobot className="text-white" />
-                  </div>
-                  <div className="self-center">AI Chatbot</div>
-                </li>
-                </Link>
-                <Link to="/login">
-                <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
-                  <div className="self-center">
-                    <MdLogin className="text-white" />
-                  </div>
-                  <div className="self-center">Login</div>
-                </li>
-                </Link>
-                <Link to="/user/userCreate">
-                <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
-                  <div className="self-center">
-                    <MdPersonAdd className="text-white" />
-                  </div>
-                  <div className="self-center">Sign Up</div>
-                </li>
+                  <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
+                    <div className="self-center">
+                      <FaRobot className="text-white" />
+                    </div>
+                    <div className="self-center">AI Chatbot</div>
+                  </li>
                 </Link>
                 <Link to={`/changePassword/${user?.id}`}>
-                <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
-                  <div className="self-center">
-                    <MdVpnKey className="text-white" />
-                  </div>
-                  <div className="self-center">Change Password</div>
-                </li>
+                  <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
+                    <div className="self-center">
+                      <MdVpnKey className="text-white" />
+                    </div>
+                    <div className="self-center">Change Password</div>
+                  </li>
+                </Link>
+                <Link to="#" onClick={logout}>
+                  <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
+                    <div className="self-center">
+                      <MdLogin className="text-white" />
+                    </div>
+                    <div className="self-center">Log out</div>
+                  </li>
                 </Link>
               </ul>
             </div>
@@ -250,39 +248,6 @@ const StableSidebar = ({ children }) => {
                   <Tooltip>
                     <TooltipTrigger>
                       <li className="flex flex-row justify-center gap-4 w-full py-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
-                        <Link to="/login">
-                          <div className="self-center w-fit">
-                            <MdLogin className="text-white" />
-                          </div>
-                        </Link>
-                      </li>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Login</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <li className="flex flex-row justify-center gap-4 w-full py-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
-                        <Link to="/user/userCreate">
-                          <div className="self-center w-fit">
-                            <MdPersonAdd className="text-white" />
-                          </div>
-                        </Link>
-                      </li>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Sign up</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <li className="flex flex-row justify-center gap-4 w-full py-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
                         <Link to={`/changePassword/${user?.id}`}>
                           <div className="self-center w-fit">
                             <MdVpnKey className="text-white" />
@@ -292,6 +257,22 @@ const StableSidebar = ({ children }) => {
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>Change Password</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <li className="flex flex-row justify-center gap-4 w-full py-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
+                        <Link to="#" onClick={logout}>
+                          <div className="self-center w-fit">
+                            <MdLogin className="text-white" />
+                          </div>
+                        </Link>
+                      </li>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Log out</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
