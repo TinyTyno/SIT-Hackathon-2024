@@ -1,14 +1,8 @@
 {
-    "BTC" : {
+    "BTC-USD" : {
         "finnhub" : "BINANCE:BTCUSDT",
         "alpaca" : "BTC/USD",
         "yahoo" : "BTC-USD",
         "name" : "Bitcoin"
-    },
-    "ETH" : {
-        "finnhub" : "BINANCE:ETHUSDT",
-        "alpaca" : "ETH/USD",
-        "yahoo" : "ETH-USD",
-        "name" : "Ethereum"
     }
 }

@@ -46,23 +46,22 @@ function BuyStock() {
     }, [user, loading, navigate]);
 
     const fetchData = async () => {
-        try {
+        try{
             // Check if the symbol is a stock or a crypto
             var type;
             var querySymbol;
+            var cryptoDetails;
             if (cryptoData[symbol]) {
                 cryptoDetails = cryptoData[symbol]
                 type = 'crypto';
-                querySymbol = cryptoDetails.alpaca;
+                querySymbol = cryptoDetails.alpaca;                
             }
             else {
                 type = 'stock';
                 querySymbol = symbol;
-            }
-
-            var data = await http.get(`http://localhost:3000/stocks/stockData?symbol=${symbol}&type=${type}&view=5D`);
-            var stockArray = (data.data[symbol])
-            console.log(stockArray[stockArray.length - 1])
+            }            
+            var data = await http.get(`http://localhost:3000/stocks/stockData?symbol=${querySymbol}&type=${type}&view=5D`);
+            var stockArray = (data.data[querySymbol])
 
             const latest = stockArray[stockArray.length - 1]
             const currentPrice = latest.c
@@ -106,7 +105,7 @@ function BuyStock() {
                 <ResizablePanel>
                 <div className="flex m-2 flex-col items-start" style={{textalign:'left', padding:'10px'}}>
                     <span className="text-4xl font-semibold tracking-tight" style={{textAlign:'left'}}>{displayName}</span>
-                    <span className="text-gray-500 text-sm mt-1">NASDAQ:{symbol}</span>
+                    <span className="text-gray-500 text-sm mt-1">{symbol}</span>
                 </div>
                 </ResizablePanel>
                 <ResizableHandle style={{display:'none'}}/>

@@ -12,6 +12,8 @@ import { Textarea } from '@/components/ui/textarea'
 import SellStockForm from '@/components/stockPage/SellStockForm'
 import StableSidebar from '@/components/StableSidebar';
 import UserContext from '@/contexts/UserContext';
+import cryptoData from '../../lib/cryptoSearch.json'
+
 
 function SellStock() {
     const upper = useParams().symbol.toUpperCase();
@@ -44,12 +46,23 @@ function SellStock() {
 
     const fetchData = async () => {
         try {
-            var data = await axios.get(`http://localhost:3000/stocks/stockData?symbol=${symbol}&type=stock&view=5D`);
-            var stockArray = (data.data[symbol])
-            console.log(stockArray[stockArray.length - 1])
+            // Check if the symbol is a stock or a crypto
+            var type;
+            var querySymbol;
+            var cryptoDetails;
+            if (cryptoData[symbol]) {
+                cryptoDetails = cryptoData[symbol]
+                type = 'crypto';
+                querySymbol = cryptoDetails.alpaca;                
+            }
+            else {
+                type = 'stock';
+                querySymbol = symbol;
+            }            
+            var data = await axios.get(`http://localhost:3000/stocks/stockData?symbol=${querySymbol}&type=${type}&view=5D`);
+            var stockArray = (data.data[querySymbol])
 
             const latest = stockArray[stockArray.length - 1]
-            console.log('latest is ' + latest.c)
             const currentPrice = latest.c
             const highPrice = latest.h
             const lowPrice = latest.l
@@ -90,13 +103,10 @@ function SellStock() {
                     <ResizablePanel>
                         <div className="flex m-2 flex-col items-start" style={{ textalign: 'left', padding: '10px' }}>
                             <span className="text-4xl font-semibold tracking-tight" style={{ textAlign: 'left' }}>{displayName}</span>
-                            <span className="text-gray-500 text-sm mt-1">NASDAQ:{symbol}</span>
+                            <span className="text-gray-500 text-sm mt-1">{symbol}</span>
                         </div>
                     </ResizablePanel>
-                    <ResizableHandle style={{ display: 'none' }} />
-                    <ResizablePanel defaultSize={25}>
-                        <div className="items-center"><span>NASDAQ Market Open</span></div>
-                    </ResizablePanel>
+                    <ResizableHandle style={{ display: 'none' }} />                    
                 </ResizablePanelGroup>
                 <ResizablePanelGroup direction="horizontal" className="border w-[100vw]" style={{ width: '30vw', minWidth:'23rem', margin:'auto'}}>
                 <ResizablePanel>

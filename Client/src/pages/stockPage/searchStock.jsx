@@ -65,10 +65,12 @@ function SearchStock() {
         try {
             var querySymbol;
             var type;
+            var displaySymbol;
             if (symbol.toUpperCase() == "BTC") {
                 querySymbol = "BTC-USD";
                 symbol = "BTC/USD";
                 type = 'crypto';
+                displaySymbol = "BTC";
             } else{
                 querySymbol = symbol;
                 type = 'stock';
@@ -80,12 +82,11 @@ function SearchStock() {
             const regularMarketChange = yahooResponse.data.regularMarketChange.toFixed(2);
             const regularMarketChangePercent = yahooResponse.data.regularMarketChangePercent.toFixed(2);
             const currentPrice = yahooResponse.data.regularMarketPrice.toFixed(2);
-
-
-            // Return the stock object to be added to the list
+            
+            // Return the stock object to be added to the list            
             return {
-                symbol,
-                name: displayName,
+                symbol: querySymbol,
+                name: displaySymbol,
                 price: currentPrice,
                 change: regularMarketChange,
                 percent: regularMarketChangePercent,
