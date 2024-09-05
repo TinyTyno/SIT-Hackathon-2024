@@ -61,7 +61,7 @@ stockRouter.get('/stockData', async (req, res) => {
     }
     else if (type === 'stock') {
         // Creating the URI for the request of the stock data
-        uri = `https://data.alpaca.markets/v2/stocks/bars?symbols=${symbol}&&timeframe=${interval}&start=${start}&limit=10000&adjustment=raw&feed=sip&sort=asc`
+        uri = `https://data.alpaca.markets/v2/stocks/bars?symbols=${symbol}&&timeframe=${interval}&start=${start}&limit=10000&adjustment=split&feed=sip&sort=asc`
         options = {
             method: 'GET',
             url: encodeURI(uri),
@@ -115,9 +115,7 @@ stockRouter.get('/allStock', async (req, res) => {
     api_key.apiKey = process.env.FINNHUB_API_KEY;
     const finnhubClient = new finnhub.DefaultApi()
 
-    console.log("All Stock")
     finnhubClient.stockSymbols('US', {securityType: 'Common Stock'}, (error, data, response) => {
-        console.log(data)
         res.status(200).send(data);
     });
 });
