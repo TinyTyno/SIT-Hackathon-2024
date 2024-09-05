@@ -16,6 +16,7 @@ import {
 import { IoSend } from 'react-icons/io5';
 import { FaArrowDown } from 'react-icons/fa'; // Icon for scroll-to-bottom button
 import { motion } from 'framer-motion'; // Import framer-motion for animations
+import StableSidebar from '@/components/StableSidebar';
 
 function QuestionArea() {
     const [messages, setMessages] = useState([]);
@@ -62,14 +63,15 @@ function QuestionArea() {
     };
 
     return (
+      <div>
+        <StableSidebar>
         <Box
             display="flex"
             flexDirection="column"
-            height="100vh"
-            sx={{ backgroundColor: '#f0f2f5', position: 'relative' }}
+            sx={{ backgroundColor: 'white', position: 'relative' }}
         >
             <Container sx={{ flex: 1, display: 'flex', flexDirection: 'column', paddingBottom: 0 }}>
-                <Typography variant="h3" sx={{ marginBottom: 3, color: '#333' }}>
+                <Typography variant="h5" sx={{ marginBottom: 3,  color: 'black',paddingLeft:2, paddingTop:'1em',fontWeight:'bold' }}>
                     Q&A Board
                 </Typography>
 
@@ -104,8 +106,8 @@ function QuestionArea() {
                                         borderRadius: '16px',
                                         display: 'flex',
                                         flexDirection: 'column',
-                                        backgroundColor: '#ffffff',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                                        backgroundColor: '#DDE7F5',
+                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                                         position: 'relative',
                                     }}
                                 >
@@ -166,8 +168,10 @@ function QuestionArea() {
                     <FaArrowDown />
                 </Fab>
 
-                {/* Form at the bottom */}
-                <Box
+               
+            </Container>
+             {/* Form at the bottom */}
+             <Box
                     component="form"
                     display="flex"
                     alignItems="center"
@@ -215,8 +219,9 @@ function QuestionArea() {
                         }}
                     />
                 </Box>
-            </Container>
         </Box>
+        </StableSidebar>
+      </div>
     );
 }
 
