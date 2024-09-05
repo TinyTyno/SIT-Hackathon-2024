@@ -173,18 +173,18 @@ function UserView() {
     await http
       .put(`/user/${user.id}`, {
         ...userInfo,
-        cashBalance: inputcash,
-        startingBalance: inputcash,
+        cashBalance: parseFloat(inputcash) + parseFloat(cashBalance),
+        startingBalance: parseFloat(inputcash) + parseFloat(cashBalance),
       })
       .then((res) => {
-        setCashBalance(inputcash)
+        setCashBalance(parseFloat(inputcash) + parseFloat(cashBalance))
       })
       .catch((err) => {
         console.log(err);
       });
     setOpenForm(false);
     console.log("holdingtopup",holdingData,inputcash)
-    let asst = CalculateAsset(inputcash, holdingData)
+    let asst = CalculateAsset(parseFloat(inputcash) + parseFloat(cashBalance), holdingData)
     setAssetValue(asst)
   };
   const handleOpenForm = () => {
