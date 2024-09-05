@@ -6,18 +6,21 @@ import {
     ResizableHandle,
     ResizablePanel,
     ResizablePanelGroup,
-  } from "@/components/ui/resizable"
+} from "@/components/ui/resizable"
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import BuyStockForm from '@/components/stockPage/buyStockForm'
 import StableSidebar from '@/components/StableSidebar';
 import UserContext from '@/contexts/UserContext';
+import cryptoData from '../../lib/cryptoSearch.json'
+import http from '@/http'
+
 
 function BuyStock() {
     const upper = useParams().symbol.toUpperCase();
     const symbol = upper;
     const navigate = useNavigate();
-    const {user} = useContext(UserContext)
+    const { user } = useContext(UserContext)
     const [loading, setLoading] = useState(true);
     const [currentPrice, setCurrentPrice] = useState(null);
     const [highPrice, setHighPrice] = useState(null);
@@ -33,23 +36,35 @@ function BuyStock() {
     const [regularMarketPreviousClose, setRegularMarketPreviousClose] = useState(null);
 
     useEffect(() => {
-        if(user){
+        if (user) {
             fetchData();
             setLoading(false);
         }
-        else if	(!user && !loading){
+        else if (!user && !loading) {
             navigate('/login');
         }
-    }, [user,loading,navigate]);
+    }, [user, loading, navigate]);
 
     const fetchData = async () => {
         try {
-            var data = await axios.get(`http://localhost:3000/stocks/stockData?symbol=${symbol}&type=stock&view=5D`);
+            // Check if the symbol is a stock or a crypto
+            var type;
+            var querySymbol;
+            if (cryptoData[symbol]) {
+                cryptoDetails = cryptoData[symbol]
+                type = 'crypto';
+                querySymbol = cryptoDetails.alpaca;
+            }
+            else {
+                type = 'stock';
+                querySymbol = symbol;
+            }
+
+            var data = await http.get(`http://localhost:3000/stocks/stockData?symbol=${symbol}&type=${type}&view=5D`);
             var stockArray = (data.data[symbol])
             console.log(stockArray[stockArray.length - 1])
 
             const latest = stockArray[stockArray.length - 1]
-            console.log('latest is ' +latest.c)
             const currentPrice = latest.c
             const highPrice = latest.h
             const lowPrice = latest.l
@@ -67,7 +82,8 @@ function BuyStock() {
             setVolume(volume);
             setVolumeWeightedAveragePrice(volumeWeightedAveragePrice.toFixed(2));
 
-            var yahoo = await axios.get(`http://localhost:3000/testing/api/stock/${symbol}`);
+            var yahoo = await http.get(`http://localhost:3000/testing/api/stock/${symbol}`);
+            console.log('yahoo', yahoo)
             const displayName = yahoo.data.shortName;
             const regularMarketChange = yahoo.data.regularMarketChange;
             const regularMarketChangePercent = yahoo.data.regularMarketChangePercent;
@@ -82,11 +98,11 @@ function BuyStock() {
             console.log(error)
         }
     };
-    
+
     return (
         <StableSidebar>
-            <div class="container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '2rem', textAlign: 'center'}}>
-            <ResizablePanelGroup direction="horizontal" className="border w-[100vw]" style={{ width: '30vw', minWidth:'23rem', margin:'auto'}}>
+            <div class="container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '2rem', textAlign: 'center' }}>
+                {/* <ResizablePanelGroup direction="horizontal" className="border w-[100vw]" style={{ width: '30vw', minWidth:'23rem', margin:'auto'}}>
             <ResizablePanel>
             <div className="flex m-2 flex-col items-start" style={{textalign:'left', padding:'10px'}}>
                 <span className="text-4xl font-semibold tracking-tight" style={{textAlign:'left'}}>{displayName}</span>
@@ -103,7 +119,28 @@ function BuyStock() {
                 <BuyStockForm currentPrice={currentPrice} />
             </ResizablePanel>
             
-            </ResizablePanelGroup>
+            </ResizablePanelGroup> */}
+                <div className='flex justify-between' style={{ margin: 'auto', marginLeft: '2rem', marginRight: '30px', marginTop: '50px' }}>
+                    <div className="flex m-2 flex-col items-start" style={{ textalign: 'left', padding: '10px' }}>
+                        <span className="text-4xl font-semibold tracking-tight">{displayName}</span>
+                        <span className="text-gray-500 text-sm mt-1">{symbol}</span>
+                    </div>
+
+                    <div className='flex flex-row'>
+                        <div className="flex flex-col h-full items-start justify-center text-sm" style={{ margin: 'auto' }}>
+                            <span>High: 100.1</span>
+                            <span>Low: 100.1</span>
+                        </div>
+                        <div className='w-20'></div>
+                        <div className="flex flex-col h-full items-start justify-center text-sm" style={{ margin: 'auto' }}>
+                            <span>Open: 100.1</span>
+                            <span>Prev Close: 100.1</span>
+                        </div>
+                    </div>
+                </div>
+                <div className="border w-[100vw]" style={{ width: '30vw', minWidth: '23rem', margin: 'auto' }}>
+                    <BuyStockForm currentPrice={currentPrice} />
+                </div>
             </div>
         </StableSidebar>
     )
