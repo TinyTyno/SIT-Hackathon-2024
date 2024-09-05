@@ -48,7 +48,6 @@ const StockTable = ({ data, itemsPerPage = 10,type='stock' }) => {
       const latest = stockArray[stockArray.length - 1];
       const currentPrice = latest.c.toFixed(2);
       const yahooResponse = await axios.get(`http://localhost:3000/testing/api/stock/${symbol}`);
-      console.log('yahooResponse.data', yahooResponse.data.regularMarketVolume);
       const displayName = yahooResponse.data.displayName;
       const regularMarketChange = yahooResponse.data.regularMarketChange.toFixed(2);
       const regularMarketChangePercent = yahooResponse.data.regularMarketChangePercent.toFixed(2);
@@ -68,7 +67,6 @@ const StockTable = ({ data, itemsPerPage = 10,type='stock' }) => {
 
       
     } catch (error) {
-      console.error(`Error fetching symbol data for ${symbol}:`, error);
       return null; // Return null on failure to prevent adding to the list
     }
   };
@@ -81,7 +79,6 @@ const StockTable = ({ data, itemsPerPage = 10,type='stock' }) => {
         stockList.push(stockData);
       }
     }
-    console.log('stockList',stockList)
     setCurrentData(stockList)
   };
   useEffect(() => {
