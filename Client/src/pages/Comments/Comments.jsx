@@ -19,10 +19,10 @@ import { motion } from 'framer-motion'; // Import framer-motion for animations
 import StableSidebar from '@/components/StableSidebar';
 import UserContext from '@/contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '@/components/Navbar';
 
 function QuestionArea() {
     const [messages, setMessages] = useState([]);
-    const [loading, setLoading] = useState(true);
     const chatEndRef = useRef(null); // Reference to the end of the chat box
     const {user} = useContext(UserContext)
     const navigate = useNavigate()
@@ -38,14 +38,9 @@ function QuestionArea() {
     };
 
     useEffect(() => {
-        if(user){
             fetchQNA(); // Fetch messages when component mounts
-            setLoading(false);
-        }
-        else if(!user && !loading){
-            navigate('/login');	
-        }
-    }, [user,loading,navigate]);
+
+    }, []);
 
     const formik = useFormik({
         initialValues: {
@@ -73,14 +68,15 @@ function QuestionArea() {
     };
 
     return (
-      <div>
+      <div className='relative'>
+     {user?(
         <StableSidebar>
         <Box
             display="flex"
             flexDirection="column"
-            sx={{ backgroundColor: 'white', position: 'relative' }}
+            sx={{ backgroundColor: 'white', position: 'relative',paddingTop: '2em' }}
         >
-            <Container sx={{ flex: 1, display: 'flex', flexDirection: 'column', paddingBottom: 0 }}>
+            <Container sx={{ flex: 1, display: 'flex', flexDirection: 'column', paddingBottom: 0}}>
                 <Typography variant="h5" sx={{ marginBottom: 3,  color: 'black',paddingLeft:2, paddingTop:'1em',fontWeight:'bold' }}>
                     Q&A Board
                 </Typography>
@@ -230,7 +226,168 @@ function QuestionArea() {
                     />
                 </Box>
         </Box>
+       
         </StableSidebar>
+     ):(
+        <>
+        <Navbar fixed={true}/>
+        <Box
+            display="flex"
+            flexDirection="column"
+            sx={{ backgroundColor: 'white', position: 'relative',paddingTop: '4em' }}
+        >
+            <Container sx={{ flex: 1, display: 'flex', flexDirection: 'column', paddingBottom: 0, width:'85%',marginX:'auto'}}>
+                <Typography variant="h5" sx={{ marginBottom: 3,  color: 'black',paddingLeft:2, paddingTop:'1em',fontWeight:'bold' }}>
+                    Q&A Board
+                </Typography>
+
+                <Box
+                    component={motion.div}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    display="flex"
+                    flexDirection="column"
+                    sx={{ flex: 1, overflowY: 'auto', padding: 2 }}
+                >
+                    {/* Messages display area */}
+                    {messages.length > 0 ? (
+                        messages.map((message) => {
+                            const messageDate = new Date(message.date);
+                            const date = messageDate.toLocaleDateString();
+                            const time = messageDate.toLocaleTimeString();
+                            const userAvatar = '/default-avatar.png'; // Default avatar for all users
+
+                            return (
+                                <Paper
+                                    key={message.id}
+                                    component={motion.div}
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ duration: 0.3 }}
+                                    elevation={3}
+                                    sx={{ 
+                                        marginBottom: 2, 
+                                        padding: 2, 
+                                        borderRadius: '16px',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        backgroundColor: '#DDE7F5',
+                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                                        position: 'relative',
+                                    }}
+                                >
+                                    <Box
+                                        sx={{
+                                            position: 'absolute',
+                                            top: 8,
+                                            right: 8,
+                                            fontSize: '0.75rem',
+                                            color: 'text.secondary',
+                                        }}
+                                    >
+                                        {date}
+                                    </Box>
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            marginBottom: 1,
+                                        }}
+                                    >
+                                        <Avatar
+                                            src={userAvatar}
+                                            sx={{ width: 40, height: 40, marginRight: 1 }}
+                                        />
+                                        <Typography variant="body2" fontWeight="bold">
+                                            {/* Display a default name or leave empty */}
+                                            Anonymous
+                                        </Typography>
+                                    </Box>
+                                    <Typography variant="body1" sx={{ marginBottom: 0.5, color: '#555' }}>
+                                        {message.messages}
+                                    </Typography>
+                                    <Typography variant="caption" color="text.secondary">
+                                        {time}
+                                    </Typography>
+                                </Paper>
+                            );
+                        })
+                    ) : (
+                        <Typography variant="body1" sx={{ color: '#777' }}>
+                            No comments yet. Be the first to comment!
+                        </Typography>
+                    )}
+                    <div ref={chatEndRef} /> {/* Empty div for scrolling to bottom */}
+                </Box>
+
+                {/* Scroll-to-bottom button */}
+                <Fab
+                    color="primary"
+                    sx={{
+                        position: 'fixed',
+                        bottom: 80,
+                        right: 16,
+                    }}
+                    onClick={scrollToBottom}
+                >
+                    <FaArrowDown />
+                </Fab>
+
+               
+            </Container>
+             {/* Form at the bottom */}
+             <Box
+                    component="form"
+                    display="flex"
+                    alignItems="center"
+                    onSubmit={formik.handleSubmit}
+                    sx={{
+                        padding: 2,
+                        backgroundColor: '#ffffff',
+                        borderTop: '1px solid #ddd',
+                        position: 'sticky',
+                        bottom: 0,
+                        zIndex: 1,
+                    }}
+                >
+                    <TextField
+                        fullWidth
+                        label="Type a comment"
+                        variant="outlined"
+                        name="messages"
+                        value={formik.values.messages}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={formik.touched.messages && Boolean(formik.errors.messages)}
+                        helperText={formik.touched.messages && formik.errors.messages}
+                        sx={{
+                            borderRadius: '20px',
+                            '& .MuiOutlinedInput-root': {
+                                borderRadius: '20px',
+                            }
+                        }}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        type="submit"
+                                        color="primary"
+                                    >
+                                        <IoSend
+                                            style={{
+                                                fontSize: '24px',
+                                            }}
+                                        />
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                </Box>
+        </Box>
+       </>
+     )}
       </div>
     );
 }

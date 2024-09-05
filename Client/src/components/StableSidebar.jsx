@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { MdDashboard, MdOutlineClose, MdLogin, MdPersonAdd, MdVpnKey,MdSearch, } from "react-icons/md";
 import { ImProfile } from "react-icons/im";
 import { LuClipboard, LuClipboardList } from "react-icons/lu";
-import { FaAngleLeft } from "react-icons/fa6";
+import { FaAngleLeft, FaRobot } from "react-icons/fa6";
 import { FaAngleRight } from "react-icons/fa6";
 import { RiQuestionAnswerLine } from "react-icons/ri";
 import {
@@ -101,6 +101,15 @@ const StableSidebar = ({ children }) => {
                     <RiQuestionAnswerLine className="text-white" />
                   </div>
                   <div className="self-center">Q&A</div>
+                </li>
+                </Link>
+                
+                <Link to={'/ai'}>
+                <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
+                  <div className="self-center">
+                    <FaRobot className="text-white" />
+                  </div>
+                  <div className="self-center">AI Chatbot</div>
                 </li>
                 </Link>
                 <Link to="/login">
@@ -219,6 +228,21 @@ const StableSidebar = ({ children }) => {
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>Q&A</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <li className="flex flex-row justify-center gap-4 w-full py-2 rounded-sm hover:bg-[#516e9578] cursor-pointer">
+                        <Link to={'/ai'}>
+                          <div className="self-center w-fit">
+                            <FaRobot className="text-white" />
+                          </div></Link>
+                      </li>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>AI Chatbot</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
