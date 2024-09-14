@@ -44,26 +44,6 @@ const Homepage = () => {
           />
         </div>
       </section>
-      <section className="py-[5em] bg-[#d9d9d94a] ">
-        <div className=" w-[90%] lg:w-[80%] m-auto grid gap-5">
-          <h1 className="text-4xl font-bold ">Trending stocks in the market</h1>
-          <div className="mt-5">
-            <Carousel>
-              <CarouselContent>
-                <CarouselItem className="md:basis-1/2 lg:basis-1/4"><StockCard name={'Nvidia'} desc={'NASA::2'} amount={'119'} pl={'1.78'} percent={'1.9'} duration={'1D'} /></CarouselItem>
-                <CarouselItem className="md:basis-1/2 lg:basis-1/4"><StockCard name={'Nvidia'} desc={'NASA::2'} amount={'119'} pl={'1.78'} percent={'1.9'} duration={'1D'} /></CarouselItem>
-                <CarouselItem className="md:basis-1/2 lg:basis-1/4"><StockCard name={'Nvidia'} desc={'NASA::2'} amount={'119'} pl={'1.78'} percent={'1.9'} duration={'1D'} /></CarouselItem>
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
-          </div>
-
-          <Button className="py-6 w-fit px-10 bg bg-gradient-to-r from-[#1DB5E4] to-[#1274CE] border-none hover:from-[#1ba8d3] hover:to-[#126ABC]">
-            View More
-          </Button>
-        </div>
-      </section>
       <section className="py-[5em] bg-white ">
         <div className=" w-[90%] lg:w-[80%] m-auto grid lg:grid-cols-[60%,auto] gap-10">
           <div>

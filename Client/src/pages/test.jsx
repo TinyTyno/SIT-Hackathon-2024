@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-// import yahooFinance from 'yahoo-finance2';
+import yahooFinance from 'yahoo-finance2';
 
 const Test = () => {
 // Import the yahoo-finance2 library
@@ -46,5 +46,4 @@ useEffect(() => {
   )
 }
 
-export default Test
-
+// export default Test

@@ -109,6 +109,14 @@ const StableSidebar = ({ children }) => {
                     <div className="self-center">Q&A</div>
                   </li>
                 </Link>
+                <Link to={'/questionnaire'}>
+                  <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">
+                    <div className="self-center">
+                      <RiQuestionAnswerLine className="text-white" />
+                    </div>
+                    <div className="self-center">Questionnaire</div>
+                  </li>
+                </Link>
 
                 <Link to={'/ai'}>
                   <li className="flex flex-row gap-4 w-full py-2 px-3 rounded-sm hover:bg-[#516e9578] cursor-pointer">

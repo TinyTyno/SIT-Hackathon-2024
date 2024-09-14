@@ -211,6 +211,26 @@ function Login() {
                   >
                     Forgot Password?
                   </Link>
+                  <Link
+                    to="/user/userCreate"
+                    style={{
+                      color: "#1274CE",
+                      textDecoration: "underline",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Sign Up?
+                  </Link>
+                  <Link
+                    to="/"
+                    style={{
+                      color: "#1274CE",
+                      textDecoration: "underline",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Back to Home
+                  </Link>
                 </Box>
 
                 <Button
